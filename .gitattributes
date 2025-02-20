@@ -1,0 +1,2 @@
+setup_dotfiles text eol=lf
+scripts/* text eol=lf
