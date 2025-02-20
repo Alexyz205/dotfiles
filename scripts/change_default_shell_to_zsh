@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Change the default shell to zsh
+chsh -s $(which zsh) || { echo "Error changing default shell"; exit 1; }

@@ -1,0 +1,37 @@
+#!/bin/bash
+
+DOTFILES_DIR="$HOME/repos/dotfiles"
+CONFIG_DIR="$HOME/.config"
+
+create_symlinks() {
+  local items=("$@")
+  for item in "${items[@]}"; do
+    IFS=':' read -r source target <<<"$item"
+    if [ -L "$target" ]; then
+      echo "Removing existing symlink $target"
+      unlink "$target"
+    elif [ -d "$target" ]; then
+      echo "Warning: $target is a directory. Skipping..."
+      continue
+    elif [ -e "$target" ]; then
+      echo "Warning: $target already exists. Skipping..."
+      continue
+    fi
+    ln -s "$DOTFILES_DIR/$source" "$target" || { echo "Error creating symlink $target"; exit 1; }
+    echo "Created symlink for $source"
+  done
+}
+
+common_items=(
+  "ghostty:$CONFIG_DIR/ghostty"
+  "nix:$CONFIG_DIR/nix"
+  "tmux/.tmux.conf:$HOME/.tmux.conf"
+  "tmux/.tmux:$HOME/.tmux"
+  "nvim:$CONFIG_DIR/nvim"
+  "starship.toml:$CONFIG_DIR/starship.toml"
+  "shell/zsh:$CONFIG_DIR/zsh"
+  "shell/zsh/.zprofile:$HOME/.zprofile"
+  "shell/zsh/.zshrc:$HOME/.zshrc"
+)
+
+create_symlinks "${common_items[@]}"

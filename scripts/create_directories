@@ -1,0 +1,17 @@
+#!/bin/bash
+
+DOTFILES_DIR="$HOME/repos/dotfiles"
+CONFIG_DIR="$HOME/.config"
+
+create_directories() {
+  local directories=("$@")
+  for dir in "${directories[@]}"; do
+    mkdir -p "$dir" || { echo "Error creating directory $dir"; exit 1; }
+  done
+}
+
+common_directories=(
+    $CONFIG_DIR
+)
+
+create_directories "${common_directories[@]}"

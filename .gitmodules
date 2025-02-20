@@ -1,0 +1,13 @@
+[submodule "nvim"]
+	url = git@github.com:Alexyz205/nvim.git
+	path = nvim
+[submodule "tmux"]
+	url = git@github.com:Alexyz205/tmux.git
+	path = tmux
+# zsh plugins
+[submodule "zsh-syntax-highlighting"]
+	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
+	path = shell/zsh/zsh-syntax-highlighting
+[submodule "zsh-autosuggestions"]
+	url = https://github.com/zsh-users/zsh-autosuggestions.git
+	path = shell/zsh/zsh-autosuggestions

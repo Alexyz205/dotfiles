@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Install git submodules
+git submodule update --init --recursive || { echo "Error initializing git submodules"; exit 1; }
+
+# Create directories
+./create_config_directories
+
+# Create symlinks
+./create_symlinks_for_dotfiles
