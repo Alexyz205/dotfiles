@@ -1,0 +1,33 @@
+#!/bin/bash
+
+CONFIG_DIR="$HOME/.config"
+DOTFILES_DIR="$HOME/repos/dotfiles"
+SCRIPT_DIR="$DOTFILES_DIR/scripts"
+
+source "$SCRIPT_DIR/logs"
+source "$SCRIPT_DIR/utils"
+
+# Install git submodules
+git submodule update --init --recursive || error_exit "Failed to install git submodules."
+
+common_directories=(
+    $CONFIG_DIR
+)
+
+common_items=(
+  "ghostty:$CONFIG_DIR/ghostty"
+  "nix:$CONFIG_DIR/nix"
+  "tmux/.tmux.conf:$HOME/.tmux.conf"
+  "tmux/.tmux:$HOME/.tmux"
+  "nvim:$CONFIG_DIR/nvim"
+  "starship.toml:$CONFIG_DIR/starship.toml"
+  "shell/zsh:$CONFIG_DIR/zsh"
+  "shell/zsh/.zprofile:$HOME/.zprofile"
+  "shell/zsh/.zshrc:$HOME/.zshrc"
+)
+
+create_directories "${common_directories[@]}"
+create_symlinks "${common_items[@]}"
+
+# Change the default shell to zsh
+chsh -s $(which zsh) || error_exit "Failed to change the default shell to zsh."

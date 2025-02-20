@@ -11,3 +11,6 @@
 [submodule "zsh-autosuggestions"]
 	url = https://github.com/zsh-users/zsh-autosuggestions.git
 	path = shell/zsh/zsh-autosuggestions
+[submodule "scripts"]
+	path = scripts
+	url = git@github.com:Alexyz205/scripts.git
