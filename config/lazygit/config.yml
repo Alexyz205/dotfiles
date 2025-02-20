@@ -1,0 +1,26 @@
+gui:
+  theme:
+    activeBorderColor:
+      - '#89b4fa'
+      - bold
+    inactiveBorderColor:
+      - '#f9e2af'
+    optionsTextColor:
+      - '#cba6f7'
+    selectedLineBgColor:
+      - '#6c7086'
+    cherryPickedCommitBgColor:
+      - '#45475a'
+    cherryPickedCommitFgColor:
+      - '#89b4fa'
+    unstagedChangesColor:
+      - '#f38ba8'
+    defaultFgColor:
+      - '#cdd6f4'
+    searchingActiveBorderColor:
+      - '#f9e2af'
+
+  authorColors:
+    '*': '#b4befe'
+    'Alexyz205': '#74c7ec'
+    'Alexis Pigeon': '#74c7ec'

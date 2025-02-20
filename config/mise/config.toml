@@ -1,0 +1,230 @@
+# ===============================================
+# Mise Global Configuration
+# ===============================================
+# This file defines the global versions of all development tools.
+# Tools are managed by mise and automatically installed when needed.
+#
+# Last Updated: 2026-02-10
+#
+# ===============================================
+# Environment Variables
+# ===============================================
+# All environment variables are centralized here for consistent configuration
+# across all shells (bash, zsh, etc.)
+#
+[env]
+# Editor Configuration
+VISUAL = "nvim"
+EDITOR = "nvim"
+
+# Directory Structure
+REPOS = "{{env.HOME}}/repos"
+GITUSER = "alexyz205"
+GHREPOS = "{{env.REPOS}}/github.com/{{env.GITUSER}}"
+DOTFILES = "{{env.REPOS}}/personal/dotfiles"
+SCRIPTS = "{{env.DOTFILES}}/scripts"
+XDG_CONFIG_HOME = "{{env.HOME}}/.config"
+EZA_CONFIG_DIR = "{{env.XDG_CONFIG_HOME}}/eza"
+
+# Ollama GPU Optimization (RTX 4090)
+OLLAMA_GPU_LAYERS = "99999"    # Use all layers on GPU
+OLLAMA_NUM_GPU = "1"           # Use 1 GPU
+CUDA_VISIBLE_DEVICES = "0"     # Use GPU 0
+OLLAMA_NUM_PARALLEL = "4"      # Allow concurrent requests
+OLLAMA_MAX_LOADED_MODELS = "2" # Keep multiple models loaded
+OLLAMA_CONTEXT_SIZE = "8192"   # Optimize context size for RTX 4090
+
+# Tmux Configuration
+TMUX_AUTO_START = "1" # Enable automatic tmux session management
+
+[tools]
+# ===============================================
+# Programming Languages & Runtimes
+# ===============================================
+
+# Node.js runtime for JavaScript/TypeScript development
+node = "24.11.1"
+
+# Go runtime (required by gitlab.nvim for building server binary)
+go = "1.26.1"
+
+# ===============================================
+# Shell & Terminal Tools
+# ===============================================
+
+# Terminal multiplexer for session management
+tmux = "3.6a"
+
+# Cross-shell prompt with git/docker/k8s context
+starship = "1.24.1"
+
+# Smart directory navigation (z command)
+zoxide = "0.9.8"
+
+# ===============================================
+# File & Text Utilities
+# ===============================================
+
+# Fuzzy finder for files/commands/history (replaces fzf)
+television = "0.15.4"
+
+# Fast grep alternative with smart defaults
+ripgrep = "15.1.0"
+
+# Fast file finder (modern find replacement)
+fd = "10.3.0"
+
+# Syntax highlighting pager (better cat)
+bat = "0.26.0"
+
+# Modern ls replacement with git integration
+eza = "0.23.4"
+
+# Terminal file manager with preview
+yazi = "25.5.31"
+
+# ===============================================
+# Version Control & Git Tools
+# ===============================================
+
+# Git terminal UI for interactive git workflows
+lazygit = "0.56.0"
+
+# GitLab CLI for MR, CI/CD, and issue management
+glab = "1.89.0"
+
+# ===============================================
+# Code Editors & Language Tools
+# ===============================================
+
+# Neovim text editor
+neovim = "0.11.5"
+
+# Tree-sitter parser generator for syntax highlighting
+tree-sitter = "0.26.5"
+
+# ===============================================
+# AI & Development Assistants
+# ===============================================
+
+# AI coding assistant with Claude integration
+opencode = "1.3.2"
+
+[settings]
+# ===============================================
+# Mise Settings Configuration
+# ===============================================
+
+# Automatically install missing tools when entering directories
+experimental = true
+yes = true
+
+# Show verbose output for debugging
+verbose = false
+
+# Enable plugin autoupdate
+plugin_autoupdate_last_check_duration = "7d"
+
+# ===============================================
+# Performance & Installation Settings
+# ===============================================
+
+# Number of parallel installs (increase on powerful machines)
+jobs = 8
+
+# HTTP timeout for downloads
+http_timeout = "30s"
+
+# Disk space management
+always_keep_download = false # Delete downloads after install
+always_keep_install = false  # Delete failed installs
+
+# ===============================================
+# Auto-install & Command Not Found Handler
+# ===============================================
+
+# Auto-install missing tools when running commands
+not_found_auto_install = true # Enable "command not found" handler
+
+# ===============================================
+# Task Runner Settings
+# ===============================================
+
+# Task output style (prefix, interleave, quiet)
+task_output = "prefix"       # Prefix task output with task names
+task_timings = true          # Show task completion times
+task_show_full_cmd = false   # Truncate long commands
+task_run_auto_install = true # Auto-install tools when running tasks
+
+# ===============================================
+# Security & Verification Settings
+# ===============================================
+
+# Enable SLSA provenance verification for supply-chain security
+slsa = true
+
+# Enable GitHub Artifact Attestations verification
+github_attestations = true
+
+# Use netrc for HTTP Basic authentication
+netrc = true
+
+# ===============================================
+# Color & Display Settings
+# ===============================================
+
+# Use color in terminal output
+color = true
+
+# Color theme for interactive prompts (default, base16, catppuccin, dracula)
+color_theme = "catppuccin"
+
+# Enable terminal progress indicators (OSC 9;4)
+terminal_progress = true
+
+# ===============================================
+# Cache & Update Settings
+# ===============================================
+
+# Cache prune age (delete cache files older than this)
+cache_prune_age = "30d"
+
+# Fetch remote versions cache duration
+fetch_remote_versions_cache = "1h"
+
+# Fetch remote versions timeout
+fetch_remote_versions_timeout = "20s"
+
+# HTTP retries with exponential backoff
+http_retries = 3
+
+# ===============================================
+# Version File Support
+# ===============================================
+
+# Enable idiomatic version files for specific tools
+idiomatic_version_file_enable_tools = ["node", "python"]
+
+# ===============================================
+# Default Tasks for DevOps Workflows
+# ===============================================
+
+[tasks.clean]
+description = "Clean mise cache and prune old installations"
+run = ["mise cache clear", "mise prune --yes"]
+
+[tasks.test]
+description = "Run all tests"
+run = "echo 'Add your test commands here'"
+
+[tasks.build]
+description = "Build the project"
+run = "echo 'Add your build commands here'"
+
+[tasks.deploy]
+description = "Deploy the project"
+run = "echo 'Add your deployment commands here'"
+
+[tasks.dev]
+description = "Start development environment"
+run = "echo 'Add your dev server commands here'"

@@ -1,0 +1,10 @@
+{
+    "image": "mcr.microsoft.com/vscode/devcontainers/base:ubuntu",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "eamodio.gitlens"
+            ]
+        }
+    }
+}

@@ -1,0 +1,162 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "autoupdate": true,
+  "share": "disabled",
+  // --- Model Configuration ---
+  // Primary: prefer Claude Haiku for day-to-day to reduce cost
+  "model": "github-copilot/claude-haiku-4.5",
+  // Lightweight: use a cheap GPT/Gemini mini for very small tasks/summaries
+  "small_model": "github-copilot/gpt-4o-mini",
+  // --- Built-in Agent Overrides ---
+  "agent": {
+    // Build agent: Opus for heavy coding work
+    "build": {
+      "model": "github-copilot/claude-sonnet-4.5"
+    },
+    // Plan agent: Sonnet is fast enough for analysis/planning
+    "plan": {
+      "model": "github-copilot/claude-sonnet-4.5"
+    },
+    // Explore subagent: fast & cheap for read-only code search
+    "explore": {
+      "model": "github-copilot/gemini-3-flash-preview",
+      "steps": 20
+    },
+    // General subagent: Sonnet for multi-step research tasks
+    "general": {
+      "model": "github-copilot/claude-sonnet-4.5",
+      "steps": 30
+    },
+    // Task agent: use a free GPT/Gemini model for routine tasks
+    "task": {
+      "model": "github-copilot/gpt-5-mini",
+      "steps": 10
+    },
+    // Compaction agent: Haiku for cheap context summaries
+    "compaction": {
+      "model": "github-copilot/claude-haiku-4.5"
+    }
+  },
+  // --- Permissions (global defaults) ---
+  "permission": {
+    "edit": "allow",
+    "bash": {
+      "*": "allow",
+      // Disallow any git/gh operations executed by the agent; these are manual-only
+      "git commit": "deny",
+      "git push": "deny",
+      "git push --force": "deny",
+      "git push -f": "deny",
+      "git rebase": "deny",
+      "git merge": "deny",
+      "git reset": "deny",
+      "gh pr create": "deny",
+      "gh pr merge": "deny",
+      "gh": "deny",
+      // Disallow common remote-exec install patterns
+      "curl * | sh": "deny",
+      "wget * | sh": "deny",
+      // Deny obvious destructive or privilege-escalating operations
+      "sudo": "ask",
+      "shutdown": "deny",
+      "reboot": "deny",
+      "rm -rf /": "deny",
+      "chmod -R 777 *": "deny",
+      "rm *": "ask",
+      "rm -f *": "ask",
+      "rm -rf *": "ask",
+      "sudo rm -rf *": "deny",
+      "docker system prune -a": "ask",
+      "terraform destroy *": "ask",
+      "kubectl delete *": "ask"
+    },
+    "webfetch": "allow",
+    "doom_loop": "ask"
+  },
+  // --- Context Management ---
+  "compaction": {
+    "auto": true,
+    "prune": true,
+    "reserved": 8000
+  },
+  // --- Instructions ---
+  "instructions": [
+    "~/.config/opencode/AGENTS.md",
+    "README.md",
+    "CONTRIBUTING.md"
+  ],
+  // --- Watcher (ignore noisy dirs) ---
+  "watcher": {
+    "ignore": [
+      "node_modules/**",
+      ".git/**",
+      ".terraform/**",
+      "vendor/**",
+      "__pycache__/**",
+      ".venv/**",
+      "dist/**",
+      "build/**",
+      ".cache/**",
+      "coverage/**"
+    ]
+  },
+  // --- Custom Commands ---
+  "command": {
+    "review": {
+      "description": "Code review the current changes",
+      "template": "Review the staged and unstaged git changes. Focus on: security issues, error handling, best practices violations, and potential bugs. Provide actionable feedback."
+    },
+    "tf-plan": {
+      "description": "Run and analyze terraform plan",
+      "template": "Run `terraform plan` in the current directory, analyze the output for: resource changes, potential issues, cost implications, and security concerns. Summarize findings."
+    },
+    "test": {
+      "description": "Run tests and fix failures",
+      "template": "Identify the test framework in use, run the test suite, analyze any failures, and fix them. Run tests again to confirm fixes. $ARGUMENTS"
+    },
+    "explain": {
+      "description": "Explain a file or concept in detail",
+      "template": "Provide a thorough explanation of $ARGUMENTS including: purpose, how it works, key design decisions, and potential improvements."
+    },
+    "security": {
+      "description": "Security audit of the codebase",
+      "template": "Perform a security audit: check for hardcoded secrets, insecure permissions, vulnerable dependencies, and configuration issues. Provide severity-ranked findings."
+    },
+    "refactor": {
+      "description": "Refactor code following best practices",
+      "template": "Analyze $ARGUMENTS for code quality issues and refactor following best practices. Explain each change and why it improves the code."
+    },
+    "optimize": {
+      "description": "Analyze code for performance, security, and issues",
+      "template": "Analyze $ARGUMENTS comprehensively across three dimensions:\n\n**Performance**: Algorithmic complexity, memory usage, I/O patterns, caching opportunities, unnecessary allocations, N+1 queries, framework-specific optimizations.\n\n**Security**: Input validation, authentication/authorization gaps, data exposure, injection vectors, dependency vulnerabilities, insecure defaults, secrets handling.\n\n**Potential Issues**: Error handling gaps, edge cases, race conditions, scalability bottlenecks, maintainability concerns, missing observability.\n\nFor each finding, provide: severity (critical/high/medium/low), location (file:line), description, and a concrete fix. Rank findings by severity. End with a summary table."
+    },
+    "clean": {
+      "description": "Clean up code: formatting, imports, debug removal, linting",
+      "template": "Run a cleanup pipeline on $ARGUMENTS in this order:\n\n1. **Debug removal** - Remove console.log, print(), debugger statements, TODO/FIXME comments that are resolved, commented-out code blocks\n2. **Import optimization** - Sort imports, remove unused imports, group by stdlib/external/internal\n3. **Formatting** - Apply project formatter (prettier, black, gofmt, etc.) or consistent style\n4. **Lint fixes** - Fix linter warnings (eslint, pylint, shellcheck, etc.)\n5. **Type safety** - Fix type errors if TypeScript/mypy/type hints are in use\n\nAfter cleanup, run the project linter/formatter to verify. Show a summary of changes made in each category."
+    }
+  },
+  // --- MCP Servers ---
+  "mcp": {
+    // Docs search - local stdio transport
+    "context7": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ]
+    },
+    // Web content fetching (Python package via uvx)
+    "fetch": {
+      "type": "local",
+      "command": [
+        "uvx",
+        "mcp-server-fetch"
+      ]
+    }
+  },
+  // --- Plugins ---
+  "plugin": [
+    "opencode-shell-strategy"
+  ]
+}

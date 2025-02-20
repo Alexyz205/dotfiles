@@ -1,0 +1,7 @@
+theme = catppuccin-mocha
+font-family = JetBrains Mono
+mouse-hide-while-typing = true
+font-size = 14
+clipboard-paste-protection = false
+copy-on-select = true
+fullscreen = true
