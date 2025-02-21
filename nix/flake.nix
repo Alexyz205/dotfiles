@@ -15,16 +15,20 @@
         # List packages installed in system profile. To search by name, run:
         # $ nix-env -qaP | grep wget
         environment.systemPackages = [
+          pkgs.devpod
+          pkgs.lazygit
+          pkgs.lazydocker
+          pkgs.neovim
+          pkgs.tmux
           pkgs.zsh
           pkgs.starship
           pkgs.ripgrep
           pkgs.fzf
           pkgs.zoxide
-          pkgs.tmux
-          pkgs.neovim
-          pkgs.lazygit
-          pkgs.lazydocker
-          pkgs.devpod
+          pkgs.fd
+          pkgs.eza
+          pkgs.ranger
+          pkgs.nodejs
         ];
 
         homebrew = {

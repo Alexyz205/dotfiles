@@ -78,29 +78,47 @@ bindkey '^[[1;5A' history-search-backward
 bindkey '^[[1;5B' history-search-forward
 
 # ~~~~~~~~~~~~~~~ Aliases ~~~~~~~~~~~~~~~~~~~~~~~~
-
 alias v=nvim
 alias c="clear"
 
 # Repos
-
-alias dot='cd $REPOS/dotfiles'
+alias dot='cd $DOTFILES'
 alias repos='cd $REPOS'
 
 # ls
+alias ls='eza --color=auto'
+alias la='eza -la'
+alias ll='eza -l --git -T --hyperlink --color=auto'
 
-alias ls='ls --color=auto'
-alias la='ls -lathr'
+alias find='fd'
+alias f='fzf'
 
 alias t='tmux'
+alias r='ranger'
+alias p='python'
 alias e='exit'
 
 # Git
-
-alias gp='git pull'
+alias g='git'
+alias ga='git add'
+alias gc='git commit'
+alias gcm='git commit -m'
+alias gco='git checkout'
+alias gd='git diff'
+alias gl='git log'
+alias gp='git push'
+alias gpl='git pull'
 alias gs='git status'
 alias lg='lazygit'
 alias ld='lazydocker'
+
+# Additional useful aliases
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias mkdir='mkdir -pv'
+alias h='history'
+alias reload='source ~/.zshrc'
 
 # Devpod
 
