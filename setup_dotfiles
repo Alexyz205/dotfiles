@@ -1,11 +1,5 @@
 #!/bin/bash
 
-DOTFILES_DIR="$HOME/repos/dotfiles"
-SCRIPT_DIR="$DOTFILES_DIR/scripts"
-
-source "$SCRIPT_DIR/logs"
-source "$SCRIPT_DIR/utils"
-
 # Help option
 if [[ "$1" == "--help" ]]; then
     echo "Usage: setup_dotfiles [--help]"
@@ -14,9 +8,13 @@ if [[ "$1" == "--help" ]]; then
     exit 0
 fi
 
-# Install git submodules
-git submodule update --init --recursive || error_exit "Failed to install git submodules."
+# Initialize git submodules to retrieve scripts.
+git submodule update --init --recursive || { echo "Error initializing git submodules"; exit 1; }
 
+DOTFILES_DIR="$HOME/repos/dotfiles"
+SCRIPT_DIR="$DOTFILES_DIR/scripts"
+
+# Call the setup script
 source "$SCRIPT_DIR/setup"
 
 # Change the default shell to zsh

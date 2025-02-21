@@ -1,14 +1,6 @@
 #!/bin/bash
 set -e
 
-# Initialize git submodules to retrieve scripts.
-git submodule update --init --recursive || { echo "Error initializing git submodules"; exit 1; }
-
-REPOS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
-SCRIPT_DIR="$REPOS_DIR/scripts"
-source "$SCRIPT_DIR/logs"
-source "$SCRIPT_DIR/utils"
-
 # Help option
 if [[ "$1" == "--help" ]]; then
     echo "Usage: install [--help]"
@@ -16,6 +8,12 @@ if [[ "$1" == "--help" ]]; then
     echo "It initializes git submodules, installs necessary tools, and sets up the environment."
     exit 0
 fi
+
+# Initialize git submodules to retrieve scripts.
+git submodule update --init --recursive nvim scripts || { echo "Error initializing git submodules"; exit 1; }
+
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
+SCRIPT_DIR="$DOTFILES_DIR/scripts"
 
 # Call the install script
 source "$SCRIPT_DIR/install"
