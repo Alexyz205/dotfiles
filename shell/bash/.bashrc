@@ -71,6 +71,7 @@ alias f='fzf'
 alias t='tmux'
 alias r='ranger'
 alias p='python'
+alias k='kubectl'
 alias e='exit'
 
 # Git
@@ -93,3 +94,4 @@ alias ....='cd ../../..'
 alias mkdir='mkdir -pv'
 alias h='history'
 alias reload='source ~/.bashrc'
+alias ik8s='~/dotfiles/scripts/install_k8s'
