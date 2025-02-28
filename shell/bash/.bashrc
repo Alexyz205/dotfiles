@@ -1,5 +1,8 @@
 # ~~~~~~~~~~~~~~~ Environment Variables ~~~~~~~~~~~~~~~~~~~~~~~~
 
+# Locale
+export LANG=en_US.UTF-8
+
 # Directories
 export REPOS="$HOME/repos"
 export GITUSER="alexyz205"
@@ -39,6 +42,18 @@ if command -v fzf &> /dev/null; then
 else
   echo "fzf not found, skipping fzf initialization."
 fi
+
+# ~~~~~~~~~~~~~~~ Tmux ~~~~~~~~~~~~~~~~~~~~~~~~
+
+if command -v tmux &> /dev/null; then
+  if [ -n "$TERM" ] && [ "$TERM" != "dumb" ]; then
+    tmux new-session -A -s dev
+  fi
+else
+  echo "tmux not found, skipping tmux initialization."
+fi
+
+alias t='tmux attach -t dev || tmux new-session -s dev'
 
 # ~~~~~~~~~~~~~~~ History ~~~~~~~~~~~~~~~~~~~~~~~~
 HISTFILE=~/.bash_history

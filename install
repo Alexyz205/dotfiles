@@ -10,7 +10,7 @@ if [[ "$1" == "--help" ]]; then
 fi
 
 # Initialize git submodules to retrieve scripts.
-git submodule update --init --recursive nvim scripts || { echo "Error initializing git submodules"; exit 1; }
+git submodule update --init --recursive nvim scripts tmux || { echo "Error initializing git submodules"; exit 1; }
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 SCRIPT_DIR="$DOTFILES_DIR/scripts"
@@ -21,4 +21,10 @@ source "$SCRIPT_DIR/install"
 # Call the setup script
 source "$SCRIPT_DIR/setup"
 
-exit 0
+
+if [ $? -eq 0 ]; then
+    echo "Setup completed successfully."
+else
+    echo "Setup failed. Please check for errors."
+    exit 1
+fi
