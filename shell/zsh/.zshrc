@@ -56,6 +56,21 @@ fi
 source ~/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
+# ~~~~~~~~~~~~~~~ Tmux ~~~~~~~~~~~~~~~~~~~~~~~~
+
+if command -v tmux &> /dev/null; then
+  if [ -z "$TMUX" ]; then
+    echo "Starting tmux..."
+    tmux attach -t dev || tmux new-session -s dev
+  else
+    clear
+  fi
+else
+  echo "tmux not found, skipping tmux initialization."
+fi
+
+alias t='tmux attach -t dev || tmux new-session -s dev'
+
 # ~~~~~~~~~~~~~~~ Configurations ~~~~~~~~~~~~~~~~~
 
 autoload -Uz compinit && compinit
@@ -93,7 +108,6 @@ alias ll='eza -l --git -T --hyperlink --color=auto'
 alias find='fd'
 alias f='fzf'
 
-alias t='tmux'
 alias r='ranger'
 alias p='python'
 alias e='exit'
@@ -123,6 +137,7 @@ alias reload='source ~/.zshrc'
 # Devpod
 
 alias ds='devpod ssh'
+alias du='devpod up .'
 
 # Docker
 alias dru='docker run -it --rm -v ~/repos/dotfiles:/root/dotfiles ubuntu bash'
