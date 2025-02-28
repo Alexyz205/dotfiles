@@ -46,8 +46,11 @@ fi
 # ~~~~~~~~~~~~~~~ Tmux ~~~~~~~~~~~~~~~~~~~~~~~~
 
 if command -v tmux &> /dev/null; then
-  if [ -n "$TERM" ] && [ "$TERM" != "dumb" ]; then
-    tmux new-session -A -s dev
+  if [ -z "$TMUX" ]; then
+    echo "Starting tmux..."
+    tmux attach -t dev || tmux new-session -s dev
+  else
+    clear
   fi
 else
   echo "tmux not found, skipping tmux initialization."
