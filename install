@@ -16,7 +16,7 @@ DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 SCRIPT_DIR="$DOTFILES_DIR/scripts"
 
 # Call the install script
-source "$SCRIPT_DIR/install"
+source "$SCRIPT_DIR/install_packages"
 
 # Call the setup script
 source "$SCRIPT_DIR/setup"
