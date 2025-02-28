@@ -3,8 +3,7 @@
 # Directories
 export REPOS="$HOME/repos"
 export GITUSER="alexyz205"
-export GHREPOS="$REPOS/github.com/$GITUSER"
-export DOTFILES="$GHREPOS/dotfiles"
+export DOTFILES="$HOME/dotfiles"
 export SCRIPTS="$DOTFILES/scripts"
 export XDG_CONFIG_HOME="$HOME/.config"
 
