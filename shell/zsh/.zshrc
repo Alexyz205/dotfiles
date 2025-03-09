@@ -58,16 +58,16 @@ source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # ~~~~~~~~~~~~~~~ Tmux ~~~~~~~~~~~~~~~~~~~~~~~~
 
-if command -v tmux &> /dev/null; then
-  if [ -z "$TMUX" ]; then
-    echo "Starting tmux..."
-    tmux attach -t dev || tmux new-session -s dev
-  else
-    clear
-  fi
-else
-  echo "tmux not found, skipping tmux initialization."
-fi
+# if command -v tmux &> /dev/null; then
+#   if [ -z "$TMUX" ]; then
+#     echo "Starting tmux..."
+#     tmux attach -t dev || tmux new-session -s dev
+#   else
+#     clear
+#   fi
+# else
+#   echo "tmux not found, skipping tmux initialization."
+# fi
 
 alias t='tmux attach -t dev || tmux new-session -s dev'
 
@@ -93,8 +93,6 @@ bindkey '^[[1;5A' history-search-backward
 bindkey '^[[1;5B' history-search-forward
 
 # ~~~~~~~~~~~~~~~ Aliases ~~~~~~~~~~~~~~~~~~~~~~~~
-alias v=nvim
-alias c="clear"
 
 # Repos
 alias dot='cd $DOTFILES'
@@ -108,9 +106,16 @@ alias ll='eza -l --git -T --hyperlink --color=auto'
 alias find='fd'
 alias f='fzf'
 
+# Applications
+alias v=nvim
+alias t='tmux'
 alias r='ranger'
 alias p='python'
-alias e='exit'
+alias k='kubectl'
+alias h='helm'
+alias hf='helmfile'
+alias d='docker'
+alias dc='docker-compose'
 
 # Git
 alias g='git'
@@ -124,15 +129,17 @@ alias gp='git push'
 alias gpl='git pull'
 alias gs='git status'
 alias lg='lazygit'
-alias ld='lazydocker'
 
 # Additional useful aliases
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias mkdir='mkdir -pv'
-alias h='history'
-alias reload='source ~/.zshrc'
+alias e='exit'
+alias c="clear"
+alias reload='source ~/.bashrc'
+alias ik8s='~/dotfiles/scripts/install_k8s'
+alias da='direnv allow'
 
 # Devpod
 

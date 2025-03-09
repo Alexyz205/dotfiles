@@ -71,8 +71,6 @@ bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
 
 # ~~~~~~~~~~~~~~~ Aliases ~~~~~~~~~~~~~~~~~~~~~~~~
-alias v=nvim
-alias c="clear"
 
 # Repos
 alias dot='cd $DOTFILES'
@@ -86,11 +84,16 @@ alias ll='eza -l --git -T --hyperlink --color=auto'
 alias find='fd'
 alias f='fzf'
 
+# Applications
+alias v=nvim
 alias t='tmux'
 alias r='ranger'
 alias p='python'
 alias k='kubectl'
-alias e='exit'
+alias h='helm'
+alias hf='helmfile'
+alias d='docker'
+alias dc='docker-compose'
 
 # Git
 alias g='git'
@@ -110,7 +113,8 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias mkdir='mkdir -pv'
-alias h='history'
+alias e='exit'
+alias c="clear"
 alias reload='source ~/.bashrc'
 alias ik8s='~/dotfiles/scripts/install_k8s'
 alias da='direnv allow'
