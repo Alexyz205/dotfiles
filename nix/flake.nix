@@ -34,10 +34,11 @@
         homebrew = {
           enable = true;
           casks = [
+            "raycast"
             "ghostty"
             "docker"
             "visual-studio-code"
-            "chatgpt"
+            "claude"
             "obsidian"
                       ];
           onActivation.cleanup = "zap";
@@ -57,7 +58,7 @@
             "/Applications/Visual Studio Code.app"
             "/Applications/Docker.app"
             "/Applications/Obsidian.app"
-            "/Applications/ChatGPT.app"
+            "/Applications/Claude.app"
             "/Applications/Safari.app"
             "System/Applications/Mail.app"
             "System/Applications/Calendar.app"
