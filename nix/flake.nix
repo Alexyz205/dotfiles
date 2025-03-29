@@ -34,6 +34,7 @@
         homebrew = {
           enable = true;
           casks = [
+            "raycast"
             "ghostty"
             "docker"
             "visual-studio-code"
