@@ -1,21 +1,100 @@
 #!/bin/bash
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
+
+# Source logs if available, otherwise define minimal color functionality
+if [ -f "$SCRIPT_DIR/scripts/logs" ]; then
+    source "$SCRIPT_DIR/scripts/logs"
+else
+    # Fallback minimal color definitions
+    BLUE="\e[34m"
+    RED="\e[31m"
+    GREEN="\e[32m"
+    YELLOW="\e[33m"
+    BOLD="\e[1m"
+    RESET="\e[0m"
+
+    # Define basic logging functions
+    log() { echo -e "${BLUE}[INFO]${RESET} $1"; }
+    log_error() { echo -e "${RED}[ERROR]${RESET} $1"; }
+    error_exit() { log_error "$1"; exit 1; }
+    log_success() { echo -e "${GREEN}[SUCCESS]${RESET} $1"; }
+    log_warning() { echo -e "${YELLOW}[WARNING]${RESET} $1"; }
+
+    section_header() {
+        local title=$1
+        echo -e "\n${BOLD}${BLUE}=== $title ===${RESET}\n"
+    }
+fi
 
 # Help option
 if [[ "$1" == "--help" ]]; then
+    section_header "Dotfiles Setup"
     echo "Usage: setup_dotfiles [--help]"
     echo "This script sets up the dotfiles by installing git submodules and running the setup script."
     echo "It also changes the default shell to zsh."
+    echo
+    echo "The setup process will:"
+    echo "  1. Initialize git submodules to retrieve components"
+    echo "  2. Run the main dotfiles setup script"
+    echo "  3. Change the default shell to zsh"
     exit 0
 fi
 
-# Initialize git submodules to retrieve scripts.
-git submodule update --init --recursive || { echo "Error initializing git submodules"; exit 1; }
+section_header "Initializing Dotfiles"
 
-DOTFILES_DIR="$HOME/repos/dotfiles"
+# Set DOTFILES_DIR if not already defined
+if [ -z "$DOTFILES_DIR" ]; then
+    DOTFILES_DIR="$HOME/repos/dotfiles"
+    log_warning "DOTFILES_DIR wasn't set, using default: ${BOLD}$DOTFILES_DIR${RESET}"
+else
+    log "Using dotfiles directory: ${BOLD}$DOTFILES_DIR${RESET}"
+fi
+
 SCRIPT_DIR="$DOTFILES_DIR/scripts"
 
+# Initialize git submodules
+log_progress "Initializing git submodules"
+git -C "$DOTFILES_DIR" submodule update --init --recursive || error_exit "Failed to initialize git submodules"
+log_success "Git submodules initialized successfully"
+
 # Call the setup script
-source "$SCRIPT_DIR/setup"
+section_header "Running Setup Script"
+log_progress "Executing main setup script"
+
+export DOTFILES_DIR
+source "$SCRIPT_DIR/setup" || error_exit "Setup script failed"
 
 # Change the default shell to zsh
-chsh -s $(which zsh) || error_exit "Failed to change the default shell to zsh."
+section_header "Configuring Default Shell"
+
+# Only try to change shell if zsh exists
+if command -v zsh &> /dev/null; then
+    ZSH_PATH=$(which zsh)
+    log_progress "Changing default shell to ${BOLD}$ZSH_PATH${RESET}"
+
+    # Check if zsh is already the default shell
+    if [[ "$SHELL" == *"zsh"* ]]; then
+        log_success "ZSH is already your default shell"
+    else
+        # Check if zsh is in /etc/shells
+        if ! grep -q "$ZSH_PATH" /etc/shells; then
+            log_warning "Adding $ZSH_PATH to /etc/shells"
+            echo "$ZSH_PATH" | sudo tee -a /etc/shells > /dev/null || log_warning "Failed to add zsh to /etc/shells"
+        fi
+
+        # Change the shell
+        chsh -s "$ZSH_PATH" || error_exit "Failed to change the default shell to zsh"
+        log_success "Default shell changed to ZSH"
+    fi
+else
+    log_warning "ZSH not found. Shell will remain as ${BOLD}$SHELL${RESET}"
+    log_warning "Install ZSH and run 'chsh -s \$(which zsh)' manually later"
+fi
+
+section_header "Setup Complete"
+log_complete "Dotfiles have been successfully set up!"
+echo
+echo "Your development environment is ready to use."
+echo "Start a new terminal session or run ${BOLD}exec zsh${RESET} to apply changes."

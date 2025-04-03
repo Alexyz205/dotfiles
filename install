@@ -1,30 +1,88 @@
 #!/bin/bash
 set -e
 
+# Define paths
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
+DOTFILES_DIR="$(cd "$SCRIPT_DIR" && pwd)"
+
+# Source common utilities if available, otherwise define minimal functionality
+if [ -f "$DOTFILES_DIR/scripts/logs" ]; then
+    source "$DOTFILES_DIR/scripts/logs"
+else
+    # Fallback minimal color definitions if logs file isn't available yet
+    BLUE="\e[34m"
+    RED="\e[31m"
+    GREEN="\e[32m"
+    YELLOW="\e[33m"
+    BOLD="\e[1m"
+    RESET="\e[0m"
+
+    # Define basic logging functions
+    log() { echo -e "${BLUE}[INFO]${RESET} $1"; }
+    log_error() { echo -e "${RED}[ERROR]${RESET} $1"; }
+    error_exit() { log_error "$1"; exit 1; }
+    log_warning() { echo -e "${YELLOW}[WARNING]${RESET} $1"; }
+    log_success() { echo -e "${GREEN}[SUCCESS]${RESET} $1"; }
+
+    section_header() {
+        local title=$1
+        echo -e "\n${BOLD}${BLUE}=== $title ===${RESET}\n"
+    }
+fi
+
 # Help option
 if [[ "$1" == "--help" ]]; then
-    echo "Usage: install [--help]"
-    echo "This script installs dependencies and sets up configuration directories."
-    echo "It initializes git submodules, installs necessary tools, and sets up the environment."
+    section_header "Dotfiles Installer"
+    echo "Usage: ./install [--help]"
+    echo "This script clones the dotfiles repository and runs the setup script."
+    echo
+    echo "The installation process will:"
+    echo "  1. Clone the dotfiles repository to $HOME/repos/dotfiles"
+    echo "  2. Run the setup_dotfiles script to install and configure dotfiles"
+    echo
     exit 0
 fi
 
-# Initialize git submodules to retrieve scripts.
-git submodule update --init --recursive nvim scripts tmux || { echo "Error initializing git submodules"; exit 1; }
+section_header "Dotfiles Installation"
 
-DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
-SCRIPT_DIR="$DOTFILES_DIR/scripts"
-
-# Call the install script
-source "$SCRIPT_DIR/install_packages"
-
-# Call the setup script
-source "$SCRIPT_DIR/setup"
-
-
-if [ $? -eq 0 ]; then
-    echo "Setup completed successfully."
-else
-    echo "Setup failed. Please check for errors."
-    exit 1
+# Create repos directory if it doesn't exist
+if [ ! -d "$HOME/repos" ]; then
+    log "Creating directory: $HOME/repos"
+    mkdir -p "$HOME/repos"
 fi
+
+# Clone repository if running from a different location
+if [ "$DOTFILES_DIR" != "$HOME/repos/dotfiles" ]; then
+    if [ -d "$HOME/repos/dotfiles" ]; then
+        log_warning "Dotfiles directory already exists at $HOME/repos/dotfiles"
+        read -p "Do you want to remove it and clone again? (y/n) " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            log "Removing existing dotfiles directory"
+            rm -rf "$HOME/repos/dotfiles"
+        else
+            log "Using existing dotfiles directory"
+        fi
+    fi
+
+    if [ ! -d "$HOME/repos/dotfiles" ]; then
+        log "Cloning dotfiles repository to $HOME/repos/dotfiles"
+        git clone https://github.com/Alexyz205/dotfiles.git "$HOME/repos/dotfiles"
+    fi
+
+    DOTFILES_DIR="$HOME/repos/dotfiles"
+fi
+
+# Export DOTFILES_DIR for setup scripts
+export DOTFILES_DIR
+
+# Run setup script
+section_header "Running Dotfiles Setup"
+log "Executing setup_dotfiles script"
+bash "$DOTFILES_DIR/setup_dotfiles"
+
+section_header "Installation Complete"
+log_success "Dotfiles have been successfully installed!"
+echo
+echo "Your new environment is ready to use."
+echo "Please restart your terminal or run ${BOLD}exec zsh${RESET} to apply all changes."
