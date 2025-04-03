@@ -116,6 +116,7 @@ alias h='helm'
 alias hf='helmfile'
 alias d='docker'
 alias dc='docker-compose'
+alias ld='lazydocker'
 
 # Git
 alias g='git'
