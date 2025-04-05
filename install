@@ -85,4 +85,4 @@ section_header "Installation Complete"
 log_success "Dotfiles have been successfully installed!"
 echo
 echo "Your new environment is ready to use."
-echo "Please restart your terminal or run ${BOLD}exec zsh${RESET} to apply all changes."
+echo -e "Please restart your terminal or run ${BOLD}exec zsh${RESET} to apply all changes."
