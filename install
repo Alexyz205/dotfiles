@@ -68,12 +68,6 @@ if [ "$DOTFILES_DIR" != "$HOME/repos/dotfiles" ]; then
     if [ ! -d "$HOME/repos/dotfiles" ]; then
         log "Cloning dotfiles repository to $HOME/repos/dotfiles"
         git clone https://github.com/Alexyz205/dotfiles.git "$HOME/repos/dotfiles"
-
-        # Initialize git submodules immediately after cloning
-        log "Initializing git submodules"
-        git -C "$HOME/repos/dotfiles" submodule update --init --recursive || \
-            error_exit "Failed to initialize git submodules"
-        log_success "Git submodules initialized successfully"
     fi
 
     DOTFILES_DIR="$HOME/repos/dotfiles"
@@ -88,4 +82,4 @@ section_header "Installation Complete"
 log_success "Dotfiles have been successfully installed!"
 echo
 echo "Your new environment is ready to use."
-echo -e "Please restart your terminal or run ${BOLD}exec zsh${RESET} to apply all changes."
+echo -e "Please restart your terminal or run ${BOLD}exec bash${RESET} to apply all changes."

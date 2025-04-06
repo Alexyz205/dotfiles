@@ -56,80 +56,6 @@ else
     log "Using dotfiles directory: ${BOLD}$DOTFILES_DIR${RESET}"
 fi
 
-# Function to handle selective git submodule initialization
-install_git_submodules() {
-    section_header "Git Submodules Management"
-
-    # Get list of available submodules
-    log_progress "Scanning available git submodules..."
-    local submodules=$(git -C "$DOTFILES_DIR" config --file .gitmodules --get-regexp path | awk '{ print $2 }')
-
-    if [ -z "$submodules" ]; then
-        log_warning "No git submodules found in repository"
-        return 0
-    fi
-
-    # Check if --all flag was provided
-    if [[ "$1" == "--all" ]]; then
-        log_progress "Installing all git submodules"
-        git -C "$DOTFILES_DIR" submodule update --init --recursive || error_exit "Failed to initialize git submodules"
-        log_success "All git submodules initialized successfully"
-        return 0
-    fi
-
-    # Interactive selection
-    log "Available submodules:"
-    local i=1
-    local submodule_array=()
-
-    while IFS= read -r module; do
-        echo "  ${i}) ${BOLD}${module}${RESET}"
-        submodule_array+=("$module")
-        ((i++))
-    done <<< "$submodules"
-
-    echo "  ${i}) ${BOLD}All submodules${RESET}"
-    echo "  $((i+1))) ${BOLD}None${RESET}"
-
-    # Prompt user for selection
-    local selected
-    while true; do
-        read -p "Enter the numbers of submodules to install (comma-separated, e.g. 1,3,4): " selected
-
-        if [[ "$selected" == "$i" ]]; then
-            # All submodules selected
-            log_progress "Installing all git submodules"
-            git -C "$DOTFILES_DIR" submodule update --init --recursive || error_exit "Failed to initialize git submodules"
-            log_success "All git submodules initialized successfully"
-            return 0
-        elif [[ "$selected" == "$((i+1))" ]]; then
-            # None selected
-            log_warning "No submodules will be installed"
-            return 0
-        elif [[ "$selected" =~ ^[0-9]+(,[0-9]+)*$ ]]; then
-            # Comma-separated list of numbers
-            break
-        else
-            log_error "Invalid selection. Please enter comma-separated numbers."
-        fi
-    done
-
-    # Process selections
-    IFS=',' read -ra indices <<< "$selected"
-    for index in "${indices[@]}"; do
-        if ((index > 0 && index < i)); then
-            local module="${submodule_array[$((index-1))]}"
-            log_progress "Initializing ${BOLD}${module}${RESET}"
-            git -C "$DOTFILES_DIR" submodule update --init --recursive -- "$module" || \
-                error_exit "Failed to initialize submodule: $module"
-        else
-            log_warning "Invalid selection: $index (ignored)"
-        fi
-    done
-
-    log_success "Selected git submodules initialized successfully"
-}
-
 # Install required packages
 install_required_packages() {
     section_header "Installing Required Packages"
@@ -175,8 +101,13 @@ install_required_packages
 
 SCRIPT_DIR="$DOTFILES_DIR/scripts"
 
-# Initialize git submodules with selection
-install_git_submodules
+# Initialize git submodules
+log_progress "Initializing git submodules"
+for submodule in "scripts" "tmux" "nvim"; do
+    log_progress "Initializing $submodule submodule"
+    git -C "$DOTFILES_DIR" submodule update --init --recursive -- "$submodule" || error_exit "Failed to initialize $submodule submodule"
+done
+log_success "Git submodules initialized successfully"
 
 # Call the setup script
 section_header "Running Setup Script"
