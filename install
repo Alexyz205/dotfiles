@@ -30,6 +30,23 @@ else
     }
 fi
 
+# Check if running in DevContainer or CI environment
+is_automated_environment() {
+    # Check for DevContainer environment variable
+    if [ -n "$REMOTE_CONTAINERS" ] || [ -n "$CODESPACES" ] || [ -n "$DEVCONTAINER_NAME" ]; then
+        return 0
+    fi
+    # Check for CI environment variables
+    if [ -n "$CI" ] || [ -n "$GITHUB_ACTIONS" ] || [ -n "$GITLAB_CI" ] || [ -n "$JENKINS_URL" ]; then
+        return 0
+    fi
+    # Check if stdin is not a TTY (script being piped)
+    if [ ! -t 0 ]; then
+        return 0
+    fi
+    return 1
+}
+
 # Help option
 if [[ "$1" == "--help" ]]; then
     section_header "Dotfiles Installer"
@@ -55,13 +72,18 @@ fi
 if [ "$DOTFILES_DIR" != "$HOME/repos/dotfiles" ]; then
     if [ -d "$HOME/repos/dotfiles" ]; then
         log_warning "Dotfiles directory already exists at $HOME/repos/dotfiles"
-        read -p "Do you want to remove it and clone again? (y/n) " -n 1 -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
-            log "Removing existing dotfiles directory"
-            rm -rf "$HOME/repos/dotfiles"
+
+        if is_automated_environment; then
+            log "Automated environment detected - using existing dotfiles directory"
         else
-            log "Using existing dotfiles directory"
+            read -p "Do you want to remove it and clone again? (y/n) " -n 1 -r
+            echo
+            if [[ $REPLY =~ ^[Yy]$ ]]; then
+                log "Removing existing dotfiles directory"
+                rm -rf "$HOME/repos/dotfiles"
+            else
+                log "Using existing dotfiles directory"
+            fi
         fi
     fi
 
@@ -71,6 +93,24 @@ if [ "$DOTFILES_DIR" != "$HOME/repos/dotfiles" ]; then
     fi
 
     DOTFILES_DIR="$HOME/repos/dotfiles"
+fi
+
+# Handle package installation
+section_header "Package Installation"
+
+# Detect if we're running in an automated environment
+if is_automated_environment; then
+    log "Automated environment detected - installing packages automatically"
+    bash "$DOTFILES_DIR/scripts/install_packages"
+else
+    read -p "Do you want to install development packages? (y/n) " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        log_progress "Running package installation script"
+        bash "$DOTFILES_DIR/scripts/install_packages"
+    else
+        log "Skipping package installation"
+    fi
 fi
 
 # Run setup script

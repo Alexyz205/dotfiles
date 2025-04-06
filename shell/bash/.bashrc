@@ -77,11 +77,20 @@ alias dot='cd $DOTFILES'
 alias repos='cd $REPOS'
 
 # ls
-alias ls='eza --color=auto'
-alias la='eza -la'
-alias ll='eza -l --git -T --hyperlink --color=auto'
+if command -v eza &> /dev/null; then
+  alias ls='eza --color=auto'
+  alias la='eza -la'
+  alias ll='eza -l --git -T --hyperlink --color=auto'
+else
+  echo "eza not found, using default ls"
+fi
 
-alias find='fd'
+
+if command -v fd &> /dev/null; then
+  alias find='fd'
+else
+  echo "fd not found, using default find"
+fi
 alias f='fzf'
 
 # Applications
