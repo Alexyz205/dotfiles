@@ -68,13 +68,16 @@ if [ "$DOTFILES_DIR" != "$HOME/repos/dotfiles" ]; then
     if [ ! -d "$HOME/repos/dotfiles" ]; then
         log "Cloning dotfiles repository to $HOME/repos/dotfiles"
         git clone https://github.com/Alexyz205/dotfiles.git "$HOME/repos/dotfiles"
+
+        # Initialize git submodules immediately after cloning
+        log "Initializing git submodules"
+        git -C "$HOME/repos/dotfiles" submodule update --init --recursive || \
+            error_exit "Failed to initialize git submodules"
+        log_success "Git submodules initialized successfully"
     fi
 
     DOTFILES_DIR="$HOME/repos/dotfiles"
 fi
-
-# Export DOTFILES_DIR for setup scripts
-export DOTFILES_DIR
 
 # Run setup script
 section_header "Running Dotfiles Setup"
