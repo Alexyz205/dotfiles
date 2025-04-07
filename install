@@ -1,125 +1,127 @@
 #!/bin/bash
+# Main installer script for dotfiles
+# This script serves as the primary entry point for setting up the entire development environment
 set -e
 
-# Define paths
+# Define absolute paths regardless of where the script is called from
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 DOTFILES_DIR="$(cd "$SCRIPT_DIR" && pwd)"
 
-# Source common utilities if available, otherwise define minimal functionality
+# Source logging utilities if available, or create minimal logging functions
 if [ -f "$DOTFILES_DIR/scripts/logs" ]; then
     source "$DOTFILES_DIR/scripts/logs"
 else
-    # Fallback minimal color definitions if logs file isn't available yet
-    BLUE="\e[34m"
-    RED="\e[31m"
-    GREEN="\e[32m"
-    YELLOW="\e[33m"
-    BOLD="\e[1m"
-    RESET="\e[0m"
+    # Fallback logging functions
+    # Function to get current timestamp in ISO 8601 format
+    get_timestamp() {
+      date +"%Y-%m-%d %H:%M:%S"
+    }
 
-    # Define basic logging functions
-    log() { echo -e "${BLUE}[INFO]${RESET} $1"; }
-    log_error() { echo -e "${RED}[ERROR]${RESET} $1"; }
+    # Core logging functions with timestamp and log type - no fancy formatting
+    log() { echo "[$(get_timestamp)][INFO] $1"; }
+    log_error() { echo "[$(get_timestamp)][ERROR] $1"; }
+    log_success() { echo "[$(get_timestamp)][SUCCESS] $1"; }
+    log_warning() { echo "[$(get_timestamp)][WARNING] $1"; }
+    log_progress() { echo "[$(get_timestamp)][PROGRESS] $1"; }
+    log_complete() { echo "[$(get_timestamp)][COMPLETE] $1"; }
+
+    # Error and exit helper
     error_exit() { log_error "$1"; exit 1; }
-    log_warning() { echo -e "${YELLOW}[WARNING]${RESET} $1"; }
-    log_success() { echo -e "${GREEN}[SUCCESS]${RESET} $1"; }
 
+    # Simple section header
     section_header() {
-        local title=$1
-        echo -e "\n${BOLD}${BLUE}=== $title ===${RESET}\n"
+        echo -e "\n===== $1 =====\n"
+    }
+
+    # Function to detect automated CI environments for conditional behaviors
+    is_automated_environment() {
+        # Check for common CI/container environment variables
+        [[ -n "${CI}" || -n "${CONTAINER}" || -n "${DEVCONTAINER}" ]]
     }
 fi
 
-# Check if running in DevContainer or CI environment
-is_automated_environment() {
-    # Check for DevContainer environment variable
-    if [ -n "$REMOTE_CONTAINERS" ] || [ -n "$CODESPACES" ] || [ -n "$DEVCONTAINER_NAME" ]; then
-        return 0
-    fi
-    # Check for CI environment variables
-    if [ -n "$CI" ] || [ -n "$GITHUB_ACTIONS" ] || [ -n "$GITLAB_CI" ] || [ -n "$JENKINS_URL" ]; then
-        return 0
-    fi
-    # Check if stdin is not a TTY (script being piped)
-    if [ ! -t 0 ]; then
+# Detect if we're in a devcontainer environment
+detect_devcontainer() {
+    if [ -n "${DEVCONTAINER}" ] || [ -n "${CODESPACES}" ] || [ -f "/.dockerenv" ] && [ -d "/workspaces" ]; then
+        export DEVCONTAINER=true
+        log "Detected devcontainer environment"
         return 0
     fi
     return 1
 }
 
-# Help option
+# Display help information when requested
 if [[ "$1" == "--help" ]]; then
     section_header "Dotfiles Installer"
     echo "Usage: ./install [--help]"
-    echo "This script clones the dotfiles repository and runs the setup script."
+    echo "This script sets up the dotfiles environment."
     echo
     echo "The installation process will:"
-    echo "  1. Clone the dotfiles repository to $HOME/repos/dotfiles"
-    echo "  2. Run the setup_dotfiles script to install and configure dotfiles"
+    echo "  1. Run the setup_dotfiles script to configure dotfiles and update git submodules"
+    echo "  2. Install required packages"
+    echo "  3. Set up automatic configuration for devcontainer environments"
     echo
     exit 0
 fi
 
+# Check if this is a devcontainer and set up accordingly
+if detect_devcontainer; then
+    log_progress "Setting up devcontainer environment"
+    # Set non-interactive mode for automated installations
+    export DEBIAN_FRONTEND=noninteractive
+    # Set environment variables to indicate automated installation
+    export AUTOMATED_INSTALL=true
+fi
+
 section_header "Dotfiles Installation"
 
-# Create repos directory if it doesn't exist
-if [ ! -d "$HOME/repos" ]; then
-    log "Creating directory: $HOME/repos"
-    mkdir -p "$HOME/repos"
-fi
-
-# Clone repository if running from a different location
-if [ "$DOTFILES_DIR" != "$HOME/repos/dotfiles" ]; then
-    if [ -d "$HOME/repos/dotfiles" ]; then
-        log_warning "Dotfiles directory already exists at $HOME/repos/dotfiles"
-
-        if is_automated_environment; then
-            log "Automated environment detected - using existing dotfiles directory"
-        else
-            read -p "Do you want to remove it and clone again? (y/n) " -n 1 -r
-            echo
-            if [[ $REPLY =~ ^[Yy]$ ]]; then
-                log "Removing existing dotfiles directory"
-                rm -rf "$HOME/repos/dotfiles"
-            else
-                log "Using existing dotfiles directory"
-            fi
-        fi
-    fi
-
-    if [ ! -d "$HOME/repos/dotfiles" ]; then
-        log "Cloning dotfiles repository to $HOME/repos/dotfiles"
-        git clone https://github.com/Alexyz205/dotfiles.git "$HOME/repos/dotfiles"
-    fi
-
-    DOTFILES_DIR="$HOME/repos/dotfiles"
-fi
-
-# Handle package installation
-section_header "Package Installation"
-
-# Detect if we're running in an automated environment
-if is_automated_environment; then
-    log "Automated environment detected - installing packages automatically"
-    bash "$DOTFILES_DIR/scripts/install_packages"
-else
-    read -p "Do you want to install development packages? (y/n) " -n 1 -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        log_progress "Running package installation script"
-        bash "$DOTFILES_DIR/scripts/install_packages"
-    else
-        log "Skipping package installation"
-    fi
-fi
-
-# Run setup script
+# First run setup script to initialize the environment
 section_header "Running Dotfiles Setup"
-log "Executing setup_dotfiles script"
+log_progress "Executing setup_dotfiles script to update git submodules and configure environment"
 bash "$DOTFILES_DIR/setup_dotfiles"
 
+# After environment setup, install required development tools
+section_header "Package Installation"
+log_progress "Installing required packages"
+bash "$DOTFILES_DIR/scripts/install_packages"
+
+# Create hook for automatic setup in devcontainer
+if detect_devcontainer; then
+    section_header "Devcontainer Configuration"
+    log_progress "Creating devcontainer initialization hook"
+
+    # Create a script to run on devcontainer startup if it doesn't exist
+    DEVCONTAINER_HOOK="$HOME/.devcontainer-init"
+    if [ ! -f "$DEVCONTAINER_HOOK" ]; then
+        cat > "$DEVCONTAINER_HOOK" << EOF
+#!/bin/bash
+# Automatically generated dotfiles initialization hook for devcontainer
+# This script runs automatically when a devcontainer starts
+
+# Run dotfiles update if available
+if [ -d "/workspaces/dotfiles" ]; then
+    echo "Updating dotfiles configuration..."
+    cd /workspaces/dotfiles && ./install
+fi
+EOF
+        chmod +x "$DEVCONTAINER_HOOK"
+        log_success "Created devcontainer initialization hook at $DEVCONTAINER_HOOK"
+    fi
+
+    # Add hook to bashrc and zshrc if not already there
+    for RC_FILE in "$HOME/.bashrc" "$HOME/.zshrc"; do
+        if [ -f "$RC_FILE" ]; then
+            if ! grep -q "/.devcontainer-init" "$RC_FILE"; then
+                echo -e "\n# Dotfiles devcontainer initialization hook" >> "$RC_FILE"
+                echo "[ -f \"$DEVCONTAINER_HOOK\" ] && source \"$DEVCONTAINER_HOOK\"" >> "$RC_FILE"
+                log_success "Added devcontainer hook to $(basename "$RC_FILE")"
+            fi
+        fi
+    done
+fi
+
 section_header "Installation Complete"
-log_success "Dotfiles have been successfully installed!"
+log_complete "Dotfiles have been successfully installed!"
 echo
 echo "Your new environment is ready to use."
-echo -e "Please restart your terminal or run ${BOLD}exec bash${RESET} to apply all changes."
+echo "Please restart your terminal or run exec bash to apply all changes."

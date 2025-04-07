@@ -1,37 +1,40 @@
 #!/bin/bash
+# Environment setup script for dotfiles
+# This script handles the initial setup of dotfiles including git submodules
+# and required system packages before the main configuration
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 
-# Source logs if available, otherwise define minimal color functionality
+# Source logs if available, otherwise create minimal logging functions
+# These functions will be replaced once the full logging system is available
 if [ -f "$SCRIPT_DIR/scripts/logs" ]; then
     source "$SCRIPT_DIR/scripts/logs"
 else
-    # Fallback minimal color definitions
-    BLUE="\e[34m"
-    RED="\e[31m"
-    GREEN="\e[32m"
-    YELLOW="\e[33m"
-    BOLD="\e[1m"
-    RESET="\e[0m"
-
-    # Define basic logging functions
-    log() { echo -e "${BLUE}[INFO]${RESET} $1"; }
-    log_error() { echo -e "${RED}[ERROR]${RESET} $1"; }
-    error_exit() { log_error "$1"; exit 1; }
-    log_success() { echo -e "${GREEN}[SUCCESS]${RESET} $1"; }
-    log_warning() { echo -e "${YELLOW}[WARNING]${RESET} $1"; }
-
-    section_header() {
-        local title=$1
-        echo -e "\n${BOLD}${BLUE}=== $title ===${RESET}\n"
+    # Minimal logging functions if logs script is not yet available
+    # Function to get current timestamp in ISO 8601 format
+    get_timestamp() {
+      date +"%Y-%m-%d %H:%M:%S"
     }
 
-    log_progress() { echo -e "${BLUE}[PROGRESS]${RESET} $1"; }
-    log_complete() { echo -e "${GREEN}[COMPLETE]${RESET} $1"; }
+    # Core logging functions with timestamp and log type - no fancy formatting
+    log() { echo "[$(get_timestamp)][INFO] $1"; }
+    log_error() { echo "[$(get_timestamp)][ERROR] $1"; }
+    log_success() { echo "[$(get_timestamp)][SUCCESS] $1"; }
+    log_warning() { echo "[$(get_timestamp)][WARNING] $1"; }
+    log_progress() { echo "[$(get_timestamp)][PROGRESS] $1"; }
+    log_complete() { echo "[$(get_timestamp)][COMPLETE] $1"; }
+
+    # Error and exit helper
+    error_exit() { log_error "$1"; exit 1; }
+
+    # Simple section header
+    section_header() {
+        echo -e "\n===== $1 =====\n"
+    }
 fi
 
-# Help option
+# Display help information when requested
 if [[ "$1" == "--help" ]]; then
     section_header "Dotfiles Setup"
     echo "Usage: setup_dotfiles [--help]"
@@ -48,19 +51,11 @@ fi
 
 section_header "Initializing Dotfiles"
 
-# Set DOTFILES_DIR if not already defined
-if [ -z "$DOTFILES_DIR" ]; then
-    DOTFILES_DIR="$HOME/repos/dotfiles"
-    log_warning "DOTFILES_DIR wasn't set, using default: ${BOLD}$DOTFILES_DIR${RESET}"
-else
-    log "Using dotfiles directory: ${BOLD}$DOTFILES_DIR${RESET}"
-fi
-
-# Install required packages
+# Detect and install required system packages based on available package manager
 install_required_packages() {
     section_header "Installing Required Packages"
 
-    # Detect package manager
+    # Use the appropriate package manager for the current system
     if command -v apt-get &> /dev/null; then
         log_progress "Detected apt package manager"
         log_progress "Updating package index..."
@@ -96,12 +91,16 @@ install_required_packages() {
     log_success "Required packages installed successfully"
 }
 
-# Install required packages before proceeding
+# Install required system packages before proceeding with setup
 install_required_packages
+
+# Ensure we have the correct dotfiles directory path regardless of execution location
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
+log_progress "Using dotfiles directory: $DOTFILES_DIR"
 
 SCRIPT_DIR="$DOTFILES_DIR/scripts"
 
-# Initialize git submodules
+# Initialize required git submodules for core functionality
 log_progress "Initializing git submodules"
 for submodule in "scripts" "tmux" "nvim"; do
     log_progress "Initializing $submodule submodule"
@@ -109,7 +108,7 @@ for submodule in "scripts" "tmux" "nvim"; do
 done
 log_success "Git submodules initialized successfully"
 
-# Call the setup script
+# Execute the main setup script to configure dotfiles
 section_header "Running Setup Script"
 log_progress "Executing main setup script"
 
@@ -120,4 +119,4 @@ section_header "Setup Complete"
 log_complete "Dotfiles have been successfully set up!"
 echo
 echo "Your development environment is ready to use."
-echo -e "Start a new terminal session or run ${BOLD}exec bash${RESET} to apply changes."
+echo "Start a new terminal session or run exec bash to apply changes."
