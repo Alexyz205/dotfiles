@@ -32,23 +32,7 @@ else
     section_header() {
         echo -e "\n===== $1 =====\n"
     }
-
-    # Function to detect automated CI environments for conditional behaviors
-    is_automated_environment() {
-        # Check for common CI/container environment variables
-        [[ -n "${CI}" || -n "${CONTAINER}" || -n "${DEVCONTAINER}" ]]
-    }
 fi
-
-# Detect if we're in a devcontainer environment
-detect_devcontainer() {
-    if [ -n "${DEVCONTAINER}" ] || [ -n "${CODESPACES}" ] || [ -f "/.dockerenv" ] && [ -d "/workspaces" ]; then
-        export DEVCONTAINER=true
-        log "Detected devcontainer environment"
-        return 0
-    fi
-    return 1
-}
 
 # Display help information when requested
 if [[ "$1" == "--help" ]]; then
@@ -59,19 +43,12 @@ if [[ "$1" == "--help" ]]; then
     echo "The installation process will:"
     echo "  1. Run the setup_dotfiles script to configure dotfiles and update git submodules"
     echo "  2. Install required packages"
-    echo "  3. Set up automatic configuration for devcontainer environments"
     echo
     exit 0
 fi
 
-# Check if this is a devcontainer and set up accordingly
-if detect_devcontainer; then
-    log_progress "Setting up devcontainer environment"
-    # Set non-interactive mode for automated installations
-    export DEBIAN_FRONTEND=noninteractive
-    # Set environment variables to indicate automated installation
-    export AUTOMATED_INSTALL=true
-fi
+# Set non-interactive mode for automated installations
+export DEBIAN_FRONTEND=noninteractive
 
 section_header "Dotfiles Installation"
 
@@ -84,41 +61,6 @@ bash "$DOTFILES_DIR/setup_dotfiles"
 section_header "Package Installation"
 log_progress "Installing required packages"
 bash "$DOTFILES_DIR/scripts/install_packages"
-
-# Create hook for automatic setup in devcontainer
-if detect_devcontainer; then
-    section_header "Devcontainer Configuration"
-    log_progress "Creating devcontainer initialization hook"
-
-    # Create a script to run on devcontainer startup if it doesn't exist
-    DEVCONTAINER_HOOK="$HOME/.devcontainer-init"
-    if [ ! -f "$DEVCONTAINER_HOOK" ]; then
-        cat > "$DEVCONTAINER_HOOK" << EOF
-#!/bin/bash
-# Automatically generated dotfiles initialization hook for devcontainer
-# This script runs automatically when a devcontainer starts
-
-# Run dotfiles update if available
-if [ -d "/workspaces/dotfiles" ]; then
-    echo "Updating dotfiles configuration..."
-    cd /workspaces/dotfiles && ./install
-fi
-EOF
-        chmod +x "$DEVCONTAINER_HOOK"
-        log_success "Created devcontainer initialization hook at $DEVCONTAINER_HOOK"
-    fi
-
-    # Add hook to bashrc and zshrc if not already there
-    for RC_FILE in "$HOME/.bashrc" "$HOME/.zshrc"; do
-        if [ -f "$RC_FILE" ]; then
-            if ! grep -q "/.devcontainer-init" "$RC_FILE"; then
-                echo -e "\n# Dotfiles devcontainer initialization hook" >> "$RC_FILE"
-                echo "[ -f \"$DEVCONTAINER_HOOK\" ] && source \"$DEVCONTAINER_HOOK\"" >> "$RC_FILE"
-                log_success "Added devcontainer hook to $(basename "$RC_FILE")"
-            fi
-        fi
-    done
-fi
 
 section_header "Installation Complete"
 log_complete "Dotfiles have been successfully installed!"
