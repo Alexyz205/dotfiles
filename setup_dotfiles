@@ -34,6 +34,30 @@ else
     }
 fi
 
+# Source checker script for sudo handling
+if [ -f "$SCRIPT_DIR/scripts/checker" ]; then
+    source "$SCRIPT_DIR/scripts/checker"
+    check_sudo
+    setup_sudo_wrapper
+else
+    log_warning "Checker script not found. Creating fallback sudo handling."
+    # Define sudo function directly in this script
+    if command -v sudo &>/dev/null; then
+        log_progress "Sudo is available and will be used for privileged operations"
+        sudo() {
+            command sudo "$@"
+        }
+    else
+        log_warning "Sudo is not available. Running with current user privileges."
+        log_warning "Some operations may fail if they require elevated permissions."
+        # Create a sudo function that just runs the command without sudo
+        sudo() {
+            "$@"
+        }
+    fi
+    export -f sudo
+fi
+
 # Display help information when requested
 if [[ "$1" == "--help" ]]; then
     section_header "Dotfiles Setup"
@@ -59,36 +83,65 @@ install_required_packages() {
     if command -v apt-get &> /dev/null; then
         log_progress "Detected apt package manager"
         log_progress "Updating package index..."
-        sudo apt-get update -qq || error_exit "Failed to update package index"
+
+        # First try without sudo
+        apt-get update -qq 2>/dev/null || {
+            # If that fails, try with sudo
+            sudo apt-get update -qq || {
+                log_warning "Failed to update package index - continuing anyway"
+            }
+        }
 
         log_progress "Installing required packages..."
-        sudo apt-get install -y -qq curl git tar wget unzip apt-transport-https \
-            ca-certificates gnupg lsb-release build-essential \
-            || error_exit "Failed to install required packages"
+        # First try without sudo
+        apt-get install -y -qq curl git tar wget unzip apt-transport-https \
+            ca-certificates gnupg lsb-release build-essential 2>/dev/null || {
+            # If that fails, try with sudo
+            sudo apt-get install -y -qq curl git tar wget unzip apt-transport-https \
+                ca-certificates gnupg lsb-release build-essential || {
+                log_warning "Failed to install some packages - continuing anyway"
+            }
+        }
     elif command -v dnf &> /dev/null; then
         log_progress "Detected dnf package manager"
         log_progress "Installing required packages..."
-        sudo dnf install -y -q curl git tar wget unzip ca-certificates gnupg \
-            make gcc gcc-c++ redhat-lsb-core \
-            || error_exit "Failed to install required packages"
+        # First try without sudo
+        dnf install -y -q curl git tar wget unzip ca-certificates gnupg \
+            make gcc gcc-c++ redhat-lsb-core 2>/dev/null || {
+            # If that fails, try with sudo
+            sudo dnf install -y -q curl git tar wget unzip ca-certificates gnupg \
+                make gcc gcc-c++ redhat-lsb-core || {
+                log_warning "Failed to install some packages - continuing anyway"
+            }
+        }
     elif command -v yum &> /dev/null; then
         log_progress "Detected yum package manager"
         log_progress "Installing required packages..."
-        sudo yum install -y -q curl git tar wget unzip ca-certificates gnupg \
-            make gcc gcc-c++ redhat-lsb-core \
-            || error_exit "Failed to install required packages"
+        # First try without sudo
+        yum install -y -q curl git tar wget unzip ca-certificates gnupg \
+            make gcc gcc-c++ redhat-lsb-core 2>/dev/null || {
+            # If that fails, try with sudo
+            sudo yum install -y -q curl git tar wget unzip ca-certificates gnupg \
+                make gcc gcc-c++ redhat-lsb-core || {
+                log_warning "Failed to install some packages - continuing anyway"
+            }
+        }
     elif command -v pacman &> /dev/null; then
         log_progress "Detected pacman package manager"
         log_progress "Installing required packages..."
-        sudo pacman -Syq --noconfirm curl git tar wget unzip ca-certificates gnupg base-devel \
-            || error_exit "Failed to install required packages"
+        # First try without sudo
+        pacman -Syq --noconfirm curl git tar wget unzip ca-certificates gnupg base-devel 2>/dev/null || {
+            # If that fails, try with sudo
+            sudo pacman -Syq --noconfirm curl git tar wget unzip ca-certificates gnupg base-devel || {
+                log_warning "Failed to install some packages - continuing anyway"
+            }
+        }
     else
         log_warning "Unsupported package manager. You may need to install dependencies manually:"
         log_warning "  - curl, git, tar, wget, unzip, build tools"
-        return 1
     fi
 
-    log_success "Required packages installed successfully"
+    log_progress "Package installation process completed"
 }
 
 # Install required system packages before proceeding with setup
