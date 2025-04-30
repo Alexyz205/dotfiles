@@ -155,7 +155,7 @@ SCRIPT_DIR="$DOTFILES_DIR/scripts"
 
 # Initialize required git submodules for core functionality
 log_progress "Initializing git submodules"
-for submodule in "scripts" "tmux" "nvim"; do
+for submodule in "scripts" "nvim"; do
     log_progress "Initializing $submodule submodule"
     git -C "$DOTFILES_DIR" submodule update --init --recursive -- "$submodule" || error_exit "Failed to initialize $submodule submodule"
 done
