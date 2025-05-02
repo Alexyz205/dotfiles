@@ -46,6 +46,13 @@ else
   echo "zoxide not found, skipping initialization."
 fi
 
+if command -v carapace &> /dev/null; then
+  export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
+  source <(carapace _carapace)
+else
+  echo "carapace not found, skipping initialization."
+fi
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 if command -v fzf &> /dev/null; then
   source <(fzf --zsh)

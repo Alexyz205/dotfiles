@@ -36,6 +36,13 @@ else
   echo "direnv not found, skipping initialization."
 fi
 
+if command -v carapace &> /dev/null; then
+  export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
+  source <(carapace _carapace)
+else
+  echo "carapace not found, skipping initialization."
+fi
+
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 if command -v fzf &> /dev/null; then
   source <(fzf --bash)

@@ -28,6 +28,7 @@
           pkgs.fd
           pkgs.eza
           pkgs.ranger
+          pkgs.carapace
           pkgs.nodejs
         ];
 
