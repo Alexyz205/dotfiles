@@ -130,7 +130,11 @@ if command -v fd &> /dev/null; then
 else
   echo "fd not found, using default find"
 fi
+
+# File operations
+alias find='fd'
 alias f='fzf'
+alias cat='bat'
 
 # Applications
 alias v=nvim

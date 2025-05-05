@@ -15,6 +15,7 @@ export GHREPOS="$REPOS/github.com/$GITUSER"
 export DOTFILES="$GHREPOS/dotfiles"
 export SCRIPTS="$DOTFILES/scripts"
 export XDG_CONFIG_HOME="$HOME/.config"
+export EZA_CONFIG_DIR="$XDG_CONFIG_HOME/eza"
 
 # ~~~~~~~~~~~~~~~ Zsh Completion Initialization ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -143,8 +144,10 @@ alias ls='eza --color=auto'
 alias la='eza -la'
 alias ll='eza -l --git -T --hyperlink --color=auto'
 
+# File operations
 alias find='fd'
 alias f='fzf'
+alias cat='bat'
 
 # Applications
 alias v=nvim
