@@ -16,6 +16,38 @@ export DOTFILES="$GHREPOS/dotfiles"
 export SCRIPTS="$DOTFILES/scripts"
 export XDG_CONFIG_HOME="$HOME/.config"
 
+# ~~~~~~~~~~~~~~~ FZF Configuration ~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Catppuccin theme colors for FZF
+export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
+  --color=fg:#cdd6f4,fg+:#a6e3a1,bg:#313244,bg+:#262626
+  --color=hl:#89b4fa,hl+:#5fd7ff,info:#cba6f7,marker:#a6e3a1
+  --color=prompt:#94e2d5,spinner:#f5c2e7,pointer:#f5c2e7,header:#87afaf
+  --color=border:#f5c2e7,preview-border:#89b4fa,preview-label:#cba6f7,label:#cdd6f4
+  --color=query:#a6e3a1
+  --border="rounded" --border-label="" --preview-window="border-rounded" --padding="1,2"
+  --prompt="> " --marker=">" --pointer="◆" --separator="─"
+  --scrollbar="│" --layout="reverse" --info="right"'
+
+export FZF_CTRL_T_OPTS="
+  --walker-skip .git,node_modules,target
+  --preview 'bat -n --color=always {}'
+  --bind 'ctrl-/:change-preview-window(down|hidden|)'"
+
+# CTRL-R - Paste the selected command from history onto the command-line
+# Press CTRL-R again to toggle sorting by relevance
+# Press CTRL-/ or ALT-/ to toggle line wrapping
+export FZF_CTRL_R_OPTS="
+  --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+  --color header:italic
+  --header 'Press CTRL-Y to copy command into clipboard'"
+
+# ALT-C - cd into the selected directory
+# Tree structure in the preview window
+export FZF_ALT_C_OPTS="
+  --walker-skip .git,node_modules,target
+  --preview 'tree -C {}'"
+
 # ~~~~~~~~~~~~~~~ Path configuration ~~~~~~~~~~~~~~~~~~~~~~~~
 
 path=(
