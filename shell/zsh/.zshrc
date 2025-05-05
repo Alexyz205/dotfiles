@@ -16,6 +16,12 @@ export DOTFILES="$GHREPOS/dotfiles"
 export SCRIPTS="$DOTFILES/scripts"
 export XDG_CONFIG_HOME="$HOME/.config"
 
+# ~~~~~~~~~~~~~~~ Zsh Completion Initialization ~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Initialize completion system early to ensure compdef is available
+autoload -Uz compinit && compinit
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+
 # ~~~~~~~~~~~~~~~ FZF Configuration ~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Catppuccin theme colors for FZF
@@ -109,11 +115,6 @@ source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 # fi
 
 alias t='tmux attach -t dev || tmux new-session -s dev'
-
-# ~~~~~~~~~~~~~~~ Configurations ~~~~~~~~~~~~~~~~~
-
-autoload -Uz compinit && compinit
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
 # ~~~~~~~~~~~~~~~ History ~~~~~~~~~~~~~~~~~~~~~~~~
 
