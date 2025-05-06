@@ -1,14 +1,14 @@
-# ~~~~~~~~~~~~~~~ Environment Variables ~~~~~~~~~~~~~~~~~~~~~~~~
+# ===============================================
+# Environment Variables and Core Settings
+# ===============================================
 
 # Set to superior editing mode
-
 set -o vi
 
 export VISUAL=nvim
 export EDITOR=nvim
 
 # Directories
-
 export REPOS="$HOME/repos"
 export GITUSER="alexyz205"
 export GHREPOS="$REPOS/github.com/$GITUSER"
@@ -17,15 +17,32 @@ export SCRIPTS="$DOTFILES/scripts"
 export XDG_CONFIG_HOME="$HOME/.config"
 export EZA_CONFIG_DIR="$XDG_CONFIG_HOME/eza"
 
-# ~~~~~~~~~~~~~~~ Zsh Completion Initialization ~~~~~~~~~~~~~~~~~~~~~~~~
+# ===============================================
+# Path Configuration
+# ===============================================
 
-# Initialize completion system early to ensure compdef is available
+path=(
+    $path                           # Keep existing PATH entries
+    $HOME/bin
+    $HOME/.local/bin
+    $SCRIPTS                        # Add scripts directory to PATH
+)
+
+# Remove duplicate entries and non-existent directories
+typeset -U path
+path=($^path(N-/))
+
+export PATH
+
+# ===============================================
+# Tool Configurations
+# ===============================================
+
+# Zsh Completion Initialization
 autoload -Uz compinit && compinit
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
-# ~~~~~~~~~~~~~~~ FZF Configuration ~~~~~~~~~~~~~~~~~~~~~~~~
-
-# Catppuccin theme colors for FZF
+# FZF Configuration
 export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
   --color=fg:#cdd6f4,fg+:#a6e3a1,bg:#313244,bg+:#262626
   --color=hl:#89b4fa,hl+:#5fd7ff,info:#cba6f7,marker:#a6e3a1
@@ -41,43 +58,27 @@ export FZF_CTRL_T_OPTS="
   --preview 'bat -n --color=always {}'
   --bind 'ctrl-/:change-preview-window(down|hidden|)'"
 
-# CTRL-R - Paste the selected command from history onto the command-line
-# Press CTRL-R again to toggle sorting by relevance
-# Press CTRL-/ or ALT-/ to toggle line wrapping
 export FZF_CTRL_R_OPTS="
   --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
   --color header:italic
   --header 'Press CTRL-Y to copy command into clipboard'"
 
-# ALT-C - cd into the selected directory
-# Tree structure in the preview window
 export FZF_ALT_C_OPTS="
   --walker-skip .git,node_modules,target
   --preview 'tree -C {}'"
 
-# ~~~~~~~~~~~~~~~ Path configuration ~~~~~~~~~~~~~~~~~~~~~~~~
+# ===============================================
+# Tool Initializations
+# ===============================================
 
-path=(
-    $path                           # Keep existing PATH entries
-    $HOME/bin
-    $HOME/.local/bin
-    $SCRIPTS                        # Add scripts directory to PATH
-)
-
-# Remove duplicate entries and non-existent directories
-typeset -U path
-path=($^path(N-/))
-
-export PATH
-
-# ~~~~~~~~~~~~~~~ Load plugins ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+# Starship prompt
 if command -v starship &> /dev/null; then
   eval "$(starship init zsh)"
 else
   echo "Starship not found, skipping initialization."
 fi
 
+# Zoxide (smart cd)
 if command -v zoxide &> /dev/null; then
   eval "$(zoxide init zsh)"
   alias cd='z'
@@ -85,6 +86,7 @@ else
   echo "zoxide not found, skipping initialization."
 fi
 
+# Carapace (completions)
 if command -v carapace &> /dev/null; then
   export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
   source <(carapace _carapace)
@@ -92,6 +94,7 @@ else
   echo "carapace not found, skipping initialization."
 fi
 
+# FZF
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 if command -v fzf &> /dev/null; then
   source <(fzf --zsh)
@@ -99,10 +102,8 @@ else
   echo "fzf not found, skipping fzf initialization."
 fi
 
-source ~/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-# ~~~~~~~~~~~~~~~ Tmux ~~~~~~~~~~~~~~~~~~~~~~~~
+# Tmux Initialization
+# Uncomment the following lines if you want to use tmux
 
 # if command -v tmux &> /dev/null; then
 #   if [ -z "$TMUX" ]; then
@@ -117,7 +118,13 @@ source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 alias t='tmux attach -t dev || tmux new-session -s dev'
 
-# ~~~~~~~~~~~~~~~ History ~~~~~~~~~~~~~~~~~~~~~~~~
+# Zsh plugins
+source ~/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# ===============================================
+# History
+# ===============================================
 
 HISTFILE=~/.zsh_history
 HISTSIZE=100000
@@ -129,37 +136,48 @@ setopt hist_ignore_dups
 setopt hist_verify
 setopt hist_ignore_space
 
-# completion using arrow keys (based on history)
+# Completion using arrow keys (based on history)
 bindkey '^[[1;5A' history-search-backward
 bindkey '^[[1;5B' history-search-forward
 
-# ~~~~~~~~~~~~~~~ Aliases ~~~~~~~~~~~~~~~~~~~~~~~~
+# ===============================================
+# Aliases
+# ===============================================
 
-# Repos
+# Navigation
 alias dot='cd $DOTFILES'
 alias repos='cd $REPOS'
-
-# ls
-alias ls='eza --color=auto'
-alias la='eza -la'
-alias ll='eza -l --git -T --hyperlink --color=auto'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias mkdir='mkdir -pv'
 
 # File operations
+# Eza with icons and enhanced display
+alias ls='eza --color=auto --icons'
+alias la='eza -la --icons'
+alias ll='eza -l --git --icons --hyperlink'
+alias lt='eza --tree --level=2 --icons'
+alias lta='eza --tree --level=2 --icons -a'
+alias ltl='eza --tree --level=2 --icons -l'
+alias ldir='eza --long --icons --only-dirs'
+alias lg='eza --grid --icons'
+alias lm='eza --icons --sort=modified'
+alias ld='eza --icons --sort=date'
+alias lz='eza --icons --sort=size'
+
 alias find='fd'
 alias f='fzf'
 alias cat='bat'
 
 # Applications
-alias v=nvim
-alias t='tmux'
+alias v='nvim'
+alias t='tmux attach -t dev || tmux new-session -s dev'
 alias r='ranger'
 alias p='python'
-alias k='kubectl'
-alias h='helm'
-alias hf='helmfile'
-alias d='docker'
-alias dc='docker-compose'
-alias ld='lazydocker'
+alias e='exit'
+alias c='clear'
+alias reload='source ~/.bashrc'
 
 # Git
 alias g='git'
@@ -174,24 +192,20 @@ alias gpl='git pull'
 alias gs='git status'
 alias lg='lazygit'
 
-# Additional useful aliases
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias mkdir='mkdir -pv'
-alias e='exit'
-alias c="clear"
-alias reload='source ~/.bashrc'
+# Container and Kubernetes
+alias k='kubectl'
+alias h='helm'
+alias hf='helmfile'
+alias d='docker'
+alias dc='docker-compose'
+alias ld='lazydocker'
+alias dru='docker run -it --rm -v ~/repos/dotfiles:/root/dotfiles ubuntu bash'
 alias ik8s='~/dotfiles/scripts/install_k8s'
 alias da='direnv allow'
 
-# Devpod
-
+# DevPod aliases
 alias ds='devpod ssh'
 alias du='devpod up .'
-
-# Docker
-alias dru='docker run -it --rm -v ~/repos/dotfiles:/root/dotfiles ubuntu bash'
 
 # Nix
 alias nr='nix run nix-darwin --extra-experimental-features "nix-command flakes" -- switch --flake ~/repos/dotfiles/nix#Alexis-MBA'

@@ -1,4 +1,6 @@
-# ~~~~~~~~~~~~~~~ Environment Variables ~~~~~~~~~~~~~~~~~~~~~~~~
+# ===============================================
+# Environment Variables and Core Settings
+# ===============================================
 
 # Locale
 export LANG=en_US.UTF-8
@@ -10,9 +12,18 @@ export DOTFILES="$HOME/dotfiles"
 export SCRIPTS="$DOTFILES/scripts"
 export XDG_CONFIG_HOME="$HOME/.config"
 
-# ~~~~~~~~~~~~~~~ FZF Configuration ~~~~~~~~~~~~~~~~~~~~~~~~
+# ===============================================
+# Path Configuration
+# ===============================================
 
-# Catppuccin theme colors for FZF
+PATH="${PATH:+${PATH}:}"$SCRIPTS":"$HOME"/.local/bin"
+export PATH
+
+# ===============================================
+# Tool Configurations
+# ===============================================
+
+# FZF Configuration
 export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
   --color=fg:#cdd6f4,fg+:#a6e3a1,bg:#313244,bg+:#262626
   --color=hl:#89b4fa,hl+:#5fd7ff,info:#cba6f7,marker:#a6e3a1
@@ -28,33 +39,27 @@ export FZF_CTRL_T_OPTS="
   --preview 'bat -n --color=always {}'
   --bind 'ctrl-/:change-preview-window(down|hidden|)'"
 
-# CTRL-R - Paste the selected command from history onto the command-line
-# Press CTRL-R again to toggle sorting by relevance
-# Press CTRL-/ or ALT-/ to toggle line wrapping
 export FZF_CTRL_R_OPTS="
   --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
   --color header:italic
   --header 'Press CTRL-Y to copy command into clipboard'"
 
-# ALT-C - cd into the selected directory
-# Tree structure in the preview window
 export FZF_ALT_C_OPTS="
   --walker-skip .git,node_modules,target
   --preview 'tree -C {}'"
 
-# ~~~~~~~~~~~~~~~ Path configuration ~~~~~~~~~~~~~~~~~~~~~~~~
+# ===============================================
+# Tool Initializations
+# ===============================================
 
-PATH="${PATH:+${PATH}:}"$SCRIPTS":"$HOME"/.local/bin"
-
-export PATH
-
-# ~~~~~~~~~~~~~~~ Load plugins ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Starship prompt
 if command -v starship &> /dev/null; then
   eval "$(starship init bash)"
 else
   echo "Starship not found, skipping initialization."
 fi
 
+# Zoxide (smart cd)
 if command -v zoxide &> /dev/null; then
   eval "$(zoxide init bash)"
   alias cd='z'
@@ -62,12 +67,14 @@ else
   echo "zoxide not found, skipping initialization."
 fi
 
+# Direnv
 if command -v direnv &> /dev/null; then
   eval "$(direnv hook bash)"
 else
   echo "direnv not found, skipping initialization."
 fi
 
+# Carapace (completions)
 if command -v carapace &> /dev/null; then
   export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
   source <(carapace _carapace)
@@ -75,6 +82,7 @@ else
   echo "carapace not found, skipping initialization."
 fi
 
+# FZF
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 if command -v fzf &> /dev/null; then
   source <(fzf --bash)
@@ -82,9 +90,9 @@ else
   echo "fzf not found, skipping fzf initialization."
 fi
 
-# ~~~~~~~~~~~~~~~ Tmux ~~~~~~~~~~~~~~~~~~~~~~~~
+# Tmux Initialization
+# Uncomment the following lines if you want to use tmux
 
-# Already working with tmux locally
 # if command -v tmux &> /dev/null; then
 #   if [ -z "$TMUX" ]; then
 #     echo "Starting tmux..."
@@ -98,32 +106,48 @@ fi
 
 alias t='tmux attach -t dev || tmux new-session -s dev'
 
-# ~~~~~~~~~~~~~~~ History ~~~~~~~~~~~~~~~~~~~~~~~~
+# ===============================================
+# History
+# ===============================================
+
 HISTFILE=~/.bash_history
 HISTSIZE=100000
 SAVEHIST=100000
 HISTCONTROL=ignoreboth
 HISTIGNORE="&:ls:cd:cd -:pwd:exit:date:* --help"
 
-# completion using arrow keys (based on history)
+# Completion using arrow keys (based on history)
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
 
-# ~~~~~~~~~~~~~~~ Aliases ~~~~~~~~~~~~~~~~~~~~~~~~
+# ===============================================
+# Aliases
+# ===============================================
 
-# Repos
+# Navigation
 alias dot='cd $DOTFILES'
 alias repos='cd $REPOS'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
 
-# ls
+# File operations
 if command -v eza &> /dev/null; then
-  alias ls='eza --color=auto'
-  alias la='eza -la'
-  alias ll='eza -l --git -T --hyperlink --color=auto'
+  # Eza with icons and enhanced display
+  alias ls='eza --color=auto --icons'
+  alias la='eza -la --icons'
+  alias ll='eza -l --git --icons --hyperlink'
+  alias lt='eza --tree --level=2 --icons'
+  alias lta='eza --tree --level=2 --icons -a'
+  alias ltl='eza --tree --level=2 --icons -l'
+  alias ldir='eza --long --icons --only-dirs'
+  alias lg='eza --grid --icons'
+  alias lm='eza --icons --sort=modified'
+  alias ld='eza --icons --sort=date'
+  alias lz='eza --icons --sort=size'
 else
   echo "eza not found, using default ls"
 fi
-
 
 if command -v fd &> /dev/null; then
   alias find='fd'
@@ -131,21 +155,18 @@ else
   echo "fd not found, using default find"
 fi
 
-# File operations
-alias find='fd'
 alias f='fzf'
 alias cat='bat'
+alias mkdir='mkdir -pv'
 
 # Applications
-alias v=nvim
-alias t='tmux'
+alias v='nvim'
+alias t='tmux attach -t dev || tmux new-session -s dev'
 alias r='ranger'
 alias p='python'
-alias k='kubectl'
-alias h='helm'
-alias hf='helmfile'
-alias d='docker'
-alias dc='docker-compose'
+alias e='exit'
+alias c='clear'
+alias reload='source ~/.bashrc'
 
 # Git
 alias g='git'
@@ -160,13 +181,11 @@ alias gpl='git pull'
 alias gs='git status'
 alias lg='lazygit'
 
-# Additional useful aliases
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias mkdir='mkdir -pv'
-alias e='exit'
-alias c="clear"
-alias reload='source ~/.bashrc'
+# Container and Kubernetes
+alias k='kubectl'
+alias h='helm'
+alias hf='helmfile'
+alias d='docker'
+alias dc='docker-compose'
 alias ik8s='~/dotfiles/scripts/install_k8s'
 alias da='direnv allow'
