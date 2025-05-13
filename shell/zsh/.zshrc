@@ -44,14 +44,14 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
 # FZF Configuration
 export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
-  --color=fg:#cdd6f4,fg+:#a6e3a1,bg:#313244,bg+:#262626
+  --color=fg:#cdd6f4,fg+:#d0d0d0,bg:#1e1e2e,bg+:#313244
   --color=hl:#89b4fa,hl+:#5fd7ff,info:#cba6f7,marker:#a6e3a1
   --color=prompt:#94e2d5,spinner:#f5c2e7,pointer:#f5c2e7,header:#87afaf
   --color=border:#f5c2e7,preview-border:#89b4fa,preview-label:#cba6f7,label:#cdd6f4
   --color=query:#a6e3a1
   --border="rounded" --border-label="" --preview-window="border-rounded" --padding="1,2"
-  --prompt="> " --marker=">" --pointer="◆" --separator="─"
-  --scrollbar="│" --layout="reverse" --info="right"'
+  --prompt="◆" --marker=">" --pointer=">" --separator="─"
+  --scrollbar="│" --layout="reverse"'
 
 export FZF_CTRL_T_OPTS="
   --walker-skip .git,node_modules,target
@@ -212,3 +212,10 @@ alias nr='nix run nix-darwin --extra-experimental-features "nix-command flakes" 
 
 # SSH
 alias sshhs='ssh alexyz@homeserveralexyz'
+
+# fnm
+FNM_PATH="/home/wsl_alexis/.local/share/fnm"
+if [ -d "$FNM_PATH" ]; then
+  export PATH="/home/wsl_alexis/.local/share/fnm:$PATH"
+  eval "`fnm env`"
+fi
