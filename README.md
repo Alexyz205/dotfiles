@@ -21,24 +21,29 @@ Dotfiles are the hidden configuration files that define the behavior of various 
 This repository contains configuration files for the following tools:
 
 1. [**Tmux**](https://github.com/tmux/tmux/wiki)
-   A terminal multiplexer for managing multiple terminal sessions from a single window. The configuration includes custom key bindings, optimized settings for productivity, and seamless integration with Neovim.
+   A terminal multiplexer for managing multiple terminal sessions from a single window. The configuration includes custom key bindings, Catppuccin theme, and seamless integration with Neovim through vim-tmux-navigator.
 
-2. [**Alacritty**](https://alacritty.org/)
-   A fast, GPU-accelerated terminal emulator. The configuration focuses on a clean and minimal interface, with optimized fonts and color schemes.
+2. [**Ghostty**](https://mitchellh.com/ghostty)
+   A fast, modern terminal emulator. The configuration includes the Catppuccin Mocha theme and JetBrains Mono font for a clean and consistent experience.
 
 3. [**Neovim**](https://neovim.io/)
-   My custom Neovim configuration, including [NvChad](https://nvchad.com/) as the base, along with additional plugins such as Tmux Navigator and Lazygit for terminal navigation and Git integration.
+   My custom Neovim configuration, built on [LazyVim](https://www.lazyvim.org/) for a powerful foundation, along with plugins like vim-tmux-navigator and snacks.nvim for Lazygit integration.
 
-4. **Zsh**  
-   My Zsh is customized with the [Starship](https://starship.rs/guide/) prompt for a fast, minimal, and highly configurable prompt
+4. **Zsh and Bash**
+   Shell configurations with [Starship](https://starship.rs/guide/) prompt for a fast, minimal, and highly configurable prompt, plus useful aliases, environment variables, and plugin integrations including zsh-autosuggestions and zsh-syntax-highlighting.
 
-5. **Setup Scripts**  
+5. **Lazygit**
+   A customized [Lazygit](https://github.com/jesseduffield/lazygit) configuration with Catppuccin theme integration for a streamlined Git workflow.
+
+6. **Setup Scripts**
    A collection of scripts to automate the installation and configuration of these tools. These scripts help provision a new PC as quickly as possible by installing essential applications, setting up the environment, and applying dotfiles.
+
+## Installation
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/dotfiles.git ~/repos/
+git clone https://github.com/yourusername/dotfiles.git ~/repos/personal/dotfiles
 ```
 
 ### 2. Install and Apply Dotfiles
@@ -46,13 +51,21 @@ git clone https://github.com/yourusername/dotfiles.git ~/repos/
 There are various scripts available to install the required software and apply the configurations:
 
 ```bash
-cd ~/repos/dotfiles
-scripts/install
-scripts/setup
+cd ~/repos/personal/dotfiles
+./install
 ```
-The `install` script will install softwares depending on your OS.
-The `setup` script create symlinks in your `.config` folder.
+
+The `install` script will install software dependencies based on your OS, and the `setup_dotfiles` script initializes git submodules and runs the main setup script to create symlinks in your `.config` folder.
+
+## Tools and Integration
+
+The configurations are designed to work together seamlessly:
+
+- **Shell + Starship**: Custom Zsh and Bash configurations with Starship prompt for a beautiful, informative command line
+- **Tmux + Neovim**: Seamless navigation between Tmux panes and Neovim splits with vim-tmux-navigator
+- **Lazygit + Neovim**: Integration through snacks.nvim for an enhanced Git workflow
+- **Cross-platform compatibility**: Works on Linux, macOS, and Windows (WSL)
 
 ## Conclusion
 
-This dotfiles setup allows me to quickly configure a new environment with all my favorite tools and settings. It’s designed to be fast, lightweight, and highly customizable. Feel free to fork this repository, modify it to fit your own workflow, or contribute to make it even better!
+This dotfiles setup allows me to quickly configure a new environment with all my favorite tools and settings. It's designed to be fast, lightweight, and highly customizable. Feel free to fork this repository, modify it to fit your own workflow, or contribute to make it even better!
