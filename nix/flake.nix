@@ -27,7 +27,6 @@
           pkgs.zoxide
           pkgs.fd
           pkgs.eza
-          pkgs.ranger
           pkgs.carapace
           pkgs.bat
           pkgs.nodejs
@@ -37,9 +36,9 @@
           enable = true;
           casks = [
             "raycast"
+            "yazi"
             "ghostty"
             "docker"
-            "visual-studio-code"
             "chatgpt"
             "obsidian"
                       ];
@@ -57,7 +56,6 @@
           dock.orientation = "left";
           dock.persistent-apps = [
             "/Applications/Ghostty.app"
-            "/Applications/Visual Studio Code.app"
             "/Applications/Docker.app"
             "/Applications/Obsidian.app"
             "/Applications/ChatGPT.app"
