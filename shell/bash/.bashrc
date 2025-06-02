@@ -162,7 +162,7 @@ alias mkdir='mkdir -pv'
 # Applications
 alias v='nvim'
 alias t='tmux attach -t dev || tmux new-session -s dev'
-alias r='ranger'
+alias y='yazi'
 alias p='python'
 alias e='exit'
 alias c='clear'
