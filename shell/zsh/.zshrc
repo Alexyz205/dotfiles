@@ -173,7 +173,7 @@ alias cat='bat'
 # Applications
 alias v='nvim'
 alias t='tmux attach -t dev || tmux new-session -s dev'
-alias r='ranger'
+alias y='yazi'
 alias p='python'
 alias e='exit'
 alias c='clear'
@@ -213,9 +213,3 @@ alias nr='nix run nix-darwin --extra-experimental-features "nix-command flakes" 
 # SSH
 alias sshhs='ssh alexyz@homeserveralexyz'
 
-# fnm
-FNM_PATH="/home/wsl_alexis/.local/share/fnm"
-if [ -d "$FNM_PATH" ]; then
-  export PATH="/home/wsl_alexis/.local/share/fnm:$PATH"
-  eval "`fnm env`"
-fi
