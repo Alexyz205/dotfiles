@@ -39,6 +39,17 @@ function Pull-GitChanges { git pull $args }
 # Kubernetes functions
 function Get-KubernetesContext { kubectl config current-context }
 
+# Yazi functions
+function y {
+    $tmp = [System.IO.Path]::GetTempFileName()
+    yazi $args --cwd-file="$tmp"
+    $cwd = Get-Content -Path $tmp -Encoding UTF8
+    if (-not [String]::IsNullOrEmpty($cwd) -and $cwd -ne $PWD.Path) {
+        Set-Location -LiteralPath ([System.IO.Path]::GetFullPath($cwd))
+    }
+    Remove-Item -Path $tmp
+}
+
 # ===============================================
 # Aliases
 # ===============================================
@@ -69,7 +80,6 @@ Set-Alias -Name f -Value fzf -Option AllScope
 # Applications and tools
 Set-Alias -Name v -Value nvim -Option AllScope
 Set-Alias -Name t -Value tmux -Option AllScope
-Set-Alias -Name y -Value yazi -Option AllScope
 Set-Alias -Name p -Value python -Option AllScope
 Set-Alias -Name k -Value kubectl -Option AllScope
 Set-Alias -Name h -Value helm -Option AllScope
