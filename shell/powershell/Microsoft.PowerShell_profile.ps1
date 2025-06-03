@@ -69,7 +69,7 @@ Set-Alias -Name f -Value fzf -Option AllScope
 # Applications and tools
 Set-Alias -Name v -Value nvim -Option AllScope
 Set-Alias -Name t -Value tmux -Option AllScope
-Set-Alias -Name r -Value ranger -Option AllScope
+Set-Alias -Name y -Value yazi -Option AllScope
 Set-Alias -Name p -Value python -Option AllScope
 Set-Alias -Name k -Value kubectl -Option AllScope
 Set-Alias -Name h -Value helm -Option AllScope
