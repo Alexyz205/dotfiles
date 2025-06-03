@@ -50,6 +50,19 @@ function y {
     Remove-Item -Path $tmp
 }
 
+# File operations with eza (function-based for complex commands)
+function ls { if (Get-Command eza -ErrorAction SilentlyContinue) { eza --color=auto --icons @args } else { Get-ChildItem @args } }
+function la { if (Get-Command eza -ErrorAction SilentlyContinue) { eza -la --icons @args } else { Get-ChildItem -Force @args } }
+function ll { if (Get-Command eza -ErrorAction SilentlyContinue) { eza -l --git --icons --hyperlink @args } else { Get-ChildItem -l @args } }
+function lt { if (Get-Command eza -ErrorAction SilentlyContinue) { eza --tree --level=2 --icons @args } else { tree @args } }
+function lta { if (Get-Command eza -ErrorAction SilentlyContinue) { eza --tree --level=2 --icons -a @args } else { tree @args } }
+function ltl { if (Get-Command eza -ErrorAction SilentlyContinue) { eza --tree --level=2 --icons -l @args } else { tree @args } }
+function ldir { if (Get-Command eza -ErrorAction SilentlyContinue) { eza --long --icons --only-dirs @args } else { Get-ChildItem -Directory @args } }
+function lg { if (Get-Command eza -ErrorAction SilentlyContinue) { eza --grid --icons @args } else { Get-ChildItem @args } }
+function lm { if (Get-Command eza -ErrorAction SilentlyContinue) { eza --icons --sort=modified @args } else { Get-ChildItem | Sort-Object LastWriteTime @args } }
+function ld { if (Get-Command eza -ErrorAction SilentlyContinue) { eza --icons --sort=date @args } else { Get-ChildItem | Sort-Object LastWriteTime @args } }
+function lz { if (Get-Command eza -ErrorAction SilentlyContinue) { eza --icons --sort=size @args } else { Get-ChildItem | Sort-Object Length @args } }
+
 # ===============================================
 # Aliases
 # ===============================================
@@ -60,34 +73,49 @@ Set-Alias -Name repos -Value Set-ReposLocation
 Set-Alias -Name .. -Value Set-ParentLocation
 Set-Alias -Name ... -Value Set-GrandparentLocation
 Set-Alias -Name .... -Value Set-GreatGrandparentLocation
-Set-Alias -Name cd -Value "z" -Option AllScope
 
-# File operations with eza
-Set-Alias -Name ls -Value "eza --color=auto --icons" -Option AllScope
-Set-Alias -Name la -Value "eza -la --icons" -Option AllScope
-Set-Alias -Name ll -Value "eza -l --git --icons --hyperlink" -Option AllScope
-Set-Alias -Name lt -Value "eza --tree --level=2 --icons" -Option AllScope
-Set-Alias -Name lta -Value "eza --tree --level=2 --icons -a" -Option AllScope
-Set-Alias -Name ltl -Value "eza --tree --level=2 --icons -l" -Option AllScope
-Set-Alias -Name ldir -Value "eza --long --icons --only-dirs" -Option AllScope
-Set-Alias -Name lg -Value "eza --grid --icons" -Option AllScope
-Set-Alias -Name lm -Value "eza --icons --sort=modified" -Option AllScope
-Set-Alias -Name ld -Value "eza --icons --sort=date" -Option AllScope
-Set-Alias -Name lz -Value "eza --icons --sort=size" -Option AllScope
-Set-Alias -Name find -Value fd -Option AllScope
-Set-Alias -Name f -Value fzf -Option AllScope
+# Safe aliases with tool existence checks
+if (Get-Command z -ErrorAction SilentlyContinue) {
+    Set-Alias -Name cd -Value z -Option AllScope
+}
+if (Get-Command fd -ErrorAction SilentlyContinue) {
+    Set-Alias -Name find -Value fd -Option AllScope
+}
+if (Get-Command fzf -ErrorAction SilentlyContinue) {
+    Set-Alias -Name f -Value fzf -Option AllScope
+}
 
 # Applications and tools
-Set-Alias -Name v -Value nvim -Option AllScope
-Set-Alias -Name t -Value tmux -Option AllScope
-Set-Alias -Name p -Value python -Option AllScope
-Set-Alias -Name k -Value kubectl -Option AllScope
-Set-Alias -Name h -Value helm -Option AllScope
-Set-Alias -Name hf -Value helmfile -Option AllScope
-Set-Alias -Name d -Value docker -Option AllScope
-Set-Alias -Name dc -Value docker-compose -Option AllScope
-Set-Alias -Name ld -Value lazydocker -Option AllScope
-Set-Alias -Name lg -Value lazygit -Option AllScope
+if (Get-Command nvim -ErrorAction SilentlyContinue) {
+    Set-Alias -Name v -Value nvim -Option AllScope
+}
+if (Get-Command tmux -ErrorAction SilentlyContinue) {
+    Set-Alias -Name t -Value tmux -Option AllScope
+}
+if (Get-Command python -ErrorAction SilentlyContinue) {
+    Set-Alias -Name p -Value python -Option AllScope
+}
+if (Get-Command kubectl -ErrorAction SilentlyContinue) {
+    Set-Alias -Name k -Value kubectl -Option AllScope
+}
+if (Get-Command helm -ErrorAction SilentlyContinue) {
+    Set-Alias -Name h -Value helm -Option AllScope
+}
+if (Get-Command helmfile -ErrorAction SilentlyContinue) {
+    Set-Alias -Name hf -Value helmfile -Option AllScope
+}
+if (Get-Command docker -ErrorAction SilentlyContinue) {
+    Set-Alias -Name d -Value docker -Option AllScope
+}
+if (Get-Command docker-compose -ErrorAction SilentlyContinue) {
+    Set-Alias -Name dc -Value docker-compose -Option AllScope
+}
+if (Get-Command lazydocker -ErrorAction SilentlyContinue) {
+    Set-Alias -Name ld -Value lazydocker -Option AllScope
+}
+if (Get-Command lazygit -ErrorAction SilentlyContinue) {
+    Set-Alias -Name lg -Value lazygit -Option AllScope
+}
 
 # Utilities
 Set-Alias -Name e -Value exit -Option AllScope
@@ -97,5 +125,7 @@ Set-Alias -Name ik8s -Value "~/dotfiles/scripts/install_k8s" -Option AllScope
 Set-Alias -Name da -Value "direnv allow" -Option AllScope
 
 # DevPod aliases
-Set-Alias -Name ds -Value "devpod ssh" -Option AllScope
-Set-Alias -Name du -Value "devpod up ." -Option AllScope
+if (Get-Command devpod -ErrorAction SilentlyContinue) {
+    function ds { devpod ssh @args }
+    function du { devpod up . @args }
+}
