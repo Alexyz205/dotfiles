@@ -1,71 +1,249 @@
-# My Dotfiles
+# 🏠 DevOps Dotfiles
 
-Welcome to my dotfiles repository! This repository contains the configuration files for the tools I use on a daily basis, along with scripts to set up a development environment quickly and efficiently. The goal of this setup is to make a new PC or environment ready for use with minimal effort, while keeping everything lightweight, optimized, and customizable.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Platform Support](https://img.shields.io/badge/Platform-Linux%20%7C%20macOS%20%7C%20WSL-blue.svg)](#platform-support)
+[![Shell Support](https://img.shields.io/badge/Shell-Zsh%20%7C%20Bash-green.svg)](#shell-configurations)
 
-## Why Use Dotfiles?
+> **A production-ready dotfiles configuration designed for DevOps engineers and infrastructure automation professionals**
 
-Dotfiles are the hidden configuration files that define the behavior of various command-line tools and applications. By keeping these in version control, I can:
+Welcome to my dotfiles repository! This setup provides a complete development environment optimized for DevOps workflows, infrastructure automation.
 
-- **Ensure Consistency**: Quickly apply the same configurations across multiple machines.
-- **Improve Productivity**: Optimize my workflow with custom keybindings, aliases, and settings.
-- **Easy Setup**: With just a few commands, I can configure a new environment or restore an existing one.
+## ✨ Features
 
-## Philosophy
+- 🚀 **One-command setup** - Get productive in minutes
+- 🎨 **Consistent theming** - Catppuccin Mocha across all tools
+- 🔧 **DevOps-optimized** - Pre-configured for K8s, Docker, Git workflows
+- 📦 **Cross-platform** - Linux, macOS, and WSL support
+- 🔄 **Automated updates** - Version-pinned tools with easy upgrade paths
+- 💡 **AI-assisted prompts** - Built-in prompt templates for development workflows
 
-- **Simple and Efficient**: The setup is designed to be straightforward, focusing on functionality without excessive complexity.
-- **Minimal but Powerful**: Each tool and setting is chosen for its utility. I only use what's necessary to keep the system light yet effective.
-- **Customizable**: Every aspect of the configuration is modular, making it easy to extend or modify based on individual preferences.
-
-## What's Included
-
-This repository contains configuration files for the following tools:
-
-1. [**Tmux**](https://github.com/tmux/tmux/wiki)
-   A terminal multiplexer for managing multiple terminal sessions from a single window. The configuration includes custom key bindings, Catppuccin theme, and seamless integration with Neovim through vim-tmux-navigator.
-
-2. [**Ghostty**](https://mitchellh.com/ghostty)
-   A fast, modern terminal emulator. The configuration includes the Catppuccin Mocha theme and JetBrains Mono font for a clean and consistent experience.
-
-3. [**Neovim**](https://neovim.io/)
-   My custom Neovim configuration, built on [LazyVim](https://www.lazyvim.org/) for a powerful foundation, along with plugins like vim-tmux-navigator and snacks.nvim for Lazygit integration.
-
-4. **Zsh and Bash**
-   Shell configurations with [Starship](https://starship.rs/guide/) prompt for a fast, minimal, and highly configurable prompt, plus useful aliases, environment variables, and plugin integrations including zsh-autosuggestions and zsh-syntax-highlighting.
-
-5. **Lazygit**
-   A customized [Lazygit](https://github.com/jesseduffield/lazygit) configuration with Catppuccin theme integration for a streamlined Git workflow.
-
-6. **Setup Scripts**
-   A collection of scripts to automate the installation and configuration of these tools. These scripts help provision a new PC as quickly as possible by installing essential applications, setting up the environment, and applying dotfiles.
-
-## Installation
-
-### 1. Clone the Repository
+## 🚀 Quick Start
 
 ```bash
+# Clone the repository
 git clone https://github.com/yourusername/dotfiles.git ~/repos/personal/dotfiles
+cd ~/repos/personal/dotfiles
+
+# Run the installer (requires internet connection)
+./install
+
+# Restart your shell or run
+exec zsh
 ```
 
-### 2. Install and Apply Dotfiles
+That's it! Your development environment is ready. 🎉
 
-There are various scripts available to install the required software and apply the configurations:
+## 🛠️ What's Included
+
+### Core Development Tools
+
+| Tool | Purpose | Configuration Highlights |
+|------|---------|-------------------------|
+| [**Ghostty**](https://mitchellh.com/ghostty) | Modern terminal emulator | Catppuccin theme, JetBrains Mono font |
+| [**Tmux**](https://github.com/tmux/tmux) | Terminal multiplexer | Catppuccin theme, Neovim integration |
+| [**Neovim**](https://neovim.io/) | Text editor | LazyVim base, DevOps plugins, Copilot |
+| [**Starship**](https://starship.rs/) | Cross-shell prompt | Git info, Docker context, K8s context |
+| [**Zsh**](https://zsh.sourceforge.io/) | Advanced shell | Auto-suggestions, syntax highlighting |
+
+### DevOps & Infrastructure Tools
+
+| Tool | Purpose | Version |
+|------|---------|---------|
+| [**Lazygit**](https://github.com/jesseduffield/lazygit) | Git TUI | v0.51.1 |
+| [**Kubectl**](https://kubernetes.io/docs/reference/kubectl/) | Kubernetes CLI | Latest |
+| [**K9s**](https://k9scli.io/) | Kubernetes TUI | Latest |
+| [**Helm**](https://helm.sh/) | Kubernetes package manager | Latest |
+| [**Docker**](https://www.docker.com/) | Container platform | Config ready |
+
+### Productivity Tools
+
+| Tool | Purpose | Version |
+|------|---------|---------|
+| [**Fzf**](https://github.com/junegunn/fzf) | Fuzzy finder | v0.62.0 |
+| [**Ripgrep**](https://github.com/BurntSushi/ripgrep) | Fast grep | v14.1.0 |
+| [**Fd**](https://github.com/sharkdp/fd) | Fast file finder | v10.2.0 |
+| [**Bat**](https://github.com/sharkdp/bat) | Better cat | v0.25.0 |
+| [**Eza**](https://github.com/eza-community/eza) | Modern ls | v0.20.21 |
+| [**Yazi**](https://github.com/sxyazi/yazi) | Terminal file manager | v25.5.31 |
+| [**Zoxide**](https://github.com/ajeetdsouza/zoxide) | Smart cd | v0.9.8 |
+| [**Direnv**](https://direnv.net/) | Environment switcher | v2.35.0 |
+
+## 🏗️ Architecture Overview
+
+```
+dotfiles/
+├── install                    # Main entry point
+├── setup_dotfiles            # Environment initialization
+├── scripts/                  # Installation and utility scripts
+│   ├── install_packages      # Package installation automation
+│   ├── install_nvim          # Neovim from source
+│   ├── install_k8s           # Kubernetes tools
+│   ├── setup                 # Configuration symlink management
+│   ├── utils                 # Core utilities (Clean Architecture)
+│   ├── logs                  # Structured logging
+│   └── checker               # System validation
+├── shell/                    # Shell configurations
+│   ├── zsh/                  # Zsh config with plugins
+│   └── bash/                 # Bash configuration
+├── nvim/                     # Neovim configuration (LazyVim)
+├── tmux/                     # Tmux configuration
+├── ghostty/                  # Terminal emulator config
+├── yazi/                     # File manager config
+├── nix/                      # Nix package manager config
+├── prompts/                  # AI assistant prompt templates
+└── vscode/                   # VS Code profiles
+```
+
+## 🎨 Theming
+
+All tools use the **Catppuccin Mocha** theme for a consistent, eye-friendly dark experience:
+
+- 🎨 **Ghostty**: Catppuccin Mocha with JetBrains Mono
+- 🖥️ **Tmux**: Catppuccin status bar and panes
+- ⌨️ **Neovim**: Catppuccin syntax highlighting
+- 🚀 **Starship**: Catppuccin-inspired prompt colors
+- 🔍 **Lazygit**: Catppuccin UI theme
+- 📁 **Yazi**: Catppuccin file manager theme
+
+## 🔧 Configuration Highlights
+
+### Shell Environment
+
+- **Vi mode** enabled by default
+- **Smart completions** with carapace
+- **Auto-suggestions** and syntax highlighting
+- **Environment management** with direnv
+
+### Neovim Setup
+
+Built on **LazyVim** with DevOps-focused enhancements:
+
+- 🤖 **GitHub Copilot** integration
+- 🔗 **Tmux navigation** seamless pane switching
+- 📁 **Yazi integration** file management
+- 🌳 **Lazygit integration** Git workflow
+- 🎨 **Catppuccin theme** consistent styling
+
+### Tmux Configuration
+
+- **Catppuccin theme** with custom status bar
+- **Vim-style navigation** between panes
+- **Plugin manager** (TPM) with continuum for session persistence
+- **Seamless Neovim integration** with vim-tmux-navigator
+
+## 🚦 Installation Options
+
+### Full Installation
+```bash
+./install                    # Complete setup with all tools
+```
+
+### Selective Installation
+```bash
+./setup_dotfiles            # Just configure dotfiles (no package installation)
+./scripts/install_packages  # Only install development tools
+./scripts/install_k8s       # Only install Kubernetes tools
+./scripts/install_nvim      # Build Neovim from source
+```
+
+### Package Management
+```bash
+# Nix support for declarative package management
+nix develop                 # Enter development shell
+```
+
+## 🤖 AI-Powered Development
+
+Includes prompt templates for common DevOps tasks:
+
+- 📝 **Architecture guidance** - Clean Architecture patterns
+- 🐳 **Dockerfile optimization** - Container best practices
+- 🔧 **Automation scripts** - Infrastructure automation
+- 🔍 **Security reviews** - Code and configuration audits
+- 📚 **Documentation** - README and code documentation
+- 🧪 **Testing strategies** - Unit and integration tests
+
+Access prompts in the `prompts/` directory.
+
+## 🌍 Platform Support
+
+| Platform | Status | Notes |
+|----------|--------|-------|
+| **Ubuntu/Debian** | ✅ Full | Primary development platform |
+| **Fedora/RHEL** | ✅ Full | Complete package manager support |
+| **Arch Linux** | ✅ Full | Pacman integration |
+| **macOS** | ✅ Full | Homebrew and Nix support |
+| **WSL2** | ✅ Full | Windows Subsystem for Linux |
+| **Alpine** | ⚠️ Limited | Basic tools only |
+
+## 🔄 Updating
+
+The dotfiles include version-pinned tools for stability. To update:
 
 ```bash
-cd ~/repos/personal/dotfiles
-./install
+# Pull latest configurations
+git pull origin main
+
+# Update git submodules
+git submodule update --init --recursive
+
+# Re-run setup to apply changes
+./setup_dotfiles
+
+# Update packages (edit versions in scripts/install_packages)
+./scripts/install_packages
 ```
 
-The `install` script will install software dependencies based on your OS, and the `setup_dotfiles` script initializes git submodules and runs the main setup script to create symlinks in your `.config` folder.
+## 🛠️ Customization
 
-## Tools and Integration
+### Adding New Tools
 
-The configurations are designed to work together seamlessly:
+1. **Add to install script**: Edit `scripts/install_packages`
+2. **Create configuration**: Add config files in appropriate directory
+3. **Update setup**: Add symlinks in `scripts/setup`
+4. **Test installation**: Run selective installation
 
-- **Shell + Starship**: Custom Zsh and Bash configurations with Starship prompt for a beautiful, informative command line
-- **Tmux + Neovim**: Seamless navigation between Tmux panes and Neovim splits with vim-tmux-navigator
-- **Lazygit + Neovim**: Integration through snacks.nvim for an enhanced Git workflow
-- **Cross-platform compatibility**: Works on Linux, macOS, and Windows (WSL)
+### Custom Scripts
 
-## Conclusion
+Add custom automation scripts following the Clean Architecture pattern:
+- **Domain logic**: Pure functions in `scripts/utils`
+- **Use cases**: Main functionality in `scripts/`
+- **Infrastructure**: Platform-specific implementations
 
-This dotfiles setup allows me to quickly configure a new environment with all my favorite tools and settings. It's designed to be fast, lightweight, and highly customizable. Feel free to fork this repository, modify it to fit your own workflow, or contribute to make it even better!
+## 🤝 Contributing
+
+Contributions are welcome! Please:
+
+1. Fork the repository
+2. Create a feature branch
+3. Follow the existing code structure and Clean Architecture principles
+4. Test on at least one supported platform
+5. Submit a pull request with a clear description
+
+### Development Guidelines
+
+- **Logging**: Use structured logging functions from `scripts/logs`
+- **Error handling**: Implement proper error handling with cleanup
+- **Testing**: Test scripts on clean environments
+- **Documentation**: Update README for new features
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [Catppuccin](https://github.com/catppuccin/catppuccin) - Beautiful pastel theme
+- [LazyVim](https://www.lazyvim.org/) - Neovim distribution
+- [Starship](https://starship.rs/) - Cross-shell prompt
+- [TPM](https://github.com/tmux-plugins/tpm) - Tmux Plugin Manager
+
+---
+
+<div align="center">
+
+**Happy coding! 🚀**
+
+*Built with ❤️ for the DevOps community*
+
+</div>
