@@ -86,6 +86,13 @@ else
   echo "zoxide not found, skipping initialization."
 fi
 
+# Direnv
+if command -v direnv &> /dev/null; then
+  eval "$(direnv hook zsh)"
+else
+  echo "direnv not found, skipping initialization."
+fi
+
 # Carapace (completions)
 if command -v carapace &> /dev/null; then
   export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
