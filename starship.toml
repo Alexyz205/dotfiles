@@ -1,11 +1,19 @@
-"$schema" = 'https://starship.rs/config-schema.json'
+# =============================
+# Starship Prompt Configuration
+# =============================
 
+# -----------
+# PROMPT LAYOUT
+# -----------
+# Main prompt format (left side)
 format = """
 [](surface0)\
 $os\
 $username\
+$sudo\
 [](bg:color_peach fg:surface0)\
 $directory\
+$direnv\
 [](fg:color_peach bg:color_green)\
 $git_branch\
 $git_status\
@@ -14,19 +22,34 @@ $c\
 $rust\
 $golang\
 $nodejs\
-$php\
-$java\
-$kotlin\
-$haskell\
 $python\
 [](fg:color_sapphire bg:color_blue)\
 $docker_context\
-$conda\
 [](fg:color_blue bg:color_pink)\
-$time\
+$shell\
 [ ](fg:color_pink)\
 $line_break$character"""
 
+# Right prompt format (right side)
+right_format = """
+[](surface0)\
+$status\
+[](bg:color_peach fg:surface0)\
+$cmd_duration\
+[](fg:color_peach bg:color_green)\
+$container\
+[](fg:color_green bg:color_sapphire)\
+$localip\
+[](fg:color_sapphire bg:color_blue)\
+$memory_usage\
+[](fg:color_blue bg:color_pink)\
+$time\
+[ ](fg:color_pink)\
+"""
+
+# -----------
+# COLOR PALETTE
+# -----------
 palette = 'catppuccin_mocha'
 
 [palettes.catppuccin_mocha]
@@ -41,7 +64,13 @@ surface0 = '#313244'
 color_purple = '#cba6f7'
 color_red = '#cc241d'
 color_peach = '#fab387'
+color_grey = '#6c7086'
 
+# =============================
+# CORE MODULES
+# =============================
+
+# --- OS and User Info ---
 [os]
 disabled = false
 style = "bg:surface0 fg:color_fg0"
@@ -49,20 +78,13 @@ style = "bg:surface0 fg:color_fg0"
 [os.symbols]
 Windows = "󰍲"
 Ubuntu = "󰕈"
-SUSE = ""
-Raspbian = "󰐿"
-Mint = "󰣭"
 Macos = "󰀵"
-Manjaro = ""
 Linux = "󰌽"
-Gentoo = "󰣨"
 Fedora = "󰣛"
 Alpine = ""
 Amazon = ""
 Android = ""
 Arch = "󰣇"
-Artix = "󰣇"
-EndeavourOS = ""
 CentOS = ""
 Debian = "󰣚"
 Redhat = "󱄛"
@@ -80,13 +102,15 @@ format = "[ $path ]($style)"
 truncation_length = 3
 truncation_symbol = "…/"
 
-[directory.substitutions]
-"Documents" = "󰈙 "
-"Downloads" = " "
-"Music" = "󰝚 "
-"Pictures" = " "
-"Developer" = "󰲋 "
+[sudo]
+style = "fg:color_fg0 bg:surface0"
+symbol = "test"
+disabled = false
 
+[direnv]
+disabled = false
+
+# --- Git Info ---
 [git_branch]
 symbol = ""
 style = "bg:color_green"
@@ -96,6 +120,11 @@ format = '[[ $symbol $branch ](fg:color_fg1 bg:color_green)]($style)'
 style = "bg:color_green"
 format = '[[($all_status$ahead_behind )](fg:color_fg1 bg:color_green)]($style)'
 
+# =============================
+# LANGUAGE & TOOL MODULES
+# =============================
+
+# --- Programming Languages ---
 [nodejs]
 symbol = ""
 style = "bg:color_sapphire"
@@ -103,6 +132,16 @@ format = '[[ $symbol( $version) ](fg:color_fg1 bg:color_sapphire)]($style)'
 
 [c]
 symbol = " "
+style = "bg:color_sapphire"
+format = '[[ $symbol( $version) ](fg:color_fg1 bg:color_sapphire)]($style)'
+
+[lua]
+symbol = ""
+style = "bg:color_sapphire"
+format = '[[ $symbol( $version) ](fg:color_fg1 bg:color_sapphire)]($style)'
+
+[cpp]
+symbol = ""
 style = "bg:color_sapphire"
 format = '[[ $symbol( $version) ](fg:color_fg1 bg:color_sapphire)]($style)'
 
@@ -116,46 +155,88 @@ symbol = ""
 style = "bg:color_sapphire"
 format = '[[ $symbol( $version) ](fg:color_fg1 bg:color_sapphire)]($style)'
 
-[php]
-symbol = ""
-style = "bg:color_sapphire"
-format = '[[ $symbol( $version) ](fg:color_fg1 bg:color_sapphire)]($style)'
-
-[java]
-symbol = " "
-style = "bg:color_sapphire"
-format = '[[ $symbol( $version) ](fg:color_fg1 bg:color_sapphire)]($style)'
-
-[kotlin]
-symbol = ""
-style = "bg:color_sapphire"
-format = '[[ $symbol( $version) ](fg:color_fg1 bg:color_sapphire)]($style)'
-
-[haskell]
-symbol = ""
-style = "bg:color_sapphire"
-format = '[[ $symbol( $version) ](fg:color_fg1 bg:color_sapphire)]($style)'
-
 [python]
 symbol = ""
 style = "bg:color_sapphire"
-format = '[[ $symbol( $version) ](fg:color_fg1 bg:color_sapphire)]($style)'
+format = '[${symbol} ${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
 
+# --- Container & Cloud ---
 [docker_context]
 symbol = ""
 style = "bg:color_blue"
 format = '[[ $symbol( $context) ](fg:color_fg1 bg:color_blue)]($style)'
 
-[conda]
+[kubernetes]
+symbol = "󱃾"
 style = "bg:color_blue"
-format = '[[ $symbol( $environment) ](fg:color_fg1 bg:color_blue)]($style)'
 
+# =============================
+# STATUS & UTILITY MODULES
+# =============================
+
+# --- Command Status ---
+[status]
+format = '[$symbol$status]($style)'
+symbol = '❌'
+success_symbol = ''
+not_executable_symbol = '🚫'
+not_found_symbol = '🔍'
+sigint_symbol = '🧱'
+signal_symbol = '⚡'
+style = 'bg:surface0'
+success_style = 'bg:surface0'
+failure_style = 'bg:surface0'
+recognize_signal_code = true
+map_symbol = true
+pipestatus = true
+pipestatus_separator = '|'
+pipestatus_format = '\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'
+pipestatus_segment_format = ''
+disabled = false
+
+# --- Shell Info ---
+[shell]
+fish_indicator = '󰈺'
+powershell_indicator = '_'
+unknown_indicator = 'mystery shell'
+style = 'bg:color_pink fg:color_fg0'
+format = '[ $indicator $shell]($style)'
+disabled = false
+
+# --- Command Duration ---
+[cmd_duration]
+min_time = 500
+format = '[ 󱎫 $duration ](fg:color_fg1 bg:color_peach)'
+
+# --- Container Name ---
+[container]
+symbol = '󰡨'
+format = '[ $symbol $name ]($style)'
+style = 'bg:color_green'
+
+# --- Local IP ---
+[localip]
+ssh_only = false
+format = '[ $localipv4 ]($style)'
+disabled = false
+style = 'bg:color_sapphire fg:color_fg1'
+
+# --- Memory Usage ---
+[memory_usage]
+disabled = false
+threshold = -1
+symbol = '󰍛'
+style = 'fg:color_fg1 bg:color_blue'
+format = '[ $symbol $ram ]($style)'
+
+# --- Time ---
 [time]
 disabled = false
 time_format = "%R"
-style = "bg:color_pink"
-format = '[[  $time ](fg:color_fg1 bg:color_pink)]($style)'
+style = "fg:color_fg1 bg:color_pink"
+format = '[  $time ]($style)'
 
+# --- Line Break & Character ---
 [line_break]
 disabled = false
 
