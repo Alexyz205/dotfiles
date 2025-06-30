@@ -13,7 +13,6 @@ $username\
 $sudo\
 [](bg:color_peach fg:surface0)\
 $directory\
-$direnv\
 [](fg:color_peach bg:color_green)\
 $git_branch\
 $git_status\
@@ -25,6 +24,8 @@ $nodejs\
 $python\
 [](fg:color_sapphire bg:color_blue)\
 $docker_context\
+$kubernetes\
+$env_var\
 [](fg:color_blue bg:color_pink)\
 $shell\
 [ ](fg:color_pink)\
@@ -37,6 +38,7 @@ $status\
 [](bg:color_peach fg:surface0)\
 $cmd_duration\
 [](fg:color_peach bg:color_green)\
+$direnv\
 $container\
 [](fg:color_green bg:color_sapphire)\
 $localip\
@@ -107,9 +109,6 @@ style = "fg:color_fg0 bg:surface0"
 symbol = "test"
 disabled = false
 
-[direnv]
-disabled = false
-
 # --- Git Info ---
 [git_branch]
 symbol = ""
@@ -166,6 +165,15 @@ symbol = ""
 style = "bg:color_blue"
 format = '[[ $symbol( $context) ](fg:color_fg1 bg:color_blue)]($style)'
 
+# [env_var.TERM]
+# variable = 'TERM'
+# style = "bg:color_blue fg:color_fg1"
+# format = '[$env_value]($style) '
+[env_var.LOG_LEVEL]
+variable = 'LOG_LEVEL'
+style = "bg:color_blue fg:color_fg1"
+format = '[$env_value]($style) '
+
 [kubernetes]
 symbol = "󱃾"
 style = "bg:color_blue"
@@ -199,7 +207,7 @@ disabled = false
 fish_indicator = '󰈺'
 powershell_indicator = '_'
 unknown_indicator = 'mystery shell'
-style = 'bg:color_pink fg:color_fg0'
+style = 'bg:color_pink fg:color_fg1'
 format = '[ $indicator $shell]($style)'
 disabled = false
 
@@ -208,16 +216,22 @@ disabled = false
 min_time = 500
 format = '[ 󱎫 $duration ](fg:color_fg1 bg:color_peach)'
 
+[direnv]
+symbol = ''
+format = '[ $symbol $loaded ]($style)'
+style = 'bg:color_green fg:color_fg1'
+disabled = false
+
 # --- Container Name ---
 [container]
-symbol = '󰡨'
+symbol = ''
 format = '[ $symbol $name ]($style)'
 style = 'bg:color_green'
 
 # --- Local IP ---
 [localip]
 ssh_only = false
-format = '[ $localipv4 ]($style)'
+format = '[ 󰩟 $localipv4 ]($style)'
 disabled = false
 style = 'bg:color_sapphire fg:color_fg1'
 
