@@ -126,38 +126,38 @@ format = '[[($all_status$ahead_behind )](fg:color_fg1 bg:color_green)]($style)'
 # --- Programming Languages ---
 [nodejs]
 symbol = ""
-style = "bg:color_sapphire"
-format = '[[ $symbol( $version) ](fg:color_fg1 bg:color_sapphire)]($style)'
+style = "bg:color_sapphire fg:color_fg1"
+format = '[[ $symbol( $version) ]($style)'
 
 [c]
 symbol = " "
-style = "bg:color_sapphire"
-format = '[[ $symbol( $version) ](fg:color_fg1 bg:color_sapphire)]($style)'
+style = "bg:color_sapphire fg:color_fg1"
+format = '[[ $symbol( $version) ]($style)'
 
 [lua]
 symbol = ""
-style = "bg:color_sapphire"
-format = '[[ $symbol( $version) ](fg:color_fg1 bg:color_sapphire)]($style)'
+style = "bg:color_sapphire fg:color_fg1"
+format = '[[ $symbol( $version) ]($style)'
 
 [cpp]
 symbol = ""
-style = "bg:color_sapphire"
-format = '[[ $symbol( $version) ](fg:color_fg1 bg:color_sapphire)]($style)'
+style = "bg:color_sapphire fg:color_fg1"
+format = '[[ $symbol( $version) ]($style)'
 
 [rust]
 symbol = ""
-style = "bg:color_sapphire"
-format = '[[ $symbol( $version) ](fg:color_fg1 bg:color_sapphire)]($style)'
+style = "bg:color_sapphire fg:color_fg1"
+format = '[[ $symbol( $version) ]($style)'
 
 [golang]
 symbol = ""
-style = "bg:color_sapphire"
-format = '[[ $symbol( $version) ](fg:color_fg1 bg:color_sapphire)]($style)'
+style = "bg:color_sapphire fg:color_fg1"
+format = '[[ $symbol( $version) ]($style)'
 
 [python]
 symbol = ""
-style = "bg:color_sapphire"
-format = '[${symbol} ${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
+style = "bg:color_sapphire fg:color_fg1"
+format = '[ ${symbol} ${pyenv_prefix}(${version})(\($virtualenv\) )]($style)'
 
 # --- Container & Cloud ---
 [docker_context]
