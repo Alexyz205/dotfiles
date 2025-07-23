@@ -106,7 +106,7 @@ truncation_symbol = "…/"
 
 [sudo]
 style = "fg:color_fg0 bg:surface0"
-symbol = "test"
+symbol = "sudo"
 disabled = false
 
 # --- Git Info ---
