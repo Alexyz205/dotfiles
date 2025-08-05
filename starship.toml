@@ -127,32 +127,32 @@ format = '[[($all_status$ahead_behind )](fg:color_fg1 bg:color_green)]($style)'
 [nodejs]
 symbol = ""
 style = "bg:color_sapphire fg:color_fg1"
-format = '[[ $symbol( $version) ]($style)'
+format = '[ ${symbol}( ${version}) ]($style)'
 
 [c]
 symbol = " "
 style = "bg:color_sapphire fg:color_fg1"
-format = '[[ $symbol( $version) ]($style)'
+format = '[ ${symbol}( ${version}) ]($style)'
 
 [lua]
 symbol = ""
 style = "bg:color_sapphire fg:color_fg1"
-format = '[[ $symbol( $version) ]($style)'
+format = '[ ${symbol}( ${version}) ]($style)'
 
 [cpp]
 symbol = ""
 style = "bg:color_sapphire fg:color_fg1"
-format = '[[ $symbol( $version) ]($style)'
+format = '[ ${symbol}( ${version}) ]($style)'
 
 [rust]
 symbol = ""
 style = "bg:color_sapphire fg:color_fg1"
-format = '[[ $symbol( $version) ]($style)'
+format = '[ ${symbol}( ${version}) ]($style)'
 
 [golang]
 symbol = ""
 style = "bg:color_sapphire fg:color_fg1"
-format = '[[ $symbol( $version) ]($style)'
+format = '[ ${symbol}( ${version}) ]($style)'
 
 [python]
 symbol = ""
