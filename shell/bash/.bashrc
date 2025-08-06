@@ -40,7 +40,7 @@ export FZF_CTRL_T_OPTS="
   --bind 'ctrl-/:change-preview-window(down|hidden|)'"
 
 export FZF_CTRL_R_OPTS="
-  --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+  --bind 'ctrl-y:execute-silent(echo -n {2..} | if [[ "$OSTYPE" == "darwin"* ]]; then pbcopy; else xclip -sel clip; fi)+abort'
   --color header:italic
   --header 'Press CTRL-Y to copy command into clipboard'"
 
@@ -147,12 +147,6 @@ if command -v eza &> /dev/null; then
   alias lz='eza --icons --sort=size'
 else
   echo "eza not found, using default ls"
-fi
-
-if command -v fd &> /dev/null; then
-  alias find='fd'
-else
-  echo "fd not found, using default find"
 fi
 
 alias f='fzf'
