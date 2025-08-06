@@ -1,7 +1,13 @@
+# =============================
+# Git Configuration
+# =============================
+
+# --- Commit Settings ---
 [commit]
     template = ~/.config/git/template
     verbose = true  # add more context to commit messages
 
+# --- Core Settings ---
 [core]
     autocrlf = input  # keep newlines as in input
     compression = 9  # trade cpu for network
@@ -9,50 +15,63 @@
     whitespace = error  # threat incorrect whitespace as errors
     preloadindex = true  # preload index for faster status
 
+# --- Blame Configuration ---
 [blame]
     coloring = highlightRecent
     date = relative
 
+# --- Diff Settings ---
 [diff]
     context = 3  # less context in diffs
     renames = copies  # detect copies as renames in diffs
     interHunkContext = 10  # merge near hunks in diffs
 
+# --- Repository Initialization ---
 [init]
     defaultBranch = main  # default branch name
 
+# --- Log Configuration ---
 [log]
     abbrevCommit = true  # short commits
     graphColors = blue,yellow,cyan,magenta,green,red
 
+# --- Status Display ---
 [status]
     branch = true
     short = true
     showStash = true
     showUntrackedFiles = all  # show individual untracked files
 
+# --- Pager Configuration ---
 [pager]
     branch = false  # no need to use pager for git branch
     tag = false
     diff = diff-so-fancy | $PAGER  # diff-so-fancy as diff pager
 
+# --- Push Configuration ---
 [push]
     autoSetupRemote = true  # easier to push new branches
     default = current  # push only current branch by default
     followTags = true  # push also tags
 
+# --- Pull Configuration ---
 [pull]
     rebase = true
     default = current
 
+# --- Submodule Settings ---
 [submodule]
     fetchJobs = 16
 
+# --- Rebase Configuration ---
 [rebase]
     autoStash = true
     missingCommitsCheck = warn  # warn if rebasing with missing commits
 
-# Integrity
+# =============================
+# INTEGRITY SETTINGS
+# =============================
+
 [transfer]
     fsckObjects = true
 
@@ -62,16 +81,25 @@
 [fetch]
     fsckObjects = true
 
+# =============================
+# SORTING SETTINGS
+# =============================
+
 [branch]
     sort = -committerdate
 
 [tag]
     sort = -taggerdate
 
-# Colors
+# =============================
+# COLOR CONFIGURATION
+# =============================
+
+# --- Blame Colors ---
 [color "blame"]
     highlightRecent = black bold,1 year ago,white,1 month ago,default,7 days ago,blue
 
+# --- Branch Colors ---
 [color "branch"]
     current  = magenta
     local    = default
@@ -79,6 +107,7 @@
     upstream = green
     plain    = blue
 
+# --- Diff Colors ---
 [color "diff"]
     meta       = black bold
     frag       = magenta
@@ -86,16 +115,24 @@
     whitespace = yellow reverse
     old        = red
 
+# --- Decoration Colors ---
 [color.decorate]
     HEAD = red
     branch = blue
     tag = yellow
     remoteBranch = magenta
 
+# =============================
+# INTERACTIVE SETTINGS
+# =============================
+
 [interactive]
     diffFilter = diff-so-fancy --patch
     singlekey = true
 
-# URL shortcuts
+# =============================
+# URL SHORTCUTS
+# =============================
+
 [url "git@github.com:"]
     insteadOf = "gh:"
