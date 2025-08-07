@@ -1,0 +1,66 @@
+# Dotfiles Package Version Lock File
+# This file contains the exact versions of all tools used in the dotfiles
+# Update this file when upgrading package versions
+
+version: "1.0"
+last_updated: "2025-08-07"
+
+packages:
+  cli_tools:
+    starship: "1.23.0"
+    tmux: "3.5" 
+    zoxide: "0.9.8"
+    fzf: "0.64.0"
+    ripgrep: "14.1.1"
+    fd: "10.2.0"
+    lazygit: "0.53.0"
+    nvim: "0.11.2"
+    direnv: "2.36.0"
+    eza: "0.22.0"
+    node: "22.14.0"
+    carapace: "1.4.1"
+    bat: "0.25.0"
+    yazi: "25.5.31"
+
+  # Platform-specific configurations
+  platforms:
+    x86_64:
+      lazygit: "Linux_x86_64"
+      direnv: "linux-amd64"
+      node: "linux-x64"
+      fzf: "amd64"
+      carapace: "linux_amd64"
+      nvim: "x86_64"
+    aarch64:
+      lazygit: "Linux_arm64"
+      direnv: "linux-arm64"
+      node: "linux-arm64"
+      fzf: "arm64"
+      carapace: "linux_arm64"
+      nvim: "arm64"
+
+  # Binary suffixes
+  binary_suffixes:
+    gnu: "unknown-linux-gnu"
+    musl: "unknown-linux-musl"
+
+  # Installation metadata
+  metadata:
+    total_tools: 14
+    installation_method: "direct_download"
+    package_manager: "custom_script"
+    architecture_support: ["x86_64", "aarch64"]
+    
+# Version checking configuration
+version_check:
+  enabled: true
+  check_before_install: true
+  fail_on_version_mismatch: false
+  allow_newer_versions: true
+
+# Update policy
+update_policy:
+  auto_update: false
+  check_frequency: "weekly"
+  update_strategy: "minor_only"
+  exclude_from_updates: []

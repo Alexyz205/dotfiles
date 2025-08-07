@@ -45,6 +45,11 @@ else
     }
 fi
 
+# Source utility functions
+if [ -f "$DOTFILES_DIR/scripts/utils" ]; then
+    source "$DOTFILES_DIR/scripts/utils"
+fi
+
 # Display help information when requested
 if [[ "${1:-}" == "--help" ]]; then
     section_header "Dotfiles Installer"
@@ -69,22 +74,25 @@ validate_prerequisites "git" "curl" "tar" || {
     exit 1
 }
 
-# Set up cleanup for main installation
-cleanup_main_install() {
-    log_progress "Cleaning up main installation resources"
-}
-register_cleanup "cleanup_main_install"
 
-# Installation steps with progress tracking
-TOTAL_STEPS=2
+# Installation steps with logging
+log "Starting dotfiles installation process"
 
 # Step 1: Run setup script to initialize the environment
-progress_with_recovery "$TOTAL_STEPS" "1" "Running dotfiles setup and configuration" \
-    "bash '$DOTFILES_DIR/setup_dotfiles'"
+log "Running dotfiles setup and configuration"
+if bash "$DOTFILES_DIR/setup_dotfiles"; then
+    log_success "Dotfiles setup completed successfully"
+else
+    error_exit "Failed to run dotfiles setup"
+fi
 
 # Step 2: Install required development tools  
-progress_with_recovery "$TOTAL_STEPS" "2" "Installing required development packages" \
-    "bash '$DOTFILES_DIR/scripts/install_packages'"
+log "Installing required development packages"
+if bash "$DOTFILES_DIR/scripts/install_packages"; then
+    log_success "Package installation completed successfully"
+else
+    error_exit "Failed to install required packages"
+fi
 
 section_header "Installation Complete"
 log_complete "Dotfiles have been successfully installed!"
