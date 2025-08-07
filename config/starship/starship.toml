@@ -105,9 +105,9 @@ truncation_length = 3
 truncation_symbol = "…/"
 
 [sudo]
+disabled = false
 style = "fg:color_fg0 bg:surface0"
 symbol = "sudo"
-disabled = false
 
 # --- Git Info ---
 [git_branch]
@@ -127,37 +127,37 @@ format = '[[($all_status$ahead_behind )](fg:color_fg1 bg:color_green)]($style)'
 [nodejs]
 symbol = ""
 style = "bg:color_sapphire fg:color_fg1"
-format = '[ ${symbol}( ${version}) ]($style)'
+format = '[ $symbol( $version) ]($style)'
 
 [c]
 symbol = " "
 style = "bg:color_sapphire fg:color_fg1"
-format = '[ ${symbol}( ${version}) ]($style)'
+format = '[ $symbol( $version) ]($style)'
 
 [lua]
 symbol = ""
 style = "bg:color_sapphire fg:color_fg1"
-format = '[ ${symbol}( ${version}) ]($style)'
+format = '[ $symbol( $version) ]($style)'
 
 [cpp]
 symbol = ""
 style = "bg:color_sapphire fg:color_fg1"
-format = '[ ${symbol}( ${version}) ]($style)'
+format = '[ $symbol( $version) ]($style)'
 
 [rust]
 symbol = ""
 style = "bg:color_sapphire fg:color_fg1"
-format = '[ ${symbol}( ${version}) ]($style)'
+format = '[ $symbol( $version) ]($style)'
 
 [golang]
 symbol = ""
 style = "bg:color_sapphire fg:color_fg1"
-format = '[ ${symbol}( ${version}) ]($style)'
+format = '[ $symbol( $version) ]($style)'
 
 [python]
 symbol = ""
 style = "bg:color_sapphire fg:color_fg1"
-format = '[ ${symbol} ${pyenv_prefix}(${version})(\($virtualenv\) )]($style)'
+format = '[ $symbol $pyenv_prefix($version)(\\($virtualenv\\) ) ]($style)'
 
 # --- Container & Cloud ---
 [docker_context]
@@ -172,11 +172,12 @@ format = '[[ $symbol( $context) ](fg:color_fg1 bg:color_blue)]($style)'
 [env_var.LOG_LEVEL]
 variable = 'LOG_LEVEL'
 style = "bg:color_blue fg:color_fg1"
-format = '[$env_value]($style) '
+format = '[ $env_value ]($style)'
 
 [kubernetes]
 symbol = "󱃾"
-style = "bg:color_blue"
+style = "bg:color_blue fg:color_fg1"
+format = '[ $symbol( $context) ]($style)'
 
 # =============================
 # STATUS & UTILITY MODULES
@@ -226,7 +227,7 @@ disabled = false
 [container]
 symbol = ''
 format = '[ $symbol $name ]($style)'
-style = 'bg:color_green'
+style = 'bg:color_green fg:color_fg1'
 
 # --- Local IP ---
 [localip]
@@ -240,14 +241,14 @@ style = 'bg:color_sapphire fg:color_fg1'
 disabled = false
 threshold = -1
 symbol = '󰍛'
-style = 'fg:color_fg1 bg:color_blue'
+style = 'bg:color_blue fg:color_fg1'
 format = '[ $symbol $ram ]($style)'
 
 # --- Time ---
 [time]
 disabled = false
 time_format = "%R"
-style = "fg:color_fg1 bg:color_pink"
+style = "bg:color_pink fg:color_fg1"
 format = '[  $time ]($style)'
 
 # --- Line Break & Character ---
