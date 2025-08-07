@@ -39,6 +39,7 @@
             "ghostty"
             "docker"
             "chatgpt"
+            "claude-code"
             "obsidian"
                       ];
           onActivation.cleanup = "zap";

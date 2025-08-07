@@ -136,3 +136,6 @@
 
 [url "git@github.com:"]
     insteadOf = "gh:"
+[user]
+	email = anathos205@gmail.com
+	name = Alexyz205
