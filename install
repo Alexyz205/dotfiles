@@ -1,11 +1,22 @@
 #!/bin/bash
 # Main installer script for dotfiles
 # This script serves as the primary entry point for setting up the entire development environment
-set -e
+
+# Initialize comprehensive error handling
+SCRIPT_NAME="dotfiles-install"
 
 # Define absolute paths regardless of where the script is called from
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 DOTFILES_DIR="$(cd "$SCRIPT_DIR" && pwd)"
+
+# Source comprehensive error handling system
+if [ -f "$DOTFILES_DIR/scripts/error_handling" ]; then
+    source "$DOTFILES_DIR/scripts/error_handling"
+    init_error_handling "$SCRIPT_NAME"
+else
+    # Fallback to basic error handling
+    set -euo pipefail
+fi
 
 # Source logging utilities if available, or create minimal logging functions
 if [ -f "$DOTFILES_DIR/scripts/logs" ]; then
@@ -35,7 +46,7 @@ else
 fi
 
 # Display help information when requested
-if [[ "$1" == "--help" ]]; then
+if [[ "${1:-}" == "--help" ]]; then
     section_header "Dotfiles Installer"
     echo "Usage: ./install [--help]"
     echo "This script sets up the dotfiles environment."
@@ -52,15 +63,28 @@ export DEBIAN_FRONTEND=noninteractive
 
 section_header "Dotfiles Installation"
 
-# First run setup script to initialize the environment
-section_header "Running Dotfiles Setup"
-log_progress "Executing setup_dotfiles script to update git submodules and configure environment"
-bash "$DOTFILES_DIR/setup_dotfiles"
+# Validate prerequisites
+validate_prerequisites "git" "curl" "tar" || {
+    log_error "Prerequisites validation failed. Please install missing tools and try again."
+    exit 1
+}
 
-# After environment setup, install required development tools
-section_header "Package Installation"
-log_progress "Installing required packages"
-bash "$DOTFILES_DIR/scripts/install_packages"
+# Set up cleanup for main installation
+cleanup_main_install() {
+    log_progress "Cleaning up main installation resources"
+}
+register_cleanup "cleanup_main_install"
+
+# Installation steps with progress tracking
+TOTAL_STEPS=2
+
+# Step 1: Run setup script to initialize the environment
+progress_with_recovery "$TOTAL_STEPS" "1" "Running dotfiles setup and configuration" \
+    "bash '$DOTFILES_DIR/setup_dotfiles'"
+
+# Step 2: Install required development tools  
+progress_with_recovery "$TOTAL_STEPS" "2" "Installing required development packages" \
+    "bash '$DOTFILES_DIR/scripts/install_packages'"
 
 section_header "Installation Complete"
 log_complete "Dotfiles have been successfully installed!"

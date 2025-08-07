@@ -2,9 +2,16 @@
 # Environment setup script for dotfiles
 # This script handles the initial setup of dotfiles including git submodules
 # and required system packages before the main configuration
-set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
+
+# Initialize error handling
+if [ -f "$SCRIPT_DIR/scripts/error_handling" ]; then
+    source "$SCRIPT_DIR/scripts/error_handling"
+    init_error_handling "setup-dotfiles"
+else
+    set -euo pipefail
+fi
 
 # Source logs if available, otherwise create minimal logging functions
 # These functions will be replaced once the full logging system is available
@@ -59,7 +66,7 @@ else
 fi
 
 # Display help information when requested
-if [[ "$1" == "--help" ]]; then
+if [[ "${1:-}" == "--help" ]]; then
     section_header "Dotfiles Setup"
     echo "Usage: setup_dotfiles [--help]"
     echo "This script sets up the dotfiles by installing git submodules and running the setup script."
