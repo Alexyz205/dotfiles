@@ -82,9 +82,17 @@ dotfiles/
 │   ├── utils                 # Core utilities (Clean Architecture)
 │   ├── logs                  # Structured logging
 │   └── checker               # System validation
+├── config/                   # XDG Base Directory configurations
+│   ├── starship/             # Cross-shell prompt config
+│   ├── yazi/                 # File manager config
+│   ├── lazygit/              # Git TUI config
+│   └── eza/                  # Modern ls config
 ├── shell/                    # Shell configurations
 │   ├── zsh/                  # Zsh config with plugins
 │   └── bash/                 # Bash configuration
+├── git/                      # Git configuration and templates
+│   ├── config                # Main git config
+│   └── template              # Commit message template
 ├── nvim/                     # Neovim configuration (LazyVim)
 ├── tmux/                     # Tmux configuration
 ├── ghostty/                  # Terminal emulator config
