@@ -44,23 +44,3 @@ packages:
     gnu: "unknown-linux-gnu"
     musl: "unknown-linux-musl"
 
-  # Installation metadata
-  metadata:
-    total_tools: 14
-    installation_method: "direct_download"
-    package_manager: "custom_script"
-    architecture_support: ["x86_64", "aarch64"]
-    
-# Version checking configuration
-version_check:
-  enabled: true
-  check_before_install: true
-  fail_on_version_mismatch: false
-  allow_newer_versions: true
-
-# Update policy
-update_policy:
-  auto_update: false
-  check_frequency: "weekly"
-  update_strategy: "minor_only"
-  exclude_from_updates: []
