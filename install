@@ -1,6 +1,16 @@
 #!/bin/bash
-# Main installer script for dotfiles
-# This script serves as the primary entry point for setting up the entire development environment
+set -euo pipefail
+
+# ===============================================
+# Dotfiles Main Installer
+# ===============================================
+# Primary entry point for setting up the entire development environment.
+# Orchestrates the complete installation process including dotfiles setup
+# and package installation.
+#
+# Author: Alexis
+# Version: 2.0
+# Last Updated: 2025-08-07
 
 # Initialize comprehensive error handling
 SCRIPT_NAME="dotfiles-install"
@@ -50,24 +60,38 @@ if [ -f "$DOTFILES_DIR/scripts/utils" ]; then
     source "$DOTFILES_DIR/scripts/utils"
 fi
 
+# ===============================================
+# Utility Functions
+# ===============================================
+
 # Validate multiple prerequisites and return 0 if all are available, 1 if any are missing
 validate_prerequisites() {
     local missing_tools=()
-    local all_good=true
+    
+    if [ $# -eq 0 ]; then
+        log_warning "No prerequisites specified for validation"
+        return 0
+    fi
+    
+    log_progress "Validating prerequisites: $*"
     
     for tool in "$@"; do
+        if [ -z "$tool" ]; then
+            continue
+        fi
+        
         if ! command -v "$tool" &> /dev/null; then
             missing_tools+=("$tool")
-            all_good=false
         fi
     done
     
     if [ ${#missing_tools[@]} -gt 0 ]; then
         log_error "Missing required tools: ${missing_tools[*]}"
+        log_error "Please install these tools before running the installer"
         return 1
     fi
     
-    log_progress "All prerequisites validated: $*"
+    log_success "All prerequisites validated: $*"
     return 0
 }
 
@@ -96,23 +120,50 @@ validate_prerequisites "git" "curl" "tar" || {
 }
 
 
-# Installation steps with logging
-log "Starting dotfiles installation process"
+# ===============================================
+# Installation Process
+# ===============================================
+
+# Installation steps with comprehensive logging
+log_progress "Starting dotfiles installation process"
 
 # Step 1: Run setup script to initialize the environment
-log "Running dotfiles setup and configuration"
+section_header "Dotfiles Setup and Configuration"
+log_progress "Executing dotfiles setup script"
+
+if [ ! -f "$DOTFILES_DIR/setup_dotfiles" ]; then
+    error_exit "Setup script not found: $DOTFILES_DIR/setup_dotfiles"
+fi
+
+if [ ! -x "$DOTFILES_DIR/setup_dotfiles" ]; then
+    log_warning "Setup script not executable, attempting to fix"
+    chmod +x "$DOTFILES_DIR/setup_dotfiles" || error_exit "Failed to make setup script executable"
+fi
+
 if bash "$DOTFILES_DIR/setup_dotfiles"; then
     log_success "Dotfiles setup completed successfully"
 else
-    error_exit "Failed to run dotfiles setup"
+    error_exit "Failed to run dotfiles setup (exit code: $?)"
 fi
 
-# Step 2: Install required development tools  
-log "Installing required development packages"
+# Step 2: Install required development tools
+section_header "Development Tools Installation"
+log_progress "Installing required development packages"
+
+if [ ! -f "$DOTFILES_DIR/scripts/install_packages" ]; then
+    error_exit "Package installer not found: $DOTFILES_DIR/scripts/install_packages"
+fi
+
+if [ ! -x "$DOTFILES_DIR/scripts/install_packages" ]; then
+    log_warning "Package installer not executable, attempting to fix"
+    chmod +x "$DOTFILES_DIR/scripts/install_packages" || error_exit "Failed to make package installer executable"
+fi
+
 if bash "$DOTFILES_DIR/scripts/install_packages"; then
     log_success "Package installation completed successfully"
 else
-    error_exit "Failed to install required packages"
+    log_warning "Package installation completed with warnings (exit code: $?)"
+    log_warning "Some packages may not have been installed correctly"
 fi
 
 section_header "Installation Complete"

@@ -1,7 +1,15 @@
 #!/bin/bash
-# Environment setup script for dotfiles
-# This script handles the initial setup of dotfiles including git submodules
-# and required system packages before the main configuration
+set -euo pipefail
+
+# ===============================================
+# Dotfiles Environment Setup Script
+# ===============================================
+# Handles the initial setup of dotfiles including git submodules
+# and required system packages before the main configuration.
+#
+# Author: Alexis
+# Version: 2.0
+# Last Updated: 2025-08-07
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 
@@ -151,29 +159,84 @@ install_required_packages() {
     log_progress "Package installation process completed"
 }
 
+# ===============================================
+# Prerequisites Installation
+# ===============================================
+
 # Install required system packages before proceeding with setup
-install_required_packages
+log_progress "Installing system prerequisites"
+if ! install_required_packages; then
+    log_warning "Some system packages may not have been installed properly"
+    log_warning "Continuing with setup, but some features may not work"
+fi
+
+# ===============================================
+# Directory Validation
+# ===============================================
 
 # Ensure we have the correct dotfiles directory path regardless of execution location
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
-log_progress "Using dotfiles directory: $DOTFILES_DIR"
-
 SCRIPT_DIR="$DOTFILES_DIR/scripts"
+
+log_progress "Validating directory structure"
+log_progress "Dotfiles directory: $DOTFILES_DIR"
+log_progress "Scripts directory: $SCRIPT_DIR"
+
+# Validate critical directories exist
+if [ ! -d "$SCRIPT_DIR" ]; then
+    error_exit "Scripts directory not found: $SCRIPT_DIR"
+fi
+
+# ===============================================
+# Git Submodules Initialization
+# ===============================================
 
 # Initialize required git submodules for core functionality
 log_progress "Initializing git submodules"
-for submodule in "scripts" "nvim"; do
+submodules=("scripts" "nvim")
+
+for submodule in "${submodules[@]}"; do
+    log_progress "Checking submodule: $submodule"
+    
+    if [ ! -d "$DOTFILES_DIR/$submodule" ]; then
+        log_warning "Submodule directory missing: $submodule"
+    fi
+    
     log_progress "Initializing $submodule submodule"
-    git -C "$DOTFILES_DIR" submodule update --init --recursive -- "$submodule" || error_exit "Failed to initialize $submodule submodule"
+    if git -C "$DOTFILES_DIR" submodule update --init --recursive -- "$submodule"; then
+        log_success "Successfully initialized $submodule submodule"
+    else
+        log_error "Failed to initialize $submodule submodule"
+        error_exit "Critical submodule initialization failed: $submodule"
+    fi
 done
-log_success "Git submodules initialized successfully"
+
+log_success "All git submodules initialized successfully"
+
+# ===============================================
+# Main Setup Execution
+# ===============================================
 
 # Execute the main setup script to configure dotfiles
 section_header "Running Setup Script"
 log_progress "Executing main setup script"
 
+# Validate setup script exists
+if [ ! -f "$SCRIPT_DIR/setup" ]; then
+    error_exit "Setup script not found: $SCRIPT_DIR/setup"
+fi
+
+if [ ! -x "$SCRIPT_DIR/setup" ]; then
+    log_warning "Setup script not executable, attempting to fix"
+    chmod +x "$SCRIPT_DIR/setup" || error_exit "Failed to make setup script executable"
+fi
+
 export DOTFILES_DIR
-source "$SCRIPT_DIR/setup" || error_exit "Setup script failed"
+if source "$SCRIPT_DIR/setup"; then
+    log_success "Setup script completed successfully"
+else
+    error_exit "Setup script failed with exit code $?"
+fi
 
 section_header "Setup Complete"
 log_complete "Dotfiles have been successfully set up!"
