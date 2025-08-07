@@ -35,7 +35,6 @@
         homebrew = {
           enable = true;
           casks = [
-            "raycast"
             "yazi"
             "ghostty"
             "docker"
