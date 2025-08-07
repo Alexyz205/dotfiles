@@ -135,8 +135,13 @@ function y() {
 alias t='tmux attach -t dev || tmux new-session -s dev'
 
 # Zsh plugins
-source ~/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+if [[ -f "$XDG_CONFIG_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
+    source "$XDG_CONFIG_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+fi
+
+if [[ -f "$XDG_CONFIG_HOME/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
+    source "$XDG_CONFIG_HOME/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh"
+fi
 
 # ===============================================
 # History
