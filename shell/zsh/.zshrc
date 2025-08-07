@@ -121,16 +121,16 @@ function y() {
 # Tmux Initialization
 # Uncomment the following lines if you want to use tmux
 
-# if command -v tmux &> /dev/null; then
-#   if [ -z "$TMUX" ]; then
-#     echo "Starting tmux..."
-#     tmux attach -t dev || tmux new-session -s dev
-#   else
-#     clear
-#   fi
-# else
-#   echo "tmux not found, skipping tmux initialization."
-# fi
+if command -v tmux &> /dev/null; then
+  if [ -z "$TMUX" ]; then
+    echo "Starting tmux..."
+    tmux attach -t dev || tmux new-session -s dev
+  else
+    clear
+  fi
+else
+  echo "tmux not found, skipping tmux initialization."
+fi
 
 alias t='tmux attach -t dev || tmux new-session -s dev'
 
