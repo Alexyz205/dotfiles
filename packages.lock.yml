@@ -50,3 +50,8 @@ packages:
     gnu: "unknown-linux-gnu"
     musl: "unknown-linux-musl"
 
+    # Architecture-specific suffixes for tools that need different variants
+    ripgrep:
+      x86_64: "unknown-linux-musl"
+      aarch64: "unknown-linux-gnu"
+
