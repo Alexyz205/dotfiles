@@ -62,7 +62,6 @@ fi
 # Zoxide (smart cd)
 if command -v zoxide &> /dev/null; then
   eval "$(zoxide init bash)"
-  alias cd='z'
 else
   echo "zoxide not found, skipping initialization."
 fi
@@ -150,8 +149,6 @@ else
 fi
 
 alias f='fzf'
-alias cat='bat'
-alias mkdir='mkdir -pv'
 
 # Applications
 alias v='nvim'
@@ -170,8 +167,8 @@ alias gcm='git commit -m'
 alias gco='git checkout'
 alias gd='git diff'
 alias gl='git log'
-alias gp='git push'
-alias gpl='git pull'
+alias gp='git pull'
+alias gP='git push'
 alias gs='git status'
 alias lg='lazygit'
 

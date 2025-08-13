@@ -81,7 +81,6 @@ fi
 # Zoxide (smart cd)
 if command -v zoxide &> /dev/null; then
   eval "$(zoxide init zsh)"
-  alias cd='z'
 else
   echo "zoxide not found, skipping initialization."
 fi
@@ -174,21 +173,24 @@ alias ....='cd ../../..'
 alias mkdir='mkdir -pv'
 
 # File operations
-# Eza with icons and enhanced display
-alias ls='eza --color=auto --icons'
-alias la='eza -la --icons'
-alias ll='eza -l --git --icons --hyperlink'
-alias lt='eza --tree --level=2 --icons'
-alias lta='eza --tree --level=2 --icons -a'
-alias ltl='eza --tree --level=2 --icons -l'
-alias ldir='eza --long --icons --only-dirs'
-alias lg='eza --grid --icons'
-alias lm='eza --icons --sort=modified'
-alias ld='eza --icons --sort=date'
-alias lz='eza --icons --sort=size'
+if command -v eza &> /dev/null; then
+  # Eza with icons and enhanced display
+  alias ls='eza --color=auto --icons'
+  alias la='eza -la --icons'
+  alias ll='eza -l --git --icons --hyperlink'
+  alias lt='eza --tree --level=2 --icons'
+  alias lta='eza --tree --level=2 --icons -a'
+  alias ltl='eza --tree --level=2 --icons -l'
+  alias ldir='eza --long --icons --only-dirs'
+  alias lg='eza --grid --icons'
+  alias lm='eza --icons --sort=modified'
+  alias ld='eza --icons --sort=date'
+  alias lz='eza --icons --sort=size'
+else
+  echo "eza not found, using default ls"
+fi
 
 alias f='fzf'
-alias cat='bat'
 
 # Applications
 alias v='nvim'
@@ -206,8 +208,8 @@ alias gcm='git commit -m'
 alias gco='git checkout'
 alias gd='git diff'
 alias gl='git log'
-alias gp='git push'
-alias gpl='git pull'
+alias gp='git pull'
+alias gP='git push'
 alias gs='git status'
 alias lg='lazygit'
 
