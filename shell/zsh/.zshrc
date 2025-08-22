@@ -229,7 +229,7 @@ alias ds='devpod ssh'
 alias du='devpod up .'
 
 # Nix
-alias nr='nix run nix-darwin --extra-experimental-features "nix-command flakes" -- switch --flake ~/repos/dotfiles/nix#Alexis-MBA'
+alias nr='sudo nix run nix-darwin --extra-experimental-features "nix-command flakes" -- switch --flake ~/repos/dotfiles/config/nix#Alexis-MBA'
 
 # SSH
 alias sshhs='ssh alexyz@homeserveralexyz'

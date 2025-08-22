@@ -18,10 +18,12 @@
           pkgs.devpod
           pkgs.lazygit
           pkgs.lazydocker
+          pkgs.yazi
           pkgs.neovim
           pkgs.tmux
           pkgs.zsh
           pkgs.starship
+          pkgs.direnv
           pkgs.ripgrep
           pkgs.fzf
           pkgs.zoxide
@@ -34,14 +36,15 @@
 
         homebrew = {
           enable = true;
+          brews = [
+            "opencode"
+          ];
           casks = [
-            "yazi"
             "ghostty"
             "docker"
             "chatgpt"
-            "claude-code"
             "obsidian"
-                      ];
+          ];
           onActivation.cleanup = "zap";
           onActivation.autoUpdate = true;
           onActivation.upgrade = true;
