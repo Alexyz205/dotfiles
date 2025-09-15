@@ -3,12 +3,11 @@
 # Update this file when upgrading package versions
 
 version: "1.0"
-last_updated: "2025-08-07"
+last_updated: "2025-09-15"
 
 packages:
   cli_tools:
     starship: "1.23.0"
-
     zoxide: "0.9.8"
     fzf: "0.64.0"
     ripgrep: "14.1.1"
@@ -18,7 +17,6 @@ packages:
     direnv: "2.36.0"
     eza: "0.22.0"
     node: "22.14.0"
-
     bat: "0.25.0"
     yazi: "25.5.31"
 
@@ -27,31 +25,4 @@ packages:
     k9s: "0.50.3"
     helm: "3.17.1"
     helmfile: "0.171.0"
-
-  # Platform-specific configurations
-  platforms:
-    x86_64:
-      lazygit: "Linux_x86_64"
-      direnv: "linux-amd64"
-      node: "linux-x64"
-      fzf: "amd64"
-
-      nvim: "x86_64"
-    aarch64:
-      lazygit: "Linux_arm64"
-      direnv: "linux-arm64"
-      node: "linux-arm64"
-      fzf: "arm64"
-
-      nvim: "arm64"
-
-  # Binary suffixes
-  binary_suffixes:
-    gnu: "unknown-linux-gnu"
-    musl: "unknown-linux-musl"
-
-    # Architecture-specific suffixes for tools that need different variants
-    ripgrep:
-      x86_64: "unknown-linux-musl"
-      aarch64: "unknown-linux-gnu"
 
