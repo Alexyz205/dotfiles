@@ -193,7 +193,7 @@ fi
 
 # Initialize required git submodules for core functionality
 log_progress "Initializing git submodules"
-submodules=("scripts" "nvim" "config/tmux")
+submodules=("scripts" "nvim")
 
 for submodule in "${submodules[@]}"; do
     log_progress "Checking submodule: $submodule"
