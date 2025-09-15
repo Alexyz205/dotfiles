@@ -118,7 +118,6 @@ All tools use the **Catppuccin Mocha** theme for a consistent, eye-friendly dark
 ### Shell Environment
 
 - **Vi mode** enabled by default
-- **Smart completions** with carapace
 - **Auto-suggestions** and syntax highlighting
 - **Environment management** with direnv
 

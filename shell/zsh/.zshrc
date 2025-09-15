@@ -68,6 +68,18 @@ export FZF_ALT_C_OPTS="
   --preview 'tree -C {}'"
 
 # ===============================================
+# Ollama GPU Optimization
+# ===============================================
+
+# GPU Configuration for Ollama
+export OLLAMA_GPU_LAYERS=99999          # Use all layers on GPU
+export OLLAMA_NUM_GPU=1                 # Use 1 GPU
+export CUDA_VISIBLE_DEVICES=0           # Use GPU 0
+export OLLAMA_NUM_PARALLEL=4            # Allow concurrent requests
+export OLLAMA_MAX_LOADED_MODELS=2       # Keep multiple models loaded
+export OLLAMA_CONTEXT_SIZE=8192         # Optimize context size for RTX 4090
+
+# ===============================================
 # Tool Initializations
 # ===============================================
 
@@ -92,13 +104,7 @@ else
   echo "direnv not found, skipping initialization."
 fi
 
-# Carapace (completions)
-if command -v carapace &> /dev/null; then
-  export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
-  source <(carapace _carapace)
-else
-  echo "carapace not found, skipping initialization."
-fi
+
 
 # FZF
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

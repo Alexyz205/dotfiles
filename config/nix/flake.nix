@@ -29,7 +29,7 @@
           pkgs.zoxide
           pkgs.fd
           pkgs.eza
-          pkgs.carapace
+
           pkgs.bat
           pkgs.nodejs
         ];

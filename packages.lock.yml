@@ -18,7 +18,7 @@ packages:
     direnv: "2.36.0"
     eza: "0.22.0"
     node: "22.14.0"
-    carapace: "1.4.1"
+
     bat: "0.25.0"
     yazi: "25.5.31"
 
@@ -35,14 +35,14 @@ packages:
       direnv: "linux-amd64"
       node: "linux-x64"
       fzf: "amd64"
-      carapace: "linux_amd64"
+
       nvim: "x86_64"
     aarch64:
       lazygit: "Linux_arm64"
       direnv: "linux-arm64"
       node: "linux-arm64"
       fzf: "arm64"
-      carapace: "linux_arm64"
+
       nvim: "arm64"
 
   # Binary suffixes
