@@ -29,7 +29,6 @@
           pkgs.zoxide
           pkgs.fd
           pkgs.eza
-
           pkgs.bat
           pkgs.nodejs
         ];
@@ -38,16 +37,18 @@
           enable = true;
           brews = [
             "opencode"
+            "colima"
+            "docker"
+            "docker-compose"
           ];
           casks = [
             "ghostty"
-            "docker"
             "chatgpt"
             "obsidian"
           ];
-          onActivation.cleanup = "zap";
-          onActivation.autoUpdate = true;
-          onActivation.upgrade = true;
+          onActivation.cleanup = "uninstall";
+          onActivation.autoUpdate = false;
+          onActivation.upgrade = false;
         };
 
         system.defaults = {
@@ -59,7 +60,6 @@
           dock.orientation = "left";
           dock.persistent-apps = [
             "/Applications/Ghostty.app"
-            "/Applications/Docker.app"
             "/Applications/Obsidian.app"
             "/Applications/ChatGPT.app"
             "/Applications/Safari.app"
@@ -86,6 +86,13 @@
         # Create /etc/zshrc that loads the nix-darwin environment.
         programs.zsh.enable = true; # default shell on catalina
         # programs.fish.enable = true;
+        
+        # Fix ownership and permissions
+        system.primaryUser = "alexis";
+        users.users.alexis = {
+          name = "alexis";
+          home = "/Users/alexis";
+        };
 
         # Set Git commit hash for darwin-version.
         system.configurationRevision = self.rev or self.dirtyRev or null;
@@ -104,18 +111,18 @@
       darwinConfigurations."Alexis-MBA" = nix-darwin.lib.darwinSystem {
         modules = [
           configuration
-          nix-homebrew.darwinModules.nix-homebrew
-          {
-            nix-homebrew = {
-              enable = true;
-              # Apple silicon only
-              enableRosetta = true;
-              # User owning the Homebrew prefix
-              user = "alexis";
+          # nix-homebrew.darwinModules.nix-homebrew
+          # {
+          #   nix-homebrew = {
+          #     enable = true;
+          #     # Apple silicon only
+          #     enableRosetta = true;
+          #     # User owning the Homebrew prefix
+          #     user = "alexis";
 
-              autoMigrate = true;
-            };
-          }
+          #     autoMigrate = true;
+          #   };
+          # }
         ];
       };
 
