@@ -24,3 +24,6 @@ gui:
     '*': '#b4befe'
     'Alexyz205': '#74c7ec'
     'Alexis Pigeon': '#74c7ec'
+
+os:
+  edit: "nvim {{filename}}"
