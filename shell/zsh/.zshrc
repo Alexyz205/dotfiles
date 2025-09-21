@@ -12,7 +12,7 @@ export EDITOR=nvim
 export REPOS="$HOME/repos"
 export GITUSER="alexyz205"
 export GHREPOS="$REPOS/github.com/$GITUSER"
-export DOTFILES="$GHREPOS/dotfiles"
+export DOTFILES="$REPOS/dotfiles"
 export SCRIPTS="$DOTFILES/scripts"
 export XDG_CONFIG_HOME="$HOME/.config"
 export EZA_CONFIG_DIR="$XDG_CONFIG_HOME/eza"
@@ -204,7 +204,7 @@ alias t='tmux attach -t dev || tmux new-session -s dev'
 alias p='python'
 alias e='exit'
 alias c='clear'
-alias reload='source ~/.bashrc'
+alias reload='source ~/.zshrc'
 
 # Git
 alias g='git'
@@ -226,6 +226,7 @@ alias hf='helmfile'
 alias d='docker'
 alias dc='docker-compose'
 alias ld='lazydocker'
+alias lss='lazyssh'
 alias dru='docker run -it --rm -v ~/repos/dotfiles:/root/dotfiles ubuntu bash'
 alias ik8s='~/dotfiles/scripts/install_k8s'
 alias da='direnv allow'
@@ -238,5 +239,5 @@ alias du='devpod up .'
 alias nr='sudo nix run nix-darwin --extra-experimental-features "nix-command flakes" -- switch --flake ~/repos/dotfiles/config/nix#Alexis-MBA'
 
 # SSH
-alias sshhs='ssh alexyz@homeserveralexyz'
+alias sshhs='ssh alexyz@192.168.1.100'
 
