@@ -21,30 +21,6 @@
     "docs/*.md",
     "prompts/*.md"
   ],
-  "mcp": {
-    "filesystem": {
-      "type": "local",
-      "command": [
-        "npx",
-        "-y",
-        "@modelcontextprotocol/server-filesystem",
-        "/home/alexis.pigeon/repos"
-      ],
-      "enabled": true,
-      "environment": {
-        "NODE_ENV": "production"
-      }
-    },
-    "git": {
-      "type": "local",
-      "command": [
-        "npx",
-        "-y",
-        "@modelcontextprotocol/server-git"
-      ],
-      "enabled": true
-    }
-  },
   "provider": {
     "ollama": {
       "npm": "@ai-sdk/openai-compatible",
@@ -52,9 +28,30 @@
         "baseURL": "http://localhost:11434/v1"
       },
       "models": {
-        "qwen2.5-coder:7b-32k": {
-          "name": "Qwen2.5 Coder 7B (32K Context)",
+        "gpt-oss:20b": {
+          "name": "GPT-OSS 20B",
           "reasoning": true,
+          "options": {
+            "num_ctx": 32768,
+            "temperature": 0.15,
+            "top_p": 0.7,
+            "repeat_penalty": 1.2
+          }
+        },
+        "deepseek-r1:32b": {
+          "name": "DeepSeek-R1 32B",
+          "reasoning": true,
+          "options": {
+            "num_ctx": 32768,
+            "temperature": 0.15,
+            "top_p": 0.7,
+            "repeat_penalty": 1.2
+          }
+        },
+        "gemma3:12b": {
+          "name": "Gemma3 12B",
+          "reasoning": false,
+          "tool_call": false,
           "options": {
             "num_ctx": 32768,
             "temperature": 0.15,
