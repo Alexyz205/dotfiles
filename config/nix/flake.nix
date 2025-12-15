@@ -35,9 +35,9 @@
 
         homebrew = {
           enable = true;
+          taps = ["sst/tap"];
           brews = [
             "opencode"
-            "colima"
             "docker"
             "docker-compose"
           ];
@@ -46,9 +46,8 @@
             "chatgpt"
             "obsidian"
           ];
-          onActivation.cleanup = "uninstall";
-          onActivation.autoUpdate = false;
-          onActivation.upgrade = false;
+          onActivation.autoUpdate = true;
+          onActivation.upgrade = true;
         };
 
         system.defaults = {
