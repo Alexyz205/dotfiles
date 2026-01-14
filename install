@@ -10,7 +10,7 @@ set -euo pipefail
 #
 # Author: Alexis
 # Version: 2.0
-# Last Updated: 2025-08-07
+# Last Updated: 2026-01-14
 
 # Initialize comprehensive error handling
 SCRIPT_NAME="dotfiles-install"
@@ -20,8 +20,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 DOTFILES_DIR="$(cd "$SCRIPT_DIR" && pwd)"
 
 # Source comprehensive error handling system
-if [ -f "$DOTFILES_DIR/scripts/error_handling" ]; then
-    source "$DOTFILES_DIR/scripts/error_handling"
+if [ -f "$DOTFILES_DIR/scripts/error_handling.sh" ]; then
+    source "$DOTFILES_DIR/scripts/error_handling.sh"
     init_error_handling "$SCRIPT_NAME"
 else
     # Fallback to basic error handling
@@ -29,8 +29,8 @@ else
 fi
 
 # Source logging utilities if available, or create minimal logging functions
-if [ -f "$DOTFILES_DIR/scripts/logs" ]; then
-    source "$DOTFILES_DIR/scripts/logs"
+if [ -f "$DOTFILES_DIR/scripts/logs.sh" ]; then
+    source "$DOTFILES_DIR/scripts/logs.sh"
 else
     # Fallback logging functions
     # Function to get current timestamp in ISO 8601 format
@@ -56,8 +56,8 @@ else
 fi
 
 # Source utility functions
-if [ -f "$DOTFILES_DIR/scripts/utils" ]; then
-    source "$DOTFILES_DIR/scripts/utils"
+if [ -f "$DOTFILES_DIR/scripts/utils.sh" ]; then
+    source "$DOTFILES_DIR/scripts/utils.sh"
 fi
 
 # ===============================================
@@ -150,16 +150,16 @@ fi
 section_header "Development Tools Installation"
 log_progress "Installing required development packages"
 
-if [ ! -f "$DOTFILES_DIR/scripts/install_packages" ]; then
-    error_exit "Package installer not found: $DOTFILES_DIR/scripts/install_packages"
+if [ ! -f "$DOTFILES_DIR/scripts/install_packages.sh" ]; then
+    error_exit "Package installer not found: $DOTFILES_DIR/scripts/install_packages.sh"
 fi
 
-if [ ! -x "$DOTFILES_DIR/scripts/install_packages" ]; then
+if [ ! -x "$DOTFILES_DIR/scripts/install_packages.sh" ]; then
     log_warning "Package installer not executable, attempting to fix"
-    chmod +x "$DOTFILES_DIR/scripts/install_packages" || error_exit "Failed to make package installer executable"
+    chmod +x "$DOTFILES_DIR/scripts/install_packages.sh" || error_exit "Failed to make package installer executable"
 fi
 
-if bash "$DOTFILES_DIR/scripts/install_packages"; then
+if bash "$DOTFILES_DIR/scripts/install_packages.sh"; then
     log_success "Package installation completed successfully"
 else
     log_warning "Package installation completed with warnings (exit code: $?)"

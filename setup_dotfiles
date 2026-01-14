@@ -9,13 +9,13 @@ set -euo pipefail
 #
 # Author: Alexis
 # Version: 2.0
-# Last Updated: 2025-08-07
+# Last Updated: 2026-01-14
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 
 # Initialize error handling
-if [ -f "$SCRIPT_DIR/scripts/error_handling" ]; then
-    source "$SCRIPT_DIR/scripts/error_handling"
+if [ -f "$SCRIPT_DIR/scripts/error_handling.sh" ]; then
+    source "$SCRIPT_DIR/scripts/error_handling.sh"
     init_error_handling "setup-dotfiles"
 else
     set -euo pipefail
@@ -23,8 +23,8 @@ fi
 
 # Source logs if available, otherwise create minimal logging functions
 # These functions will be replaced once the full logging system is available
-if [ -f "$SCRIPT_DIR/scripts/logs" ]; then
-    source "$SCRIPT_DIR/scripts/logs"
+if [ -f "$SCRIPT_DIR/scripts/logs.sh" ]; then
+    source "$SCRIPT_DIR/scripts/logs.sh"
 else
     # Minimal logging functions if logs script is not yet available
     # Function to get current timestamp in ISO 8601 format
@@ -50,8 +50,8 @@ else
 fi
 
 # Source checker script for sudo handling
-if [ -f "$SCRIPT_DIR/scripts/checker" ]; then
-    source "$SCRIPT_DIR/scripts/checker"
+if [ -f "$SCRIPT_DIR/scripts/checker.sh" ]; then
+    source "$SCRIPT_DIR/scripts/checker.sh"
     check_sudo
     setup_sudo_wrapper
 else
@@ -222,17 +222,17 @@ section_header "Running Setup Script"
 log_progress "Executing main setup script"
 
 # Validate setup script exists
-if [ ! -f "$SCRIPT_DIR/setup" ]; then
-    error_exit "Setup script not found: $SCRIPT_DIR/setup"
+if [ ! -f "$SCRIPT_DIR/setup.sh" ]; then
+    error_exit "Setup script not found: $SCRIPT_DIR/setup.sh"
 fi
 
-if [ ! -x "$SCRIPT_DIR/setup" ]; then
+if [ ! -x "$SCRIPT_DIR/setup.sh" ]; then
     log_warning "Setup script not executable, attempting to fix"
-    chmod +x "$SCRIPT_DIR/setup" || error_exit "Failed to make setup script executable"
+    chmod +x "$SCRIPT_DIR/setup.sh" || error_exit "Failed to make setup script executable"
 fi
 
 export DOTFILES_DIR
-if source "$SCRIPT_DIR/setup"; then
+if source "$SCRIPT_DIR/setup.sh"; then
     log_success "Setup script completed successfully"
 else
     error_exit "Setup script failed with exit code $?"
