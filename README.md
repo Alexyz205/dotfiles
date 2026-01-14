@@ -83,23 +83,19 @@ dotfiles/
 │   ├── logs                  # Structured logging
 │   └── checker               # System validation
 ├── config/                   # XDG Base Directory configurations
-│   ├── starship/             # Cross-shell prompt config
-│   ├── yazi/                 # File manager config
+│   ├── ghostty/              # Terminal emulator config
+│   ├── git/                  # Git configuration
 │   ├── lazygit/              # Git TUI config
-│   └── eza/                  # Modern ls config
+│   ├── nix/                  # Nix package manager config
+│   ├── opencode/             # AI assistant config
+│   ├── starship/             # Cross-shell prompt config
+│   └── tmux/                 # Tmux configuration (submodule)
 ├── shell/                    # Shell configurations
 │   ├── zsh/                  # Zsh config with plugins
-│   └── bash/                 # Bash configuration
-├── git/                      # Git configuration and templates
-│   ├── config                # Main git config
-│   └── template              # Commit message template
-├── nvim/                     # Neovim configuration (LazyVim)
-├── tmux/                     # Tmux configuration
-├── ghostty/                  # Terminal emulator config
-├── yazi/                     # File manager config
-├── nix/                      # Nix package manager config
-├── prompts/                  # AI assistant prompt templates
-└── vscode/                   # VS Code profiles
+│   ├── bash/                 # Bash configuration
+│   └── powershell/           # PowerShell configuration
+├── nvim/                     # Neovim configuration (LazyVim submodule)
+└── scripts/                  # Installation and utility scripts (submodule)
 ```
 
 ## 🎨 Theming

@@ -4,7 +4,6 @@
 
 # --- Commit Settings ---
 [commit]
-    template = ~/.config/git/template
     verbose = true  # add more context to commit messages
 
 # --- Core Settings ---
