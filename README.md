@@ -15,7 +15,6 @@ Welcome to my dotfiles repository! This setup provides a complete development en
 - 🔧 **DevOps-optimized** - Pre-configured for K8s, Docker, Git workflows
 - 📦 **Cross-platform** - Linux, macOS, and WSL support
 - 🔄 **Automated updates** - Version-pinned tools with easy upgrade paths
-- 💡 **AI-assisted prompts** - Built-in prompt templates for development workflows
 
 ## 🚀 Quick Start
 
@@ -45,16 +44,6 @@ That's it! Your development environment is ready. 🎉
 | [**Starship**](https://starship.rs/) | Cross-shell prompt | Git info, Docker context, K8s context |
 | [**Zsh**](https://zsh.sourceforge.io/) | Advanced shell | Auto-suggestions, syntax highlighting |
 
-### DevOps & Infrastructure Tools
-
-| Tool | Purpose | Version |
-|------|---------|---------|
-| [**Lazygit**](https://github.com/jesseduffield/lazygit) | Git TUI | v0.51.1 |
-| [**Kubectl**](https://kubernetes.io/docs/reference/kubectl/) | Kubernetes CLI | Latest |
-| [**K9s**](https://k9scli.io/) | Kubernetes TUI | Latest |
-| [**Helm**](https://helm.sh/) | Kubernetes package manager | Latest |
-| [**Docker**](https://www.docker.com/) | Container platform | Config ready |
-
 ### Productivity Tools
 
 | Tool | Purpose | Version |
@@ -74,17 +63,8 @@ That's it! Your development environment is ready. 🎉
 dotfiles/
 ├── install                    # Main entry point
 ├── setup_dotfiles            # Environment initialization
-├── scripts/                  # Installation and utility scripts
-│   ├── install_packages      # Package installation automation
-│   ├── install_nvim          # Neovim from source
-│   ├── install_k8s           # Kubernetes tools
-│   ├── setup                 # Configuration symlink management
-│   ├── utils                 # Core utilities (Clean Architecture)
-│   ├── logs                  # Structured logging
-│   └── checker               # System validation
 ├── config/                   # XDG Base Directory configurations
 │   ├── ghostty/              # Terminal emulator config
-│   ├── git/                  # Git configuration
 │   ├── lazygit/              # Git TUI config
 │   ├── nix/                  # Nix package manager config
 │   ├── opencode/             # AI assistant config
@@ -121,7 +101,6 @@ All tools use the **Catppuccin Mocha** theme for a consistent, eye-friendly dark
 
 Built on **LazyVim** with DevOps-focused enhancements:
 
-- 🤖 **GitHub Copilot** integration
 - 🔗 **Tmux navigation** seamless pane switching
 - 📁 **Yazi integration** file management
 - 🌳 **Lazygit integration** Git workflow
@@ -148,37 +127,6 @@ Built on **LazyVim** with DevOps-focused enhancements:
 ./scripts/install_k8s       # Only install Kubernetes tools
 ./scripts/install_nvim      # Build Neovim from source
 ```
-
-### Package Management
-```bash
-# Nix support for declarative package management
-nix develop                 # Enter development shell
-```
-
-## 🤖 AI-Powered Development
-
-Includes prompt templates for common DevOps tasks:
-
-- 📝 **Architecture guidance** - Clean Architecture patterns
-- 🐳 **Dockerfile optimization** - Container best practices
-- 🔧 **Automation scripts** - Infrastructure automation
-- 🔍 **Security reviews** - Code and configuration audits
-- 📚 **Documentation** - README and code documentation
-- 🧪 **Testing strategies** - Unit and integration tests
-
-Access prompts in the `prompts/` directory.
-
-## 🌍 Platform Support
-
-| Platform | Status | Notes |
-|----------|--------|-------|
-| **Ubuntu/Debian** | ✅ Full | Primary development platform |
-| **Fedora/RHEL** | ✅ Full | Complete package manager support |
-| **Arch Linux** | ✅ Full | Pacman integration |
-| **macOS** | ✅ Full | Homebrew and Nix support |
-| **WSL2** | ✅ Full | Windows Subsystem for Linux |
-| **Alpine** | ⚠️ Limited | Basic tools only |
-
 ## 🔄 Updating
 
 The dotfiles include version-pinned tools for stability. To update:
@@ -194,7 +142,7 @@ git submodule update --init --recursive
 ./setup_dotfiles
 
 # Update packages (edit versions in scripts/install_packages)
-./scripts/install_packages
+./scripts/install_packages --force
 ```
 
 ## 🛠️ Customization
@@ -215,38 +163,8 @@ Add custom automation scripts following the Clean Architecture pattern:
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch
-3. Follow the existing code structure and Clean Architecture principles
-4. Test on at least one supported platform
-5. Submit a pull request with a clear description
-
-### Development Guidelines
-
-- **Logging**: Use structured logging functions from `scripts/logs`
-- **Error handling**: Implement proper error handling with cleanup
-- **Testing**: Test scripts on clean environments
-- **Documentation**: Update README for new features
+Contributions are welcome!
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- [Catppuccin](https://github.com/catppuccin/catppuccin) - Beautiful pastel theme
-- [LazyVim](https://www.lazyvim.org/) - Neovim distribution
-- [Starship](https://starship.rs/) - Cross-shell prompt
-- [TPM](https://github.com/tmux-plugins/tpm) - Tmux Plugin Manager
-
----
-
-<div align="center">
-
-**Happy coding! 🚀**
-
-*Built with ❤️ for the DevOps community*
-
-</div>
