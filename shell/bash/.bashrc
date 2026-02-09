@@ -45,7 +45,17 @@ if [ -f "$SHELL_DIR/common/fzf.sh" ]; then
   source "$SHELL_DIR/common/fzf.sh"
 fi
 
-# Tool availability checks
+# ===============================================
+# Source Bash-Specific Configuration
+# ===============================================
+# Load Bash-only features and optimizations
+# This must come before tools.sh
+
+if [ -f "$SHELL_DIR/bash/bash_specific.sh" ]; then
+  source "$SHELL_DIR/bash/bash_specific.sh"
+fi
+
+# Tool availability checks (after bash-specific config)
 if [ -f "$SHELL_DIR/common/tools.sh" ]; then
   source "$SHELL_DIR/common/tools.sh"
 fi
@@ -58,15 +68,6 @@ fi
 # Shared aliases
 if [ -f "$SHELL_DIR/common/aliases.sh" ]; then
   source "$SHELL_DIR/common/aliases.sh"
-fi
-
-# ===============================================
-# Source Bash-Specific Configuration
-# ===============================================
-# Load Bash-only features and optimizations
-
-if [ -f "$SHELL_DIR/bash/bash_specific.sh" ]; then
-  source "$SHELL_DIR/bash/bash_specific.sh"
 fi
 
 # ===============================================

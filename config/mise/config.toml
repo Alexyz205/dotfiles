@@ -1,0 +1,415 @@
+# ===============================================
+# Mise Global Configuration
+# ===============================================
+# This file defines the global versions of all development tools.
+# Tools are managed by mise and automatically installed when needed.
+#
+# Backend Types:
+#   - core:  Mise's built-in support (node, python, etc.)
+#   - ubi:   GitHub releases (pre-built binaries)
+#   - npm:   Node.js packages
+#   - cargo: Rust packages
+#   - aqua:  Aqua registry packages
+#
+# Last Updated: 2026-02-09
+#
+[tools]
+# ===============================================
+# Programming Languages & Runtimes
+# ===============================================
+
+# Node.js runtime for JavaScript/TypeScript development
+node = "24.11.1"
+
+# Python runtime for scripting and automation
+python = "3.14.3"
+
+# Python application installer and manager
+pipx = "1.8.0"
+
+# ===============================================
+# Shell & Terminal Tools
+# ===============================================
+
+# Terminal multiplexer for session management
+tmux = "3.6a"
+
+# Cross-shell prompt with git/docker/k8s context
+"ubi:starship/starship" = "1.24.1"
+
+# Smart directory navigation (z command)
+"ubi:ajeetdsouza/zoxide" = "0.9.8"
+
+# ===============================================
+# File & Text Utilities
+# ===============================================
+
+# Fuzzy finder for files/commands/history
+"ubi:junegunn/fzf" = "0.67.0"
+
+# Fast grep alternative with smart defaults
+ripgrep = "15.1.0"
+
+# Fast file finder (modern find replacement)
+"ubi:sharkdp/fd" = "10.3.0"
+
+# Syntax highlighting pager (better cat)
+"ubi:sharkdp/bat" = "0.26.0"
+
+# Modern ls replacement with git integration
+eza = "0.23.4"
+
+# Terminal file manager with preview
+"ubi:sxyazi/yazi" = "25.5.31"
+
+# ===============================================
+# Version Control & Git Tools
+# ===============================================
+
+# Git terminal UI for interactive git workflows
+"ubi:jesseduffield/lazygit" = "0.56.0"
+
+# ===============================================
+# Code Editors & Language Tools
+# ===============================================
+
+# Neovim text editor (v0.11.5)
+"aqua:neovim/neovim" = "0.11.5"
+
+# Tree-sitter parser generator for syntax highlighting
+"npm:tree-sitter-cli" = "0.26.5"
+
+# ===============================================
+# Infrastructure as Code (IaC)
+# ===============================================
+
+# Terraform for cloud infrastructure provisioning
+terraform = "1.14.4"
+
+# Ansible for configuration management and automation
+ansible = "13.3.0"
+
+# ===============================================
+# Container & Kubernetes Tools
+# ===============================================
+
+# Kubernetes CLI for cluster management
+kubectl = "1.34.1"
+
+# Kubernetes TUI for interactive cluster exploration
+"ubi:derailed/k9s" = "0.50.12"
+
+# Kubernetes package manager
+helm = "3.19.0"
+
+# Declarative Helm chart deployment tool
+"ubi:helmfile/helmfile" = "1.1.7"
+
+# ===============================================
+# Security & Secrets Management
+# ===============================================
+
+# # Secrets management with SOPS
+# "aqua:getsops/sops" = "latest"
+#
+# # Vulnerability scanner for containers and IaC
+# "aqua:aquasecurity/trivy" = "latest"
+#
+# # Secret scanner for git repositories
+# "aqua:trufflesecurity/trufflehog" = "latest"
+
+# ===============================================
+# YAML, JSON & Data Tools
+# ===============================================
+
+# YAML processor (like jq for YAML)
+"aqua:mikefarah/yq" = "latest"
+
+# JSON processor (core tool)
+jq = "latest"
+
+# ===============================================
+# Infrastructure as Code Tools
+# ===============================================
+
+# # Terraform linter
+# "aqua:terraform-linters/tflint" = "latest"
+#
+# # Infrastructure as Code security scanner
+# "aqua:tenable/terrascan" = "latest"
+
+# ===============================================
+# Container Tools
+# ===============================================
+
+# # Docker image layer analyzer
+# "aqua:wagoodman/dive" = "latest"
+
+# ===============================================
+# Network & API Tools
+# ===============================================
+
+# # User-friendly HTTP client
+# "pipx:httpie" = "latest"
+#
+# # Modern network testing tool
+# "aqua:codesenberg/bombardier" = "latest"
+
+# ===============================================
+# CI/CD Tools
+# ===============================================
+
+# # Run GitHub Actions locally
+# "aqua:nektos/act" = "latest"
+#
+# # GitHub CLI
+# "aqua:cli/cli" = "latest"
+#
+# # GitHub Actions linter
+# "aqua:rhysd/actionlint" = "latest"
+#
+# # GitLab CLI
+# "github:profclems/glab" = "latest"
+
+# ===============================================
+# AI & Development Assistants
+# ===============================================
+
+# AI coding assistant with Claude integration
+"npm:opencode-ai" = "1.1.53"
+
+[settings]
+# ===============================================
+# Mise Settings Configuration
+# ===============================================
+
+# Automatically install missing tools when entering directories
+experimental = true
+yes = true
+
+# Show verbose output for debugging
+verbose = false
+
+# Enable plugin autoupdate
+plugin_autoupdate_last_check_duration = "7d"
+
+# ===============================================
+# Performance & Installation Settings
+# ===============================================
+
+# Number of parallel installs (increase on powerful machines)
+jobs = 8
+
+# HTTP timeout for downloads
+http_timeout = "30s"
+
+# Disk space management
+always_keep_download = false # Delete downloads after install
+always_keep_install = false  # Delete failed installs
+
+# ===============================================
+# Auto-install & Command Not Found Handler
+# ===============================================
+
+# Auto-install missing tools when running commands
+not_found_auto_install = true # Enable "command not found" handler
+
+# ===============================================
+# Task Runner Settings
+# ===============================================
+
+# Task output style (prefix, interleave, quiet)
+task_output = "prefix"       # Prefix task output with task names
+task_timings = true          # Show task completion times
+task_show_full_cmd = false   # Truncate long commands
+task_run_auto_install = true # Auto-install tools when running tasks
+
+# ===============================================
+# Security & Verification Settings
+# ===============================================
+
+# Enable SLSA provenance verification for supply-chain security
+slsa = true
+
+# Enable GitHub Artifact Attestations verification
+github_attestations = true
+
+# Use netrc for HTTP Basic authentication
+netrc = true
+
+# ===============================================
+# Color & Display Settings
+# ===============================================
+
+# Use color in terminal output
+color = true
+
+# Color theme for interactive prompts (default, base16, catppuccin, dracula)
+color_theme = "catppuccin"
+
+# Enable terminal progress indicators (OSC 9;4)
+terminal_progress = true
+
+# ===============================================
+# Cache & Update Settings
+# ===============================================
+
+# Cache prune age (delete cache files older than this)
+cache_prune_age = "30d"
+
+# Fetch remote versions cache duration
+fetch_remote_versions_cache = "1h"
+
+# Fetch remote versions timeout
+fetch_remote_versions_timeout = "20s"
+
+# HTTP retries with exponential backoff
+http_retries = 3
+
+# ===============================================
+# Version File Support
+# ===============================================
+
+# Enable idiomatic version files for specific tools
+idiomatic_version_file_enable_tools = ["node", "python", "ruby", "java", "go"]
+
+# ===============================================
+# Default Tasks for DevOps Workflows
+# ===============================================
+
+[tasks.clean]
+description = "Clean mise cache and prune old installations"
+run = ["mise cache clear", "mise prune --yes"]
+
+[tasks.lint]
+description = "Run linters for infrastructure code"
+depends = ["lint:terraform", "lint:yaml", "lint:docker"]
+
+[tasks."lint:terraform"]
+description = "Lint Terraform files"
+run = "tflint --init && tflint --recursive"
+sources = ["**/*.tf"]
+outputs = [".tflint.hcl"]
+
+[tasks."lint:yaml"]
+description = "Lint YAML files"
+run = "yamllint ."
+sources = ["**/*.yml", "**/*.yaml"]
+
+[tasks."lint:docker"]
+description = "Lint Dockerfiles"
+run = "find . -name 'Dockerfile*' -exec hadolint {} +"
+sources = ["**/Dockerfile*"]
+
+[tasks.security]
+description = "Run security scans"
+depends = ["security:trivy", "security:secrets"]
+
+[tasks."security:trivy"]
+description = "Scan for vulnerabilities with Trivy"
+run = "trivy fs --scanners vuln,secret,misconfig ."
+
+[tasks."security:secrets"]
+description = "Scan for secrets in git history"
+run = "trufflehog filesystem . --no-update"
+
+[tasks.terraform]
+description = "Terraform workflow tasks"
+depends = ["terraform:fmt", "terraform:validate"]
+
+[tasks."terraform:fmt"]
+description = "Format Terraform files"
+run = "terraform fmt -recursive"
+sources = ["**/*.tf"]
+
+[tasks."terraform:validate"]
+description = "Validate Terraform configuration"
+run = "terraform validate"
+sources = ["**/*.tf"]
+
+[tasks."terraform:plan"]
+description = "Run Terraform plan"
+run = "terraform plan"
+sources = ["**/*.tf"]
+
+[tasks."terraform:apply"]
+description = "Apply Terraform changes"
+run = "terraform apply"
+sources = ["**/*.tf"]
+
+[tasks.k8s]
+description = "Kubernetes tasks"
+depends = ["k8s:contexts", "k8s:pods"]
+
+[tasks."k8s:contexts"]
+description = "List Kubernetes contexts"
+run = "kubectl config get-contexts"
+
+[tasks."k8s:pods"]
+description = "List all pods in current context"
+run = "kubectl get pods --all-namespaces"
+
+[tasks."k8s:dashboard"]
+description = "Launch K9s dashboard"
+run = "k9s"
+
+[tasks.ansible]
+description = "Ansible tasks"
+run = "ansible --version"
+
+[tasks."ansible:lint"]
+description = "Lint Ansible playbooks"
+run = "ansible-lint"
+sources = ["**/*.yml", "**/*.yaml"]
+
+[tasks."ansible:inventory"]
+description = "Show Ansible inventory"
+run = "ansible-inventory --list"
+
+[tasks.docker]
+description = "Docker tasks"
+depends = ["docker:ps", "docker:images"]
+
+[tasks."docker:ps"]
+description = "List running containers"
+run = "docker ps"
+
+[tasks."docker:images"]
+description = "List Docker images"
+run = "docker images"
+
+[tasks."docker:clean"]
+description = "Clean up Docker resources"
+run = "docker system prune -af --volumes"
+
+[tasks.git]
+description = "Git tasks"
+depends = ["git:status", "git:branches"]
+
+[tasks."git:status"]
+description = "Show git status"
+run = "git status"
+
+[tasks."git:branches"]
+description = "List git branches"
+run = "git branch -va"
+
+[tasks."git:log"]
+description = "Show git log"
+run = "git log --oneline --graph --decorate --all -n 10"
+
+[tasks.test]
+description = "Run all tests"
+run = "echo 'Add your test commands here'"
+
+[tasks.build]
+description = "Build the project"
+run = "echo 'Add your build commands here'"
+
+[tasks.deploy]
+description = "Deploy the project"
+run = "echo 'Add your deployment commands here'"
+
+[tasks.dev]
+description = "Start development environment"
+run = "echo 'Add your dev server commands here'"

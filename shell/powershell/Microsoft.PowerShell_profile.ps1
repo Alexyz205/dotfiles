@@ -122,7 +122,6 @@ Set-Alias -Name e -Value exit -Option AllScope
 Set-Alias -Name c -Value clear -Option AllScope
 Set-Alias -Name reload -Value "& { . $PROFILE }" -Option AllScope
 Set-Alias -Name ik8s -Value "~/dotfiles/scripts/install_k8s" -Option AllScope
-Set-Alias -Name da -Value "direnv allow" -Option AllScope
 
 # DevPod aliases
 if (Get-Command devpod -ErrorAction SilentlyContinue) {

@@ -114,32 +114,6 @@ if [[ -f "$XDG_CONFIG_HOME/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.z
 fi
 
 # ===============================================
-# Zsh-Specific Tool Initializations
-# ===============================================
-
-# Starship prompt initialization for Zsh
-if [ "${STARSHIP_AVAILABLE}" = "1" ]; then
-  eval "$(starship init zsh)"
-fi
-
-# Zoxide initialization for Zsh
-if [ "${ZOXIDE_AVAILABLE}" = "1" ]; then
-  eval "$(zoxide init zsh)"
-fi
-
-# Direnv initialization for Zsh
-if [ "${DIRENV_AVAILABLE}" = "1" ]; then
-  eval "$(direnv hook zsh)"
-fi
-
-# FZF initialization for Zsh
-if [ "${FZF_AVAILABLE}" = "1" ]; then
-  if command -v fzf &>/dev/null; then
-    source <(fzf --zsh) 2>/dev/null || true
-  fi
-fi
-
-# ===============================================
 # Zsh-Specific Aliases
 # ===============================================
 

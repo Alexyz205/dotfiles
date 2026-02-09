@@ -76,7 +76,6 @@ alias lss='lazyssh'
 alias lssh='lazyssh'
 alias dru='docker run -it --rm -v ~/repos/dotfiles:/root/dotfiles ubuntu bash'
 alias ik8s='$SCRIPTS/install_k8s'
-alias da='direnv allow'
 
 # ===============================================
 # DevPod

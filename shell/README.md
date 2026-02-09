@@ -85,9 +85,9 @@ FZF (Fuzzy Finder) configuration:
 
 #### `common/tools.sh`
 Tool availability detection and initialization:
+- Mise (version manager)
 - Starship prompt
 - Zoxide (smart cd)
-- Direnv (environment switcher)
 - FZF integration
 
 ### Shell-Specific Modules
@@ -181,8 +181,8 @@ Aliases automatically adjust based on available tools:
 - Provides helpful messages when tools are missing
 
 ### Automatic Environment Management
-- `direnv` integration for per-directory environments
-- Automatic loading of `.envrc` files
+- Mise integration for per-directory tool versions
+- Automatic loading of `.mise.toml` files
 
 ### Cross-Shell Consistency
 Same aliases, functions, and behavior across Bash and Zsh.
@@ -286,14 +286,14 @@ grep "common/env.sh" ~/.zshrc
 ```
 
 #### Tool Initialization Failing
-**Problem**: Starship/Zoxide/Direnv not initializing
+**Problem**: Starship/Zoxide/Mise not initializing
 
 **Solution**:
 ```bash
 # Check if tool is installed
 command -v starship
 command -v zoxide
-command -v direnv
+command -v mise
 
 # Install missing tools
 cd ~/repos/dotfiles

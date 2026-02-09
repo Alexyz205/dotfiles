@@ -62,32 +62,6 @@ bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
 
 # ===============================================
-# Bash-Specific Tool Initializations
-# ===============================================
-
-# Starship prompt initialization for Bash
-if [ "${STARSHIP_AVAILABLE}" = "1" ]; then
-  eval "$(starship init bash)"
-fi
-
-# Zoxide initialization for Bash
-if [ "${ZOXIDE_AVAILABLE}" = "1" ]; then
-  eval "$(zoxide init bash)"
-fi
-
-# Direnv initialization for Bash
-if [ "${DIRENV_AVAILABLE}" = "1" ]; then
-  eval "$(direnv hook bash)"
-fi
-
-# FZF initialization for Bash
-if [ "${FZF_AVAILABLE}" = "1" ]; then
-  if command -v fzf &>/dev/null; then
-    source <(fzf --bash) 2>/dev/null || true
-  fi
-fi
-
-# ===============================================
 # Bash-Specific Aliases
 # ===============================================
 

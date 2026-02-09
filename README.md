@@ -14,7 +14,8 @@ Welcome to my dotfiles repository! This setup provides a complete development en
 - 🎨 **Consistent theming** - Catppuccin Mocha across all tools
 - 🔧 **DevOps-optimized** - Pre-configured for K8s, Docker, Git workflows
 - 📦 **Cross-platform** - Linux, macOS, and WSL support
-- 🔄 **Automated updates** - Version-pinned tools with easy upgrade paths
+- 🔄 **Version management** - Mise for declarative tool version control
+- 💡 **AI-assisted prompts** - Built-in prompt templates for development workflows
 
 ## 🚀 Quick Start
 
@@ -38,24 +39,12 @@ That's it! Your development environment is ready. 🎉
 
 | Tool | Purpose | Configuration Highlights |
 |------|---------|-------------------------|
+| [**Mise**](https://mise.jdx.dev/) | Tool version manager | Declarative version control for all CLI tools |
 | [**Ghostty**](https://mitchellh.com/ghostty) | Modern terminal emulator | Catppuccin theme, JetBrains Mono font |
 | [**Tmux**](https://github.com/tmux/tmux) | Terminal multiplexer | Catppuccin theme, Neovim integration |
-| [**Neovim**](https://neovim.io/) | Text editor | LazyVim base, DevOps plugins, Copilot |
+| [**Neovim**](https://neovim.io/) | Text editor | LazyVim base, DevOps plugins, Copilot (v0.11.5) |
 | [**Starship**](https://starship.rs/) | Cross-shell prompt | Git info, Docker context, K8s context |
 | [**Zsh**](https://zsh.sourceforge.io/) | Advanced shell | Auto-suggestions, syntax highlighting |
-
-### Productivity Tools
-
-| Tool | Purpose | Version |
-|------|---------|---------|
-| [**Fzf**](https://github.com/junegunn/fzf) | Fuzzy finder | v0.62.0 |
-| [**Ripgrep**](https://github.com/BurntSushi/ripgrep) | Fast grep | v14.1.0 |
-| [**Fd**](https://github.com/sharkdp/fd) | Fast file finder | v10.2.0 |
-| [**Bat**](https://github.com/sharkdp/bat) | Better cat | v0.25.0 |
-| [**Eza**](https://github.com/eza-community/eza) | Modern ls | v0.20.21 |
-| [**Yazi**](https://github.com/sxyazi/yazi) | Terminal file manager | v25.5.31 |
-| [**Zoxide**](https://github.com/ajeetdsouza/zoxide) | Smart cd | v0.9.8 |
-| [**Direnv**](https://direnv.net/) | Environment switcher | v2.35.0 |
 
 ## 🏗️ Architecture Overview
 
@@ -63,10 +52,19 @@ That's it! Your development environment is ready. 🎉
 dotfiles/
 ├── install                    # Main entry point
 ├── setup_dotfiles            # Environment initialization
+├── scripts/                  # Installation and utility scripts
+│   ├── install_packages       # Mise-based package installation
+│   ├── configure_k9s         # K9s theme setup
+│   ├── configure_helm        # Helm plugins setup
+│   ├── setup                 # Configuration symlink management
+│   ├── utils                 # Core utilities (Clean Architecture)
+│   ├── logs                  # Structured logging
+│   └── checker               # System validation
 ├── config/                   # XDG Base Directory configurations
 │   ├── ghostty/              # Terminal emulator config
+│   ├── git/                  # Git configuration
 │   ├── lazygit/              # Git TUI config
-│   ├── nix/                  # Nix package manager config
+│   ├── mise/                 # Mise tool version manager config
 │   ├── opencode/             # AI assistant config
 │   ├── starship/             # Cross-shell prompt config
 │   └── tmux/                 # Tmux configuration (submodule)
@@ -95,12 +93,13 @@ All tools use the **Catppuccin Mocha** theme for a consistent, eye-friendly dark
 
 - **Vi mode** enabled by default
 - **Auto-suggestions** and syntax highlighting
-- **Environment management** with direnv
+- **Environment management** with mise
 
 ### Neovim Setup
 
 Built on **LazyVim** with DevOps-focused enhancements:
 
+- 🤖 **GitHub Copilot** integration
 - 🔗 **Tmux navigation** seamless pane switching
 - 📁 **Yazi integration** file management
 - 🌳 **Lazygit integration** Git workflow
@@ -115,21 +114,88 @@ Built on **LazyVim** with DevOps-focused enhancements:
 
 ## 🚦 Installation Options
 
-### Full Installation
+### Full Installation (Recommended)
+
 ```bash
 ./install                    # Complete setup with all tools
 ```
 
+This will:
+
+1. Initialize git submodules
+2. Create symlinks for all configurations  
+3. Install mise (tool version manager)
+4. Install all tools defined in `config/mise/config.toml`
+5. Configure k9s theme and Helm plugins
+
 ### Selective Installation
+
 ```bash
-./setup_dotfiles            # Just configure dotfiles (no package installation)
-./scripts/install_packages  # Only install development tools
-./scripts/install_k8s       # Only install Kubernetes tools
-./scripts/install_nvim      # Build Neovim from source
+./setup_dotfiles             # Just configure dotfiles (no package installation)
+./scripts/install_packages   # Install mise + all tools + post-install configs
 ```
+
+### Manual Configuration (Optional)
+
+```bash
+./scripts/configure_k9s.sh   # Configure k9s Catppuccin theme
+./scripts/configure_helm.sh  # Install Helm plugins (diff, secrets)
+```
+
+### Managing Tools with Mise
+
+All development tools are managed by mise and defined in `config/mise/config.toml`:
+
+```bash
+# Install all tools from config
+mise install
+
+# List installed tools and versions
+mise list
+
+# Update a specific tool
+mise upgrade node
+
+# Update all tools to latest versions
+mise upgrade
+
+# Use different version in a project
+cd ~/my-project
+echo "node = '20.0.0'" > .mise.toml
+mise install
+
+# Add new tools
+# Edit config/mise/config.toml, then run:
+mise install
+```
+
+## 🤖 AI-Powered Development
+
+Includes prompt templates for common DevOps tasks:
+
+- 📝 **Architecture guidance** - Clean Architecture patterns
+- 🐳 **Dockerfile optimization** - Container best practices
+- 🔧 **Automation scripts** - Infrastructure automation
+- 🔍 **Security reviews** - Code and configuration audits
+- 📚 **Documentation** - README and code documentation
+- 🧪 **Testing strategies** - Unit and integration tests
+
+Access prompts in the `prompts/` directory.
+
+## 🌍 Platform Support
+
+| Platform | Status | Notes |
+|----------|--------|-------|
+| **Ubuntu/Debian** | ✅ Full | Primary development platform |
+| **Fedora/RHEL** | ✅ Full | Complete package manager support |
+| **Arch Linux** | ✅ Full | Pacman integration |
+| **macOS** | ✅ Full | Mise-based tool management |
+| **WSL2** | ✅ Full | Windows Subsystem for Linux |
+| **Alpine** | ⚠️ Limited | Basic tools only |
+
 ## 🔄 Updating
 
-The dotfiles include version-pinned tools for stability. To update:
+The dotfiles include version-pinned tools managed by mise. To update:
 
 ```bash
 # Pull latest configurations
@@ -141,30 +207,65 @@ git submodule update --init --recursive
 # Re-run setup to apply changes
 ./setup_dotfiles
 
-# Update packages (edit versions in scripts/install_packages)
-./scripts/install_packages --force
+# Update all tools to versions in config
+mise install
+
+# Or upgrade all tools to latest versions
+mise upgrade
 ```
 
 ## 🛠️ Customization
 
 ### Adding New Tools
 
-1. **Add to install script**: Edit `scripts/install_packages`
-2. **Create configuration**: Add config files in appropriate directory
-3. **Update setup**: Add symlinks in `scripts/setup`
-4. **Test installation**: Run selective installation
+1. **Add to mise config**: Edit `config/mise/config.toml`
+2. **Install the tool**: Run `mise install`
+3. **Create configuration**: Add config files in appropriate directory
+4. **Update setup**: Add symlinks in `scripts/setup` if needed
+5. **Test**: Verify the tool works
 
 ### Custom Scripts
 
 Add custom automation scripts following the Clean Architecture pattern:
+
 - **Domain logic**: Pure functions in `scripts/utils`
 - **Use cases**: Main functionality in `scripts/`
 - **Infrastructure**: Platform-specific implementations
 
 ## 🤝 Contributing
 
-Contributions are welcome!
+Contributions are welcome! Please:
+
+1. Fork the repository
+2. Create a feature branch
+3. Follow the existing code structure and Clean Architecture principles
+4. Test on at least one supported platform
+5. Submit a pull request with a clear description
+
+### Development Guidelines
+
+- **Logging**: Use structured logging functions from `scripts/logs`
+- **Error handling**: Implement proper error handling with cleanup
+- **Testing**: Test scripts on clean environments
+- **Documentation**: Update README for new features
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [Catppuccin](https://github.com/catppuccin/catppuccin) - Beautiful pastel theme
+- [LazyVim](https://www.lazyvim.org/) - Neovim distribution
+- [Starship](https://starship.rs/) - Cross-shell prompt
+- [TPM](https://github.com/tmux-plugins/tpm) - Tmux Plugin Manager
+
+---
+
+<div align="center">
+
+**Happy coding! 🚀**
+
+*Built with ❤️ for the DevOps community*
+
+</div>

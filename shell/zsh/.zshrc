@@ -38,7 +38,17 @@ if [ -f "$SHELL_DIR/common/fzf.sh" ]; then
   source "$SHELL_DIR/common/fzf.sh"
 fi
 
-# Tool availability checks
+# ===============================================
+# Source Zsh-Specific Configuration
+# ===============================================
+# Load Zsh-only features and optimizations
+# This must come before tools.sh so mise is activated first
+
+if [ -f "$SHELL_DIR/zsh/zsh_specific.sh" ]; then
+  source "$SHELL_DIR/zsh/zsh_specific.sh"
+fi
+
+# Tool availability checks (after mise activation)
 if [ -f "$SHELL_DIR/common/tools.sh" ]; then
   source "$SHELL_DIR/common/tools.sh"
 fi
@@ -51,24 +61,6 @@ fi
 # Shared aliases
 if [ -f "$SHELL_DIR/common/aliases.sh" ]; then
   source "$SHELL_DIR/common/aliases.sh"
-fi
-
-# ===============================================
-# Source Zsh-Specific Configuration
-# ===============================================
-# Load Zsh-only features and optimizations
-
-if [ -f "$SHELL_DIR/zsh/zsh_specific.sh" ]; then
-  source "$SHELL_DIR/zsh/zsh_specific.sh"
-fi
-
-# ===============================================
-# Nix Configuration (macOS)
-# ===============================================
-# Load Nix package manager alias if on macOS
-if [[ "$OSTYPE" == "darwin"* ]]; then
-  # Nix package manager alias
-  alias nr='sudo nix run nix-darwin --extra-experimental-features "nix-command flakes" -- switch --flake ~/repos/dotfiles/config/nix#Alexis-MBA'
 fi
 
 # ===============================================
