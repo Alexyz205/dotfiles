@@ -11,81 +11,84 @@ set -euo pipefail
 # Version: 3.0
 # Last Updated: 2026-02-10
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 
 # Initialize error handling
 if [ -f "$SCRIPT_DIR/scripts/error_handling.sh" ]; then
-    source "$SCRIPT_DIR/scripts/error_handling.sh"
-    init_error_handling "setup-dotfiles"
+  source "$SCRIPT_DIR/scripts/error_handling.sh"
+  init_error_handling "setup-dotfiles"
 else
-    set -euo pipefail
+  set -euo pipefail
 fi
 
 # Source logs if available, otherwise create minimal logging functions
 # These functions will be replaced once the full logging system is available
 if [ -f "$SCRIPT_DIR/scripts/logs.sh" ]; then
-    source "$SCRIPT_DIR/scripts/logs.sh"
+  source "$SCRIPT_DIR/scripts/logs.sh"
 else
-    # Minimal logging functions if logs script is not yet available
-    # Function to get current timestamp in ISO 8601 format
-    get_timestamp() {
-      date +"%Y-%m-%d %H:%M:%S"
-    }
+  # Minimal logging functions if logs script is not yet available
+  # Function to get current timestamp in ISO 8601 format
+  get_timestamp() {
+    date +"%Y-%m-%d %H:%M:%S"
+  }
 
-    # Core logging functions with timestamp and log type - no fancy formatting
-    log() { echo "[$(get_timestamp)][INFO] $1"; }
-    log_error() { echo "[$(get_timestamp)][ERROR] $1"; }
-    log_success() { echo "[$(get_timestamp)][SUCCESS] $1"; }
-    log_warning() { echo "[$(get_timestamp)][WARNING] $1"; }
-    log_progress() { echo "[$(get_timestamp)][PROGRESS] $1"; }
-    log_complete() { echo "[$(get_timestamp)][COMPLETE] $1"; }
+  # Core logging functions with timestamp and log type - no fancy formatting
+  log() { echo "[$(get_timestamp)][INFO] $1"; }
+  log_error() { echo "[$(get_timestamp)][ERROR] $1"; }
+  log_success() { echo "[$(get_timestamp)][SUCCESS] $1"; }
+  log_warning() { echo "[$(get_timestamp)][WARNING] $1"; }
+  log_progress() { echo "[$(get_timestamp)][PROGRESS] $1"; }
+  log_complete() { echo "[$(get_timestamp)][COMPLETE] $1"; }
 
-    # Error and exit helper
-    error_exit() { log_error "$1"; exit 1; }
+  # Error and exit helper
+  error_exit() {
+    log_error "$1"
+    exit 1
+  }
 
-    # Simple section header
-    section_header() {
-        echo -e "\n===== $1 =====\n"
-    }
+  # Simple section header
+  section_header() {
+    echo -e "\n===== $1 =====\n"
+  }
 fi
 
 # Source checker script for sudo handling
 if [ -f "$SCRIPT_DIR/scripts/checker.sh" ]; then
-    source "$SCRIPT_DIR/scripts/checker.sh"
-    check_sudo
-    setup_sudo_wrapper
+  source "$SCRIPT_DIR/scripts/checker.sh"
+  check_sudo
+  setup_sudo_wrapper
 else
-    log_warning "Checker script not found. Creating fallback sudo handling."
-    # Define sudo function directly in this script
-    if command -v sudo &>/dev/null; then
-        log_progress "Sudo is available and will be used for privileged operations"
-        sudo() {
-            command sudo "$@"
-        }
-    else
-        log_warning "Sudo is not available. Running with current user privileges."
-        log_warning "Some operations may fail if they require elevated permissions."
-        # Create a sudo function that just runs the command without sudo
-        sudo() {
-            "$@"
-        }
-    fi
-    export -f sudo
+  log_warning "Checker script not found. Creating fallback sudo handling."
+  # Define sudo function directly in this script
+  if command -v sudo &>/dev/null; then
+    log_progress "Sudo is available and will be used for privileged operations"
+    sudo() {
+      command sudo "$@"
+    }
+  else
+    log_warning "Sudo is not available. Running with current user privileges."
+    log_warning "Some operations may fail if they require elevated permissions."
+    # Create a sudo function that just runs the command without sudo
+    sudo() {
+      "$@"
+    }
+  fi
+  export -f sudo
 fi
 
 # Display help information when requested
 if [[ "${1:-}" == "--help" ]]; then
-    section_header "Dotfiles Setup"
-    echo "Usage: setup_dotfiles [--help]"
-    echo "This script sets up the dotfiles by initializing git submodules and configuring dotfiles."
-    echo
-    echo "The setup process will:"
-    echo "  1. Initialize git submodules to retrieve components"
-    echo "  2. Run the main dotfiles setup script"
-    echo
-    echo "Note: Package installation is handled separately by mise."
-    echo "      Run './scripts/install_packages' to install tools."
-    exit 0
+  section_header "Dotfiles Setup"
+  echo "Usage: setup_dotfiles [--help]"
+  echo "This script sets up the dotfiles by initializing git submodules and configuring dotfiles."
+  echo
+  echo "The setup process will:"
+  echo "  1. Initialize git submodules to retrieve components"
+  echo "  2. Run the main dotfiles setup script"
+  echo
+  echo "Note: Package installation is handled separately by mise."
+  echo "      Run './scripts/install_packages' to install tools."
+  exit 0
 fi
 
 section_header "Initializing Dotfiles"
@@ -95,7 +98,7 @@ section_header "Initializing Dotfiles"
 # ===============================================
 
 # Ensure we have the correct dotfiles directory path regardless of execution location
-DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 SCRIPT_DIR="$DOTFILES_DIR/scripts"
 
 log_progress "Validating directory structure"
@@ -104,7 +107,7 @@ log_progress "Scripts directory: $SCRIPT_DIR"
 
 # Validate critical directories exist
 if [ ! -d "$SCRIPT_DIR" ]; then
-    error_exit "Scripts directory not found: $SCRIPT_DIR"
+  error_exit "Scripts directory not found: $SCRIPT_DIR"
 fi
 
 # ===============================================
@@ -113,22 +116,22 @@ fi
 
 # Initialize required git submodules for core functionality
 log_progress "Initializing git submodules"
-submodules=("scripts" "nvim")
+submodules=("scripts" "nvim" "config/tmux")
 
 for submodule in "${submodules[@]}"; do
-    log_progress "Checking submodule: $submodule"
-    
-    if [ ! -d "$DOTFILES_DIR/$submodule" ]; then
-        log_warning "Submodule directory missing: $submodule"
-    fi
-    
-    log_progress "Initializing $submodule submodule"
-    if git -C "$DOTFILES_DIR" submodule update --init --recursive -- "$submodule"; then
-        log_success "Successfully initialized $submodule submodule"
-    else
-        log_error "Failed to initialize $submodule submodule"
-        error_exit "Critical submodule initialization failed: $submodule"
-    fi
+  log_progress "Checking submodule: $submodule"
+
+  if [ ! -d "$DOTFILES_DIR/$submodule" ]; then
+    log_warning "Submodule directory missing: $submodule"
+  fi
+
+  log_progress "Initializing $submodule submodule"
+  if git -C "$DOTFILES_DIR" submodule update --init --recursive -- "$submodule"; then
+    log_success "Successfully initialized $submodule submodule"
+  else
+    log_error "Failed to initialize $submodule submodule"
+    error_exit "Critical submodule initialization failed: $submodule"
+  fi
 done
 
 log_success "All git submodules initialized successfully"
@@ -143,19 +146,19 @@ log_progress "Executing main setup script"
 
 # Validate setup script exists
 if [ ! -f "$SCRIPT_DIR/setup.sh" ]; then
-    error_exit "Setup script not found: $SCRIPT_DIR/setup.sh"
+  error_exit "Setup script not found: $SCRIPT_DIR/setup.sh"
 fi
 
 if [ ! -x "$SCRIPT_DIR/setup.sh" ]; then
-    log_warning "Setup script not executable, attempting to fix"
-    chmod +x "$SCRIPT_DIR/setup.sh" || error_exit "Failed to make setup script executable"
+  log_warning "Setup script not executable, attempting to fix"
+  chmod +x "$SCRIPT_DIR/setup.sh" || error_exit "Failed to make setup script executable"
 fi
 
 export DOTFILES_DIR
 if source "$SCRIPT_DIR/setup.sh"; then
-    log_success "Setup script completed successfully"
+  log_success "Setup script completed successfully"
 else
-    error_exit "Setup script failed with exit code $?"
+  error_exit "Setup script failed with exit code $?"
 fi
 
 section_header "Setup Complete"
