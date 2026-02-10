@@ -27,15 +27,15 @@ XDG_CONFIG_HOME = "{{env.HOME}}/.config"
 EZA_CONFIG_DIR = "{{env.XDG_CONFIG_HOME}}/eza"
 
 # Ollama GPU Optimization (RTX 4090)
-OLLAMA_GPU_LAYERS = "99999"         # Use all layers on GPU
-OLLAMA_NUM_GPU = "1"                # Use 1 GPU
-CUDA_VISIBLE_DEVICES = "0"          # Use GPU 0
-OLLAMA_NUM_PARALLEL = "4"           # Allow concurrent requests
-OLLAMA_MAX_LOADED_MODELS = "2"      # Keep multiple models loaded
-OLLAMA_CONTEXT_SIZE = "8192"        # Optimize context size for RTX 4090
+OLLAMA_GPU_LAYERS = "99999"    # Use all layers on GPU
+OLLAMA_NUM_GPU = "1"           # Use 1 GPU
+CUDA_VISIBLE_DEVICES = "0"     # Use GPU 0
+OLLAMA_NUM_PARALLEL = "4"      # Allow concurrent requests
+OLLAMA_MAX_LOADED_MODELS = "2" # Keep multiple models loaded
+OLLAMA_CONTEXT_SIZE = "8192"   # Optimize context size for RTX 4090
 
 # Tmux Configuration
-TMUX_AUTO_START = "1"               # Enable automatic tmux session management
+TMUX_AUTO_START = "1" # Enable automatic tmux session management
 
 [tools]
 # ===============================================
@@ -96,98 +96,6 @@ neovim = "0.11.5"
 
 # Tree-sitter parser generator for syntax highlighting
 tree-sitter = "0.26.5"
-
-# ===============================================
-# Infrastructure as Code (IaC)
-# ===============================================
-#
-# # Terraform for cloud infrastructure provisioning
-# terraform = "1.14.4"
-#
-# # Ansible for configuration management and automation
-# ansible = "13.3.0"
-#
-# ===============================================
-# Container & Kubernetes Tools
-# ===============================================
-#
-# # Kubernetes CLI for cluster management
-# kubectl = "1.34.1"
-#
-# # Kubernetes TUI for interactive cluster exploration
-# "ubi:derailed/k9s" = "0.50.12"
-#
-# # Kubernetes package manager
-# helm = "3.19.0"
-#
-# # Declarative Helm chart deployment tool
-# helmfile = "1.1.7"
-#
-# ===============================================
-# Security & Secrets Management
-# ===============================================
-
-# # Secrets management with SOPS
-# "aqua:getsops/sops" = "latest"
-#
-# # Vulnerability scanner for containers and IaC
-# "aqua:aquasecurity/trivy" = "latest"
-#
-# # Secret scanner for git repositories
-# "aqua:trufflesecurity/trufflehog" = "latest"
-
-# ===============================================
-# YAML, JSON & Data Tools
-# ===============================================
-#
-# # YAML processor (like jq for YAML)
-# yq = "latest"
-#
-# # JSON processor (core tool)
-# jq = "latest"
-#
-# ===============================================
-# Infrastructure as Code Tools
-# ===============================================
-
-# # Terraform linter
-# "aqua:terraform-linters/tflint" = "latest"
-#
-# # Infrastructure as Code security scanner
-# "aqua:tenable/terrascan" = "latest"
-
-# ===============================================
-# Container Tools
-# ===============================================
-
-# # Docker image layer analyzer
-# "aqua:wagoodman/dive" = "latest"
-
-# ===============================================
-# Network & API Tools
-# ===============================================
-
-# # User-friendly HTTP client
-# "pipx:httpie" = "latest"
-#
-# # Modern network testing tool
-# "aqua:codesenberg/bombardier" = "latest"
-
-# ===============================================
-# CI/CD Tools
-# ===============================================
-
-# # Run GitHub Actions locally
-# "aqua:nektos/act" = "latest"
-#
-# # GitHub CLI
-# "aqua:cli/cli" = "latest"
-#
-# # GitHub Actions linter
-# "aqua:rhysd/actionlint" = "latest"
-#
-# # GitLab CLI
-# "github:profclems/glab" = "latest"
 
 # ===============================================
 # AI & Development Assistants
@@ -298,123 +206,6 @@ idiomatic_version_file_enable_tools = ["node", "python"]
 [tasks.clean]
 description = "Clean mise cache and prune old installations"
 run = ["mise cache clear", "mise prune --yes"]
-
-[tasks.lint]
-description = "Run linters for infrastructure code"
-depends = ["lint:terraform", "lint:yaml", "lint:docker"]
-
-[tasks."lint:terraform"]
-description = "Lint Terraform files"
-run = "tflint --init && tflint --recursive"
-sources = ["**/*.tf"]
-outputs = [".tflint.hcl"]
-
-[tasks."lint:yaml"]
-description = "Lint YAML files"
-run = "yamllint ."
-sources = ["**/*.yml", "**/*.yaml"]
-
-[tasks."lint:docker"]
-description = "Lint Dockerfiles"
-run = "find . -name 'Dockerfile*' -exec hadolint {} +"
-sources = ["**/Dockerfile*"]
-
-[tasks.security]
-description = "Run security scans"
-depends = ["security:trivy", "security:secrets"]
-
-[tasks."security:trivy"]
-description = "Scan for vulnerabilities with Trivy"
-run = "trivy fs --scanners vuln,secret,misconfig ."
-
-[tasks."security:secrets"]
-description = "Scan for secrets in git history"
-run = "trufflehog filesystem . --no-update"
-
-[tasks.terraform]
-description = "Terraform workflow tasks"
-depends = ["terraform:fmt", "terraform:validate"]
-
-[tasks."terraform:fmt"]
-description = "Format Terraform files"
-run = "terraform fmt -recursive"
-sources = ["**/*.tf"]
-
-[tasks."terraform:validate"]
-description = "Validate Terraform configuration"
-run = "terraform validate"
-sources = ["**/*.tf"]
-
-[tasks."terraform:plan"]
-description = "Run Terraform plan"
-run = "terraform plan"
-sources = ["**/*.tf"]
-
-[tasks."terraform:apply"]
-description = "Apply Terraform changes"
-run = "terraform apply"
-sources = ["**/*.tf"]
-
-[tasks.k8s]
-description = "Kubernetes tasks"
-depends = ["k8s:contexts", "k8s:pods"]
-
-[tasks."k8s:contexts"]
-description = "List Kubernetes contexts"
-run = "kubectl config get-contexts"
-
-[tasks."k8s:pods"]
-description = "List all pods in current context"
-run = "kubectl get pods --all-namespaces"
-
-[tasks."k8s:dashboard"]
-description = "Launch K9s dashboard"
-run = "k9s"
-
-[tasks.ansible]
-description = "Ansible tasks"
-run = "ansible --version"
-
-[tasks."ansible:lint"]
-description = "Lint Ansible playbooks"
-run = "ansible-lint"
-sources = ["**/*.yml", "**/*.yaml"]
-
-[tasks."ansible:inventory"]
-description = "Show Ansible inventory"
-run = "ansible-inventory --list"
-
-[tasks.docker]
-description = "Docker tasks"
-depends = ["docker:ps", "docker:images"]
-
-[tasks."docker:ps"]
-description = "List running containers"
-run = "docker ps"
-
-[tasks."docker:images"]
-description = "List Docker images"
-run = "docker images"
-
-[tasks."docker:clean"]
-description = "Clean up Docker resources"
-run = "docker system prune -af --volumes"
-
-[tasks.git]
-description = "Git tasks"
-depends = ["git:status", "git:branches"]
-
-[tasks."git:status"]
-description = "Show git status"
-run = "git status"
-
-[tasks."git:branches"]
-description = "List git branches"
-run = "git branch -va"
-
-[tasks."git:log"]
-description = "Show git log"
-run = "git log --oneline --graph --decorate --all -n 10"
 
 [tasks.test]
 description = "Run all tests"
