@@ -12,8 +12,21 @@
 # Mise (Tool Version Manager)
 # ===============================================
 # Activate mise early to make tools and environment variables available
+
+# First, ensure mise binary is in PATH
+if [ ! -x "$(command -v mise 2>/dev/null)" ] && [ -x "$HOME/.local/bin/mise" ]; then
+  export PATH="$HOME/.local/bin:$PATH"
+fi
+
+# Add mise shims directory to PATH for non-interactive/devcontainer environments
+if [ -d "$HOME/.local/share/mise/shims" ]; then
+  if [[ ":$PATH:" != *":$HOME/.local/share/mise/shims:"* ]]; then
+    export PATH="$HOME/.local/share/mise/shims:$PATH"
+  fi
+fi
+
 if command -v mise &>/dev/null; then
-  # Determine the current shell
+  # Determine the current shell and activate mise
   if [ -n "$ZSH_VERSION" ]; then
     eval "$(mise activate zsh)"
   elif [ -n "$BASH_VERSION" ]; then
