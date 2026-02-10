@@ -21,7 +21,7 @@ alias mkdir='mkdir -pv'
 # File Operations
 # ===============================================
 # Eza (modern ls replacement) with icons and enhanced display
-if command -v eza &> /dev/null; then
+if command -v eza &>/dev/null; then
   alias ls='eza --color=auto --icons'
   alias la='eza -la --icons'
   alias ll='eza -l --git --icons --hyperlink'
@@ -82,8 +82,3 @@ alias ik8s='$SCRIPTS/install_k8s'
 # ===============================================
 alias ds='devpod ssh'
 alias du='devpod up .'
-
-# ===============================================
-# SSH
-# ===============================================
-alias sshhs='ssh alexyz@192.168.1.100'
