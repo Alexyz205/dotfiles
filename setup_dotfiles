@@ -5,11 +5,11 @@ set -euo pipefail
 # Dotfiles Environment Setup Script
 # ===============================================
 # Handles the initial setup of dotfiles including git submodules
-# and required system packages before the main configuration.
+# and main configuration. Package installation is handled by mise.
 #
 # Author: Alexis
-# Version: 2.0
-# Last Updated: 2026-01-14
+# Version: 3.0
+# Last Updated: 2026-02-10
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 
@@ -77,98 +77,18 @@ fi
 if [[ "${1:-}" == "--help" ]]; then
     section_header "Dotfiles Setup"
     echo "Usage: setup_dotfiles [--help]"
-    echo "This script sets up the dotfiles by installing git submodules and running the setup script."
-    echo "It also changes the default shell to zsh."
+    echo "This script sets up the dotfiles by initializing git submodules and configuring dotfiles."
     echo
     echo "The setup process will:"
-    echo "  1. Install required system packages"
-    echo "  2. Initialize git submodules to retrieve components"
-    echo "  3. Run the main dotfiles setup script"
-    echo "  4. Change the default shell to zsh"
+    echo "  1. Initialize git submodules to retrieve components"
+    echo "  2. Run the main dotfiles setup script"
+    echo
+    echo "Note: Package installation is handled separately by mise."
+    echo "      Run './scripts/install_packages' to install tools."
     exit 0
 fi
 
 section_header "Initializing Dotfiles"
-
-# Detect and install required system packages based on available package manager
-install_required_packages() {
-    section_header "Installing Required Packages"
-
-    # Use the appropriate package manager for the current system
-    if command -v apt-get &> /dev/null; then
-        log_progress "Detected apt package manager"
-        log_progress "Updating package index..."
-
-        # First try without sudo
-        apt-get update -qq 2>/dev/null || {
-            # If that fails, try with sudo
-            sudo apt-get update -qq || {
-                log_warning "Failed to update package index - continuing anyway"
-            }
-        }
-
-        log_progress "Installing required packages..."
-        # First try without sudo
-        apt-get install -y -qq curl git tar wget unzip apt-transport-https \
-            ca-certificates gnupg lsb-release build-essential 2>/dev/null || {
-            # If that fails, try with sudo
-            sudo apt-get install -y -qq curl git tar wget unzip apt-transport-https \
-                ca-certificates gnupg lsb-release build-essential || {
-                log_warning "Failed to install some packages - continuing anyway"
-            }
-        }
-    elif command -v dnf &> /dev/null; then
-        log_progress "Detected dnf package manager"
-        log_progress "Installing required packages..."
-        # First try without sudo
-        dnf install -y -q curl git tar wget unzip ca-certificates gnupg \
-            make gcc gcc-c++ redhat-lsb-core 2>/dev/null || {
-            # If that fails, try with sudo
-            sudo dnf install -y -q curl git tar wget unzip ca-certificates gnupg \
-                make gcc gcc-c++ redhat-lsb-core || {
-                log_warning "Failed to install some packages - continuing anyway"
-            }
-        }
-    elif command -v yum &> /dev/null; then
-        log_progress "Detected yum package manager"
-        log_progress "Installing required packages..."
-        # First try without sudo
-        yum install -y -q curl git tar wget unzip ca-certificates gnupg \
-            make gcc gcc-c++ redhat-lsb-core 2>/dev/null || {
-            # If that fails, try with sudo
-            sudo yum install -y -q curl git tar wget unzip ca-certificates gnupg \
-                make gcc gcc-c++ redhat-lsb-core || {
-                log_warning "Failed to install some packages - continuing anyway"
-            }
-        }
-    elif command -v pacman &> /dev/null; then
-        log_progress "Detected pacman package manager"
-        log_progress "Installing required packages..."
-        # First try without sudo
-        pacman -Syq --noconfirm curl git tar wget unzip ca-certificates gnupg base-devel 2>/dev/null || {
-            # If that fails, try with sudo
-            sudo pacman -Syq --noconfirm curl git tar wget unzip ca-certificates gnupg base-devel || {
-                log_warning "Failed to install some packages - continuing anyway"
-            }
-        }
-    else
-        log_warning "Unsupported package manager. You may need to install dependencies manually:"
-        log_warning "  - curl, git, tar, wget, unzip, build tools"
-    fi
-
-    log_progress "Package installation process completed"
-}
-
-# ===============================================
-# Prerequisites Installation
-# ===============================================
-
-# Install required system packages before proceeding with setup
-log_progress "Installing system prerequisites"
-if ! install_required_packages; then
-    log_warning "Some system packages may not have been installed properly"
-    log_warning "Continuing with setup, but some features may not work"
-fi
 
 # ===============================================
 # Directory Validation
