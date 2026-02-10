@@ -7,7 +7,7 @@
 #
 # Author: Alexis
 # Version: 3.0
-# Last Updated: 2025-01-14
+# Last Updated: 2026-02-10
 
 # ===============================================
 # Vi Mode
@@ -24,11 +24,19 @@ SHELL_DIR="${ZSHRC_PATH:h:h}"
 export SHELL_DIR
 
 # ===============================================
+# Mise Activation (MUST BE FIRST)
+# ===============================================
+# Activate mise early to make tools and environment variables available
+if command -v mise &>/dev/null; then
+  eval "$(mise activate zsh)"
+fi
+
+# ===============================================
 # Source Common Configurations
 # ===============================================
 # Load shared configurations used across all shells
 
-# Environment variables
+# Environment variables (now mostly managed by mise)
 if [ -f "$SHELL_DIR/common/env.sh" ]; then
   source "$SHELL_DIR/common/env.sh"
 fi

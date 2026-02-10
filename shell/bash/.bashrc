@@ -7,7 +7,7 @@
 #
 # Author: Alexis
 # Version: 3.0
-# Last Updated: 2025-01-14
+# Last Updated: 2026-02-10
 
 # ===============================================
 # Vi Mode
@@ -31,11 +31,19 @@ fi
 export SHELL_DIR
 
 # ===============================================
+# Mise Activation (MUST BE FIRST)
+# ===============================================
+# Activate mise early to make tools and environment variables available
+if command -v mise &>/dev/null; then
+  eval "$(mise activate bash)"
+fi
+
+# ===============================================
 # Source Common Configurations
 # ===============================================
 # Load shared configurations used across all shells
 
-# Environment variables
+# Environment variables (now mostly managed by mise)
 if [ -f "$SHELL_DIR/common/env.sh" ]; then
   source "$SHELL_DIR/common/env.sh"
 fi
@@ -55,7 +63,7 @@ if [ -f "$SHELL_DIR/bash/bash_specific.sh" ]; then
   source "$SHELL_DIR/bash/bash_specific.sh"
 fi
 
-# Tool availability checks (after bash-specific config)
+# Tool availability checks (after mise activation)
 if [ -f "$SHELL_DIR/common/tools.sh" ]; then
   source "$SHELL_DIR/common/tools.sh"
 fi

@@ -3,25 +3,19 @@
 # Tool Initializations
 # ===============================================
 # Common tool initialization commands shared across all shells.
-# This file handles ALL tool initialization including mise, starship,
-# zoxide, and fzf with automatic shell detection.
+# This file handles tool initialization for starship, zoxide, and fzf
+# with automatic shell detection.
 #
 # Usage: source "$SHELL_DIR/common/tools.sh"
 
 # ===============================================
 # Mise (Tool Version Manager)
 # ===============================================
-# Initialize mise if available - MUST run first to make tools available
+# Check if mise is available (already activated in shell configs)
 if command -v mise &>/dev/null; then
-  # Determine the current shell
-  if [ -n "$ZSH_VERSION" ]; then
-    eval "$(mise activate zsh)"
-  elif [ -n "$BASH_VERSION" ]; then
-    eval "$(mise activate bash)"
-  fi
   export MISE_AVAILABLE=1
 else
-  echo "mise not found, skipping initialization."
+  echo "mise not found, some tools may not be available."
   export MISE_AVAILABLE=0
 fi
 
