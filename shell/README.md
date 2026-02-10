@@ -9,11 +9,10 @@ This shell configuration follows **Clean Architecture** principles with a modula
 ```
 shell/
 ├── common/                          # Shared configurations
-│   ├── env.sh                       # Environment variables
 │   ├── aliases.sh                   # Aliases (tool-agnostic)
 │   ├── functions.sh                 # Shared functions
 │   ├── fzf.sh                       # FZF configuration
-│   └── tools.sh                     # Tool initializations
+│   └── tools.sh                     # Tool initializations (mise, starship, zoxide, fzf)
 ├── bash/
 │   ├── .bashrc                      # Main Bash config (sources common)
 │   └── bash_specific.sh             # Bash-only features
@@ -56,13 +55,6 @@ Each configuration file is a standalone module that can be:
 
 ### Common Modules
 
-#### `common/env.sh`
-Environment variables shared across all shells:
-- Editor configuration (`VISUAL`, `EDITOR`)
-- Directory structure (`REPOS`, `DOTFILES`, `SCRIPTS`)
-- Tool-specific settings (Ollama GPU, XDG directories)
-- Feature flags (`TMUX_AUTO_START`)
-
 #### `common/aliases.sh`
 Shell-agnostic command aliases:
 - Navigation shortcuts (`dot`, `repos`, `..`)
@@ -85,7 +77,7 @@ FZF (Fuzzy Finder) configuration:
 
 #### `common/tools.sh`
 Tool availability detection and initialization:
-- Mise (version manager)
+- Mise (version manager activation with shell-specific eval)
 - Starship prompt
 - Zoxide (smart cd)
 - FZF integration
@@ -281,8 +273,8 @@ cd ~/repos/dotfiles
 # Check SHELL_DIR is set correctly
 echo $SHELL_DIR
 
-# Verify common/env.sh is being sourced
-grep "common/env.sh" ~/.zshrc
+# Verify tools.sh is being sourced
+grep "common/tools.sh" ~/.zshrc
 ```
 
 #### Tool Initialization Failing

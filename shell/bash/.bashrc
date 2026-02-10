@@ -31,22 +31,9 @@ fi
 export SHELL_DIR
 
 # ===============================================
-# Mise Activation (MUST BE FIRST)
-# ===============================================
-# Activate mise early to make tools and environment variables available
-if command -v mise &>/dev/null; then
-  eval "$(mise activate bash)"
-fi
-
-# ===============================================
 # Source Common Configurations
 # ===============================================
 # Load shared configurations used across all shells
-
-# Environment variables (now mostly managed by mise)
-if [ -f "$SHELL_DIR/common/env.sh" ]; then
-  source "$SHELL_DIR/common/env.sh"
-fi
 
 # FZF configuration
 if [ -f "$SHELL_DIR/common/fzf.sh" ]; then
@@ -57,13 +44,12 @@ fi
 # Source Bash-Specific Configuration
 # ===============================================
 # Load Bash-only features and optimizations
-# This must come before tools.sh
 
 if [ -f "$SHELL_DIR/bash/bash_specific.sh" ]; then
   source "$SHELL_DIR/bash/bash_specific.sh"
 fi
 
-# Tool availability checks (after mise activation)
+# Tool initializations (includes mise activation)
 if [ -f "$SHELL_DIR/common/tools.sh" ]; then
   source "$SHELL_DIR/common/tools.sh"
 fi

@@ -24,22 +24,9 @@ SHELL_DIR="${ZSHRC_PATH:h:h}"
 export SHELL_DIR
 
 # ===============================================
-# Mise Activation (MUST BE FIRST)
-# ===============================================
-# Activate mise early to make tools and environment variables available
-if command -v mise &>/dev/null; then
-  eval "$(mise activate zsh)"
-fi
-
-# ===============================================
 # Source Common Configurations
 # ===============================================
 # Load shared configurations used across all shells
-
-# Environment variables (now mostly managed by mise)
-if [ -f "$SHELL_DIR/common/env.sh" ]; then
-  source "$SHELL_DIR/common/env.sh"
-fi
 
 # FZF configuration
 if [ -f "$SHELL_DIR/common/fzf.sh" ]; then
@@ -50,13 +37,12 @@ fi
 # Source Zsh-Specific Configuration
 # ===============================================
 # Load Zsh-only features and optimizations
-# This must come before tools.sh so mise is activated first
 
 if [ -f "$SHELL_DIR/zsh/zsh_specific.sh" ]; then
   source "$SHELL_DIR/zsh/zsh_specific.sh"
 fi
 
-# Tool availability checks (after mise activation)
+# Tool initializations (includes mise activation)
 if [ -f "$SHELL_DIR/common/tools.sh" ]; then
   source "$SHELL_DIR/common/tools.sh"
 fi
