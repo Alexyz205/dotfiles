@@ -10,37 +10,33 @@ metadata:
 
 ## Purpose
 
-Patterns and standards for Python scripts and tools in DevOps contexts.
+Python patterns for DevOps tooling. CLI, API clients, config, async, testing.
 
-## CLI Tools
+## CLI with Typer
 
-### Structure with Typer/Click
 ```python
 import typer
 from typing import Annotated
 
-app = typer.Typer(help="My DevOps tool")
+app = typer.Typer(help="DevOps tool")
 
 @app.command()
 def deploy(
-    environment: Annotated[str, typer.Argument(help="Target environment")],
-    dry_run: Annotated[bool, typer.Option("--dry-run", help="Preview only")] = False,
+    env: Annotated[str, typer.Argument(help="Target environment")],
+    dry_run: Annotated[bool, typer.Option("--dry-run")] = False,
     verbose: Annotated[bool, typer.Option("--verbose", "-v")] = False,
 ):
-    """Deploy application to target environment."""
     ...
 
 if __name__ == "__main__":
     app()
 ```
-- Use Typer for modern CLI (type hints + auto-complete)
-- Click for more complex nested command groups
+
 - Always include `--dry-run`, `--verbose`, `--help`
-- Return proper exit codes via `raise typer.Exit(code=1)`
+- Return exit codes: `raise typer.Exit(code=1)`
 
-## API Clients
+## API Clients (httpx, not requests)
 
-### httpx (preferred over requests)
 ```python
 import httpx
 from tenacity import retry, stop_after_attempt, wait_exponential
@@ -50,101 +46,73 @@ async def get_resource(client: httpx.AsyncClient, url: str) -> dict:
     response = await client.get(url, timeout=30.0)
     response.raise_for_status()
     return response.json()
-
-async with httpx.AsyncClient(
-    base_url="https://api.example.com",
-    headers={"Authorization": f"Bearer {token}"},
-) as client:
-    data = await get_resource(client, "/resources")
 ```
-- Use `httpx` for async support, HTTP/2, connection pooling
-- Always set timeouts explicitly
-- Retry with exponential backoff for transient failures (tenacity)
-- Use context managers for connection lifecycle
 
-## Configuration
+- `httpx` for async, HTTP/2, connection pooling
+- Always set explicit timeouts
+- Retry with tenacity (exponential backoff)
+- Context managers for connection lifecycle
 
-### pydantic-settings
+## Config (pydantic-settings)
+
 ```python
-from pydantic_settings import BaseSettings
-from pydantic import Field
-
 class Config(BaseSettings):
     model_config = {"env_prefix": "APP_", "env_file": ".env"}
-
-    db_host: str = Field(description="Database hostname")
-    db_port: int = Field(default=5432)
-    debug: bool = Field(default=False)
-    log_level: str = Field(default="INFO")
+    db_host: str
+    db_port: int = 5432
+    debug: bool = False
 ```
-- Env vars > config files > defaults (precedence)
-- Validate at startup, fail fast on missing required config
-- Type coercion built-in (str -> int, bool, etc.)
+
+- Env vars > config files > defaults
+- Validate at startup, fail fast
 
 ## Async Patterns
 
 ```python
-import asyncio
-from typing import Iterable
-
-async def process_batch(items: Iterable, concurrency: int = 10):
+async def process_batch(items, concurrency=10):
     semaphore = asyncio.Semaphore(concurrency)
     async def bounded(item):
         async with semaphore:
             return await process_item(item)
     return await asyncio.gather(*[bounded(i) for i in items])
 ```
-- Use semaphores to bound concurrency
-- `asyncio.gather` for parallel I/O (API calls, file ops)
-- `asyncio.TaskGroup` (3.11+) for structured concurrency
-- Avoid mixing sync/async — use `asyncio.to_thread()` for blocking calls
+
+- Semaphores to bound concurrency
+- `asyncio.gather` for parallel I/O
+- `TaskGroup` (3.11+) for structured concurrency
+- `asyncio.to_thread()` for blocking calls
 
 ## Testing
 
 ```python
-# conftest.py
-import pytest
-from unittest.mock import AsyncMock
-
 @pytest.fixture
 def mock_client():
     client = AsyncMock(spec=httpx.AsyncClient)
     client.get.return_value = httpx.Response(200, json={"key": "value"})
     return client
 ```
-- `pytest` + `pytest-asyncio` for async tests
-- Mock external services, never hit real APIs in unit tests
-- Use `respx` for httpx mocking, `responses` for requests mocking
-- Test CLI with `typer.testing.CliRunner` or `click.testing.CliRunner`
+
+- `pytest-asyncio` for async tests
+- `respx` for httpx mocking
+- `typer.testing.CliRunner` for CLI tests
 
 ## Project Layout
 
 ```
-my_tool/
-├── pyproject.toml        # PEP 621 metadata + deps
-├── src/my_tool/
-│   ├── __init__.py
-│   ├── __main__.py       # Entry point
-│   ├── cli.py            # Typer/Click commands
-│   ├── client.py         # API clients
-│   ├── config.py         # Settings
-│   └── utils.py
-├── tests/
-└── Dockerfile
+src/my_tool/
+├── __main__.py    # Entry point
+├── cli.py         # Commands
+├── client.py      # API client
+├── config.py      # Settings
+└── utils.py
 ```
-- Use `pyproject.toml` (not setup.py/setup.cfg)
+
+- `pyproject.toml` (not setup.py)
 - `src/` layout to prevent import confusion
-- Pin deps in `pyproject.toml`, lock with `uv.lock` or `pip-compile`
-
-## Packaging
-
-- Use `uv` for fast dependency management and virtual envs
-- Multi-stage Docker builds: build deps in builder, copy to slim runtime
-- For internal tools: publish to private PyPI or install from git
+- Use `uv` for deps + virtual envs
 
 ## When to Use
 
-- Building DevOps CLI tools and automation
-- Writing API integration scripts
-- Setting up Python project structure for infrastructure tooling
-- Reviewing Python scripts for production readiness
+- DevOps CLI tools and automation
+- API integration scripts
+- Production readiness review

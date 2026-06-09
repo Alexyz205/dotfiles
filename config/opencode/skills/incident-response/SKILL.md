@@ -10,50 +10,44 @@ metadata:
 
 ## Purpose
 
-Provide a structured framework for incident handling from detection to post-mortem.
+Structured incident handling: detection → mitigation → RCA → post-mortem.
 
 ## Triage Framework
 
 ### 1. Assess
-- **What** is the user-facing impact? (service down, degraded, data loss)
-- **Who** is affected? (all users, subset, internal only)
-- **When** did it start? (correlate with recent deployments/changes)
-- **Severity**: SEV1 (total outage) → SEV4 (minor, no user impact)
+- Impact? (service down, degraded, data loss)
+- Scope? (all users, subset, internal)
+- Started when? (correlate with deployments/changes)
+- Severity: SEV1 (total outage) → SEV4 (minor)
 
 ### 2. Mitigate
-- Rollback recent changes if timing correlates
-- Scale up / failover if capacity-related
-- Feature flag toggle if feature-specific
-- **Goal**: Restore service first, root-cause later
+- Rollback if timing correlates
+- Scale up / failover for capacity
+- Feature flag toggle for feature-specific
+- **Goal: restore service first, RCA later**
 
 ### 3. Communicate
-- Notify stakeholders with: impact, ETA, who's working on it
-- Update status page if public-facing
-- Keep a timeline of actions taken (who did what, when)
+- Notify stakeholders: impact, ETA, who's working
+- Update status page if public
+- Keep action timeline
 
-### 4. Root Cause Analysis
-- Gather: logs, metrics, traces, deployment history
-- Use the 5 Whys or fault tree analysis
+### 4. RCA
+- Gather: logs, metrics, traces, deploy history
+- 5 Whys or fault tree analysis
 - Identify contributing factors (not just trigger)
 - Document: timeline, root cause, mitigation, action items
 
 ### 5. Follow-up
-- Create action items with owners and deadlines
+- Action items with owners and deadlines
 - Classify: prevent recurrence, improve detection, improve response
 - Share post-mortem (blameless)
 
 ## Diagnostic Commands
-
 ```bash
-# Recent deployments
 kubectl rollout history deployment/<name>
 git log --oneline --since="2 hours ago"
-
-# Service health
 kubectl get pods -o wide | grep -v Running
 kubectl top pods --sort-by=memory
-
-# Logs
 kubectl logs -l app=<name> --since=1h --tail=500
 journalctl -u <service> --since "1 hour ago"
 ```
@@ -61,5 +55,5 @@ journalctl -u <service> --since "1 hour ago"
 ## When to Use
 
 - Active incident or outage
-- Post-incident review / writing post-mortems
-- Preparing runbooks for on-call
+- Post-incident review / post-mortem
+- Preparing on-call runbooks

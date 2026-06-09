@@ -10,65 +10,48 @@ metadata:
 
 ## Purpose
 
-Enforce production-grade standards when writing or reviewing shell scripts.
+Production-grade shell script standards. Enforce patterns, catch anti-patterns, minimize verbosity.
 
 ## Required Patterns
-
-### Header
 
 ```bash
 #!/usr/bin/env bash
 set -euo pipefail
 ```
 
-### Error Handling
-
-- `set -e` — exit on error
-- `set -u` — error on undefined variables
-- `set -o pipefail` — catch pipe failures
+- `set -e` → exit on error
+- `set -u` → error on undefined vars
+- `set -o pipefail` → catch pipe failures
 - Trap cleanup: `trap cleanup EXIT ERR INT TERM`
 
-### Logging
+## Error Handling
 
-- Prefix with severity: `[INFO]`, `[WARN]`, `[ERROR]`
 - Log to stderr: `echo "[ERROR] msg" >&2`
-- Include timestamps in long-running scripts
-- Use colors only when `stdout` is a terminal
+- Quote all vars: `"${var}"` not `$var`
+- Trap for cleanup: `trap 'rm -f "$tmpfile"' EXIT`
+- Return exit codes: 0=success, 1=error, 2=usage, 3=deps
 
-### Arguments
+## Arguments
 
-- Validate required args with clear usage messages
-- Support `--help` / `-h` flag
-- Use `getopts` or manual `case` parsing for options
-- Quote all variable expansions: `"${var}"`
-
-### Cleanup
-
-- Use trap for temporary files: `trap 'rm -f "$tmpfile"' EXIT`
-- Release locks, restore state on exit
-- Return meaningful exit codes (0=success, 1=general error, 2=usage error)
-
-### Portability
-
-- Prefer POSIX builtins over external commands where possible
-- Test on target platforms (Ubuntu, Alpine, macOS)
-- Avoid bashisms if targeting `/bin/sh`
-
-### Validation
-
-- Run `shellcheck` before committing — zero warnings policy
-- Test with `bash -n script.sh` for syntax check
+- Validate required args
+- Support `--help`, `--dry-run`, `--verbose`
+- Use `getopts` or `case` for parsing
 
 ## Anti-patterns
 
-- `cd dir && command` — use subshells or pushd/popd
-- Unquoted `$variables` — word splitting bugs
-- `cat file | grep` — useless use of cat
-- `eval` with user input — injection risk
-- Missing error handling on critical operations
+- `cd dir && command` → use subshells
+- Unquoted `$variables` → word splitting bugs
+- `cat file | grep` → useless cat
+- `eval` with user input → injection risk
+- Missing error handling on critical ops
+
+## Validation
+
+- Run `shellcheck` — zero warnings
+- Test: `bash -n script.sh`
+- Cross-platform (Ubuntu, Alpine, macOS)
 
 ## When to Use
 
-- Writing new automation scripts
-- Reviewing scripts for production readiness
-- Refactoring existing scripts to meet standards
+- Writing automation scripts
+- Reviewing for production readiness

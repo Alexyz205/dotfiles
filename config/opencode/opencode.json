@@ -3,46 +3,62 @@
   "autoupdate": true,
   "share": "disabled",
   // --- Model Configuration ---
-  // Primary: prefer Claude Haiku for day-to-day to reduce cost
-  "model": "github-copilot/claude-haiku-4.5",
-  // Lightweight: use a cheap GPT/Gemini mini for very small tasks/summaries
-  "small_model": "github-copilot/gpt-4o-mini",
-  // --- Built-in Agent Overrides ---
+  "model": "opencode/nemotron-3-super-free",
+  "small_model": "opencode/deepseek-v4-flash-free",
   "agent": {
-    // Build agent: Opus for heavy coding work
-    "build": {
-      "model": "github-copilot/claude-sonnet-4.5"
-    },
-    // Plan agent: Sonnet is fast enough for analysis/planning
-    "plan": {
-      "model": "github-copilot/claude-sonnet-4.5"
-    },
-    // Explore subagent: fast & cheap for read-only code search
     "explore": {
-      "model": "github-copilot/gemini-3-flash-preview",
+      "model": "opencode/deepseek-v4-flash-free",
       "steps": 20
     },
-    // General subagent: Sonnet for multi-step research tasks
     "general": {
-      "model": "github-copilot/claude-sonnet-4.5",
+      "model": "opencode/nemotron-3-super-free",
       "steps": 30
     },
-    // Task agent: use a free GPT/Gemini model for routine tasks
     "task": {
-      "model": "github-copilot/gpt-5-mini",
-      "steps": 10
+      "model": "opencode/nemotron-3-super-free",
+      "steps": 20
     },
-    // Compaction agent: Haiku for cheap context summaries
     "compaction": {
-      "model": "github-copilot/claude-haiku-4.5"
+      "model": "opencode/nemotron-3-super-free"
     }
   },
-  // --- Permissions (global defaults) ---
+  // --- LLM Providers ---
+  "provider": {
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (local)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        "qwen3-coder-next:q4_K_M": {
+          "name": "Qwen3 Coder Next",
+          "limit": {
+            "context": 64000,
+            "output": 32768
+          }
+        },
+      }
+    }
+  },
+  // --- Global Permissions ---
   "permission": {
+    "read": "allow",
     "edit": "allow",
+    "glob": "allow",
+    "grep": "allow",
+    "list": "allow",
+    "task": "allow",
+    "skill": "allow",
+    "lsp": "allow",
+    "question": "allow",
+    "webfetch": "allow",
+    "websearch": "allow",
+    "todowrite": "allow",
+    "external_directory": "ask",
+    "doom_loop": "ask",
     "bash": {
       "*": "allow",
-      // Disallow any git/gh operations executed by the agent; these are manual-only
       "git commit": "deny",
       "git push": "deny",
       "git push --force": "deny",
@@ -53,10 +69,8 @@
       "gh pr create": "deny",
       "gh pr merge": "deny",
       "gh": "deny",
-      // Disallow common remote-exec install patterns
       "curl * | sh": "deny",
       "wget * | sh": "deny",
-      // Deny obvious destructive or privilege-escalating operations
       "sudo": "ask",
       "shutdown": "deny",
       "reboot": "deny",
@@ -69,9 +83,7 @@
       "docker system prune -a": "ask",
       "terraform destroy *": "ask",
       "kubectl delete *": "ask"
-    },
-    "webfetch": "allow",
-    "doom_loop": "ask"
+    }
   },
   // --- Context Management ---
   "compaction": {
@@ -137,7 +149,6 @@
   },
   // --- MCP Servers ---
   "mcp": {
-    // Docs search - local stdio transport
     "context7": {
       "type": "local",
       "command": [
@@ -146,7 +157,6 @@
         "@upstash/context7-mcp@latest"
       ]
     },
-    // Web content fetching (Python package via uvx)
     "fetch": {
       "type": "local",
       "command": [
@@ -157,6 +167,16 @@
   },
   // --- Plugins ---
   "plugin": [
-    "opencode-shell-strategy"
+    "opencode-shell-strategy",
+    "opencode-vibeguard",
+    "opencode-skillful",
+    "opencode-supermemory",
+    "opencode-dynamic-context-pruning",
+    "opencode-background-agents",
+    "opencode-conductor",
+    "opencode.nvim",
+    "opencode-md-table-formatter",
+    "opencode-websearch-cited",
+    "opencode-gemini-auth"
   ]
 }
