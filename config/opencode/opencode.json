@@ -1,25 +1,26 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "autoupdate": true,
+  "lsp": true,
   "share": "disabled",
   // --- Model Configuration ---
-  "model": "opencode/nemotron-3-super-free",
-  "small_model": "opencode/deepseek-v4-flash-free",
+  "model": "opencode/deepseek-v4-flash-free",
+  "small_model": "opencode/big-pickle",
   "agent": {
     "explore": {
       "model": "opencode/deepseek-v4-flash-free",
       "steps": 20
     },
     "general": {
-      "model": "opencode/nemotron-3-super-free",
+      "model": "opencode/deepseek-v4-flash-free",
       "steps": 30
     },
     "task": {
-      "model": "opencode/nemotron-3-super-free",
-      "steps": 20
+      "model": "opencode/deepseek-v4-flash-free",
+      "steps": 30
     },
     "compaction": {
-      "model": "opencode/nemotron-3-super-free"
+      "model": "opencode/big-pickle"
     }
   },
   // --- LLM Providers ---
@@ -59,6 +60,7 @@
     "doom_loop": "ask",
     "bash": {
       "*": "allow",
+      "git checkout": "deny",
       "git commit": "deny",
       "git push": "deny",
       "git push --force": "deny",
