@@ -45,7 +45,12 @@ function tmux_auto_start() {
 		return 0
 	fi
 
-	# Attach to existing session or create new one
+	# Only run in interactive terminals
+	if ! [[ -o interactive ]] || ! test -t 0; then
+		return 1
+	fi
+
+	# Attach to existing session or create new one (atomic)
 	echo "Starting tmux..."
-	tmux attach -t dev || tmux new-session -s dev
+	tmux new-session -A -s dev
 }

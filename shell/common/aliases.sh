@@ -44,7 +44,7 @@ alias f='tv'
 # Applications
 # ===============================================
 alias v='nvim'
-alias t='tmux attach -t dev || tmux new-session -s dev'
+alias t='tmux new-session -A -s dev'
 alias p='python'
 alias e='exit'
 alias c='clear'
