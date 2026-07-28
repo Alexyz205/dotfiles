@@ -4,7 +4,7 @@
 # This file defines the global versions of all development tools.
 # Tools are managed by mise and automatically installed when needed.
 #
-# Last Updated: 2026-05-05
+# Last Updated: 2026-07-28
 #
 # ===============================================
 # Environment Variables
@@ -43,33 +43,33 @@ TMUX_AUTO_START = "1" # Enable automatic tmux session management
 # ===============================================
 
 # Node.js runtime for JavaScript/TypeScript development
-node = "26.3.0"
+node = "26.5.0"
 
 # Go runtime (required by gitlab.nvim for building server binary)
-go = "1.26.2"
+go = "1.26.5"
 
 # ===============================================
 # Shell & Terminal Tools
 # ===============================================
 
 # Terminal multiplexer for session management
-tmux = "3.6a"
+tmux = "3.7b"
 
 # Cross-shell prompt with git/docker/k8s context
-starship = "1.25.1"
+starship = "1.26.0"
 
 # Smart directory navigation (z command)
-zoxide = "0.9.9"
+zoxide = "0.10.0"
 
 # ===============================================
 # File & Text Utilities
 # ===============================================
 
 # Fuzzy finder for files/commands/history (replaces fzf)
-television = "0.15.6"
+television = "0.15.9"
 
 # Fast grep alternative with smart defaults
-ripgrep = "15.1.0"
+ripgrep = "15.2.0"
 
 # Fast file finder (modern find replacement)
 fd = "10.4.2"
@@ -78,37 +78,37 @@ fd = "10.4.2"
 bat = "0.26.1"
 
 # Modern ls replacement with git integration
-eza = "0.23.4"
+eza = "0.23.5"
 
 # Terminal file manager with preview
-yazi = "26.1.22"
+yazi = "26.5.6"
 
 # ===============================================
 # Version Control & Git Tools
 # ===============================================
 
 # Git terminal UI for interactive git workflows
-lazygit = "0.61.1"
+lazygit = "0.63.1"
 
 # GitLab CLI for MR, CI/CD, and issue management
-glab = "1.93.0"
+glab = "1.109.0"
 
 # ===============================================
 # Code Editors & Language Tools
 # ===============================================
 
 # Neovim text editor
-neovim = "0.12.2"
+neovim = "0.12.4"
 
 # Tree-sitter parser generator for syntax highlighting
-tree-sitter = "0.26.8"
+tree-sitter = "0.26.11"
 
 # ===============================================
 # AI & Development Assistants
 # ===============================================
 
 # AI coding assistant with Claude integration
-opencode = "v1.14.38"
+opencode = "v1.18.7"
 
 [settings]
 # ===============================================
