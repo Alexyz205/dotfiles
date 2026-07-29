@@ -13,13 +13,13 @@
 # Allows yazi to change the current directory when exiting
 # Usage: y [directory]
 function y() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	yazi "$@" --cwd-file="$tmp"
-	if [ -f "$tmp" ]; then
-		IFS= read -r -d '' cwd < "$tmp" || cwd="$(cat "$tmp")"
-		[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
-		rm -f -- "$tmp"
-	fi
+  local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+  yazi "$@" --cwd-file="$tmp"
+  if [ -f "$tmp" ]; then
+    IFS= read -r -d '' cwd <"$tmp" || cwd="$(cat "$tmp")"
+    [ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+    rm -f -- "$tmp"
+  fi
 }
 
 # ===============================================
@@ -48,29 +48,26 @@ function pbcopy() {
 # Automatically attaches to or creates a tmux session
 # Respects TMUX_AUTO_START environment variable
 function tmux_auto_start() {
-	# Skip if TMUX_AUTO_START is disabled
-	if [ "${TMUX_AUTO_START:-1}" = "0" ]; then
-		return 0
-	fi
+  # Skip if inside a devcontainer or Codespaces
+  if [ -n "${REMOTE_CONTAINERS:-}" ] || [ -n "${CODESPACES:-}" ]; then
+    return 0
+  fi
+  # Skip if TMUX_AUTO_START is disabled
+  if [ "${TMUX_AUTO_START:-1}" = "0" ]; then
+    return 0
+  fi
+  # Skip if tmux is not available
+  if ! command -v tmux &>/dev/null; then
+    echo "tmux not found, skipping tmux initialization."
+    return 1
+  fi
+  # Skip if already inside tmux
+  if [ -n "$TMUX" ]; then
+    clear
+    return 0
+  fi
 
-	# Skip if tmux is not available
-	if ! command -v tmux &>/dev/null; then
-		echo "tmux not found, skipping tmux initialization."
-		return 1
-	fi
-
-	# Skip if already inside tmux
-	if [ -n "$TMUX" ]; then
-		clear
-		return 0
-	fi
-
-	# Only run in interactive terminals
-	if ! [[ -o interactive ]] || ! test -t 0; then
-		return 1
-	fi
-
-	# Attach to existing session or create new one (atomic)
-	echo "Starting tmux..."
-	tmux new-session -A -s dev
+  # Attach to existing session or create new one (atomic)
+  echo "Starting tmux..."
+  tmux new-session -A -s dev
 }
