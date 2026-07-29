@@ -39,6 +39,14 @@ else
 fi
 
 # ===============================================
+# Bat (Syntax Highlighting Pager)
+# ===============================================
+# Set Catppuccin Mocha theme for bat
+export BAT_THEME="Catppuccin Mocha"
+export PAGER="bat"
+export GIT_PAGER="bat"
+
+# ===============================================
 # Starship Prompt
 # ===============================================
 # Initialize starship cross-shell prompt if available

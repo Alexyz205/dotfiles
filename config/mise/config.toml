@@ -48,6 +48,9 @@ node = "26.5.0"
 # Go runtime (required by gitlab.nvim for building server binary)
 go = "1.26.5"
 
+# .NET SDK (required by csharpier, fantomas, fsautocomplete, omnisharp)
+dotnet = "9.0.316"
+
 # ===============================================
 # Shell & Terminal Tools
 # ===============================================
@@ -89,6 +92,9 @@ yazi = "26.5.6"
 
 # Git terminal UI for interactive git workflows
 lazygit = "0.63.1"
+
+# Diff viewer with syntax highlighting (used by lazygit)
+delta = "0.19.2"
 
 # GitLab CLI for MR, CI/CD, and issue management
 glab = "1.109.0"

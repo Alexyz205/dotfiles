@@ -47,6 +47,15 @@
     tag = false
     diff = diff-so-fancy | $PAGER  # diff-so-fancy as diff pager
 
+# --- Delta (diff viewer) Configuration ---
+[delta]
+    features = catppuccin-mocha  # Catppuccin Mocha theme for delta
+    navigate = true  # use n/N for navigating diff sections
+    side-by-side = false  # keep unified diff by default
+
+[include]
+    path = ~/.config/delta/catppuccin.gitconfig  # delta catppuccin theme
+
 # --- Push Configuration ---
 [push]
     autoSetupRemote = true  # easier to push new branches
