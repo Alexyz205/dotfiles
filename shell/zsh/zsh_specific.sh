@@ -24,6 +24,12 @@ setopt no_beep
 setopt interactive_comments
 
 # ===============================================
+# Dotfiles Scripts Directory
+# ===============================================
+
+export SCRIPTS="$(cd "$SHELL_DIR/../scripts" && pwd 2>/dev/null || echo "$HOME/repos/personal/dotfiles/scripts")"
+
+# ===============================================
 # Path Configuration (Zsh-specific)
 # ===============================================
 
