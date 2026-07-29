@@ -23,38 +23,23 @@ function y() {
 }
 
 # ===============================================
-# OSC 52 Clipboard Functions (for non-X11 environments)
+# Clipboard Functions (OSC 52 via tmux, X11 fallback)
 # ===============================================
-# Works transparently across SSH, DevContainers, and local terminal
-# Uses osc52.sh from dotfiles scripts directory
+# In tmux: uses tmux load-buffer which propagates to system clipboard
+#   via built-in OSC 52 support (set-clipboard on in tmux.conf)
+# Outside tmux: falls back to xclip/xsel
 
-# Copy stdin to system clipboard via OSC 52
-# Usage: echo "text" | pbcopy
+# Copy stdin to system clipboard
 function pbcopy() {
-  if command -v osc52.sh &>/dev/null; then
-    osc52.sh
-  elif [ -x "$HOME/.local/bin/osc52.sh" ]; then
-    "$HOME/.local/bin/osc52.sh"
-  elif [ -n "${SCRIPTS:-}" ] && [ -x "$SCRIPTS/osc52.sh" ]; then
-    "$SCRIPTS/osc52.sh"
-  else
-    if command -v xclip &>/dev/null; then
-      command xclip -selection clipboard
-    elif command -v xsel &>/dev/null; then
-      command xsel --clipboard --input
-    else
-      cat >/dev/null
-    fi
-  fi
-}
-
-# Copy text to system clipboard via tmux buffer (for non-X11 environments)
-# Usage: echo "text" | pbtcopy
-function pbtcopy() {
   if [ -n "${TMUX:-}" ]; then
     tmux load-buffer -
+  elif command -v xclip &>/dev/null; then
+    command xclip -selection clipboard
+  elif command -v xsel &>/dev/null; then
+    command xsel --clipboard --input
+  else
+    cat >/dev/null
   fi
-  pbcopy
 }
 
 # ===============================================
