@@ -23,6 +23,41 @@ function y() {
 }
 
 # ===============================================
+# OSC 52 Clipboard Functions (for non-X11 environments)
+# ===============================================
+# Works transparently across SSH, DevContainers, and local terminal
+# Uses osc52.sh from dotfiles scripts directory
+
+# Copy stdin to system clipboard via OSC 52
+# Usage: echo "text" | pbcopy
+function pbcopy() {
+  if command -v osc52.sh &>/dev/null; then
+    osc52.sh
+  elif [ -x "$HOME/.local/bin/osc52.sh" ]; then
+    "$HOME/.local/bin/osc52.sh"
+  elif [ -n "${SCRIPTS:-}" ] && [ -x "$SCRIPTS/osc52.sh" ]; then
+    "$SCRIPTS/osc52.sh"
+  else
+    if command -v xclip &>/dev/null; then
+      command xclip -selection clipboard
+    elif command -v xsel &>/dev/null; then
+      command xsel --clipboard --input
+    else
+      cat >/dev/null
+    fi
+  fi
+}
+
+# Copy text to system clipboard via tmux buffer (for non-X11 environments)
+# Usage: echo "text" | pbtcopy
+function pbtcopy() {
+  if [ -n "${TMUX:-}" ]; then
+    tmux load-buffer -
+  fi
+  pbcopy
+}
+
+# ===============================================
 # Tmux Auto-Start Function
 # ===============================================
 # Automatically attaches to or creates a tmux session
