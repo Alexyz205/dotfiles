@@ -22,18 +22,17 @@ alias mkdir='mkdir -pv'
 # ===============================================
 # Eza (modern ls replacement) with icons and enhanced display
 if command -v eza &>/dev/null; then
-  alias ls='eza --color=auto --icons'
-  alias la='eza -la --icons'
-  alias ll='eza -l --git --icons --hyperlink'
-  alias lt='eza --tree --level=2 --icons'
-  alias lta='eza --tree --level=2 --icons -a'
-  alias ltl='eza --tree --level=2 --icons -l'
-  alias ldir='eza --long --icons --only-dirs'
-  alias ldu='eza -l --total-size --sort=size -r'
-  alias lg='eza --grid --icons'
-  alias lm='eza --icons --sort=modified'
-  alias ld='eza --icons --sort=date'
-  alias lz='eza --icons --sort=size'
+  alias ls='eza --color=auto --icons=auto'
+  alias la='eza -la --icons=auto'
+  alias ll='eza -l --git --hyperlink --icons=auto'
+  alias lt='eza --tree --level=2 --icons=auto'
+  alias lta='eza --tree --level=2 --icons=auto -a'
+  alias ltl='eza --tree --level=2 --icons=auto -l'
+  alias ldir='eza --long --icons=auto --only-dirs'
+  alias lg='eza --grid --icons=auto'
+  alias lm='eza --icons=auto --sort=modified'
+  alias ld='eza --icons=auto --sort=date'
+  alias lz='eza --icons=auto --sort=size'
 else
   echo "eza not found, using default ls"
 fi
