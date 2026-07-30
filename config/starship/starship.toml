@@ -6,7 +6,8 @@
 # PERFORMANCE
 # -----------
 follow_symlinks = false
-scan_timeout = 50
+scan_timeout = 200
+command_timeout = 1000
 
 # -----------
 # PROMPT LAYOUT
@@ -28,10 +29,14 @@ $rust\
 $golang\
 $nodejs\
 $python\
+$package\
 [](fg:color_sapphire bg:color_blue)\
 $docker_context\
 $kubernetes\
 $env_var\
+$container\
+$terraform\
+$helm\
 [](fg:color_blue bg:color_pink)\
 $shell\
 [ ](fg:color_pink)\
@@ -45,7 +50,8 @@ $status\
 $cmd_duration\
 [](fg:color_peach bg:color_green)\
 $mise\
-$container\
+$shlvl\
+$jobs\
 [](fg:color_green bg:color_sapphire)\
 $localip\
 [](fg:color_sapphire bg:color_blue)\
@@ -166,6 +172,11 @@ symbol = ""
 style = "bg:color_sapphire fg:color_fg1"
 format = '[ $symbol ($version)(\($virtualenv\))]($style)'
 
+[package]
+symbol = "󰏗"
+style = "bg:color_sapphire fg:color_fg1"
+format = '[ $symbol( $version) ]($style)'
+
 # --- Container & Cloud ---
 [docker_context]
 symbol = ""
@@ -185,6 +196,16 @@ format = '[ $env_value ]($style)'
 symbol = "󱃾"
 style = "bg:color_blue fg:color_fg1"
 format = '[ $symbol( $context) ]($style)'
+
+[terraform]
+symbol = "󱁻"
+style = "bg:color_blue fg:color_fg1"
+format = '[ $symbol( $workspace) ]($style)'
+
+[helm]
+symbol = "⎈"
+style = "bg:color_blue fg:color_fg1"
+format = '[ $symbol( $version) ]($style)'
 
 # =============================
 # STATUS & UTILITY MODULES
@@ -230,11 +251,26 @@ format = '[ $symbol $health ]($style)'
 style = 'bg:color_green fg:color_fg1'
 disabled = false
 
+[shlvl]
+symbol = '↕'
+style = 'bg:color_green fg:color_fg1'
+format = '[ $symbol$shlvl ]($style)'
+threshold = 1
+disabled = false
+
+[jobs]
+symbol = '✦'
+style = 'bg:color_green fg:color_fg1'
+format = '[ $symbol$number ]($style)'
+symbol_threshold = 1
+number_threshold = 2
+disabled = false
+
 # --- Container Name ---
 [container]
 symbol = ''
 format = '[ $symbol $name ]($style)'
-style = 'bg:color_green fg:color_fg1'
+style = 'bg:color_blue fg:color_fg1'
 
 # --- Local IP ---
 [localip]
