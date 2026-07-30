@@ -26,16 +26,8 @@ SCRIPTS = "{{env.DOTFILES}}/scripts"
 XDG_CONFIG_HOME = "{{env.HOME}}/.config"
 EZA_CONFIG_DIR = "{{env.XDG_CONFIG_HOME}}/eza"
 
-# Ollama GPU Optimization (RTX 4090)
-OLLAMA_GPU_LAYERS = "99999"    # Use all layers on GPU
-OLLAMA_NUM_GPU = "1"           # Use 1 GPU
-CUDA_VISIBLE_DEVICES = "0"     # Use GPU 0
-OLLAMA_NUM_PARALLEL = "4"      # Allow concurrent requests
-OLLAMA_MAX_LOADED_MODELS = "2" # Keep multiple models loaded
-OLLAMA_CONTEXT_SIZE = "8192"   # Optimize context size for RTX 4090
-
 # Tmux Configuration
-TMUX_AUTO_START = "1" # Enable automatic tmux session management
+TMUX_AUTO_START = "0" # Enable automatic tmux session management
 
 [tools]
 # ===============================================
@@ -73,6 +65,21 @@ television = "0.15.9"
 
 # Fast grep alternative with smart defaults
 ripgrep = "15.2.0"
+
+# System information tool
+fastfetch = "2.30.0"
+
+# Modern disk usage analyzer (du replacement)
+dust = "1.2.0"
+
+# Better df replacement
+duf = "0.8.1"
+
+# YAML/JSON/XML/TOML/CSV processor (like jq for YAML)
+yq = "4.45.1"
+
+# Universal data format query/transform tool (JSON, YAML, TOML, XML, CSV)
+dasel = "2.8.1"
 
 # Fast file finder (modern find replacement)
 fd = "10.4.2"
@@ -136,10 +143,10 @@ plugin_autoupdate_last_check_duration = "7d"
 # ===============================================
 
 # Number of parallel installs (increase on powerful machines)
-jobs = 8
+jobs = 12
 
 # HTTP timeout for downloads
-http_timeout = "30s"
+http_timeout = "20s"
 
 # Disk space management
 always_keep_download = false # Delete downloads after install
@@ -193,7 +200,7 @@ terminal_progress = true
 # ===============================================
 
 # Cache prune age (delete cache files older than this)
-cache_prune_age = "30d"
+cache_prune_age = "5d"
 
 # Fetch remote versions cache duration
 fetch_remote_versions_cache = "1h"
