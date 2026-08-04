@@ -164,10 +164,10 @@ not_found_auto_install = true # Enable "command not found" handler
 # ===============================================
 
 # Task output style (prefix, interleave, quiet)
-task_output = "prefix"       # Prefix task output with task names
-task_timings = true          # Show task completion times
-task_show_full_cmd = false   # Truncate long commands
-task_run_auto_install = true # Auto-install tools when running tasks
+task.output = "prefix"       # Prefix task output with task names
+task.timings = true          # Show task completion times
+task.show_full_cmd = false   # Truncate long commands
+task.run_auto_install = true # Auto-install tools when running tasks
 
 # ===============================================
 # Security & Verification Settings
