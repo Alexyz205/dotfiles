@@ -6,6 +6,10 @@
 .DS_Store
 Thumbs.db
 
+# Third-party plugin submodules (hide from finder, keep own code visible)
+# NOTE: config/tmux/tmux/plugins/ is ignored via config/tmux/.gitignore (submodule boundary)
+shell/zsh/plugins/
+
 # Temporary files
 *.tmp
 *.swp
