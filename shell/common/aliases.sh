@@ -95,3 +95,44 @@ alias gciv='glab ci view'
 # ===============================================
 alias ds='devpod ssh'
 alias du='devpod up .'
+
+# ===============================================
+# Password Manager (pass)
+# ===============================================
+if command -v pass &>/dev/null; then
+  alias pw='pass'
+  alias pwls='pass ls'
+  alias pwgen='pass generate'
+  alias pwcp='pass show -c'
+fi
+
+# ===============================================
+# AI (fabric)
+# ===============================================
+# Create aliases for all fabric patterns so they can be run directly,
+# e.g. `summarize` instead of `fabric --pattern summarize`
+if command -v fabric &>/dev/null && [ -d "$HOME/.config/fabric/patterns" ]; then
+  for pattern_file in "$HOME"/.config/fabric/patterns/*; do
+    [ -e "$pattern_file" ] || continue
+    pattern_name="$(basename "$pattern_file")"
+    alias_name="${FABRIC_ALIAS_PREFIX:-}${pattern_name}"
+    eval "alias $alias_name='fabric --pattern $pattern_name'"
+  done
+
+  # YouTube transcript helper
+  yt() {
+    if [ "$#" -eq 0 ] || [ "$#" -gt 2 ]; then
+      echo "Usage: yt [-t | --timestamps] youtube-link"
+      echo "Use the '-t' flag to get the transcript with timestamps."
+      return 1
+    fi
+
+    transcript_flag="--transcript"
+    if [ "$1" = "-t" ] || [ "$1" = "--timestamps" ]; then
+      transcript_flag="--transcript-with-timestamps"
+      shift
+    fi
+    local video_link="$1"
+    fabric -y "$video_link" $transcript_flag
+  }
+fi

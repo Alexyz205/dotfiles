@@ -51,6 +51,11 @@ export PATH
 # Zsh Completion System
 # ===============================================
 
+# Add vendored completion files (fabric) to fpath before compinit
+if [ -d "$SCRIPTS/completions/fabric" ]; then
+  fpath=($SCRIPTS/completions/fabric $fpath)
+fi
+
 # Initialize completion system
 autoload -Uz compinit && compinit
 

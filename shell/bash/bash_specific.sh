@@ -46,6 +46,11 @@ if [ -f /usr/local/etc/bash_completion ]; then
   . /usr/local/etc/bash_completion
 fi
 
+# Fabric CLI completion
+if [ -f "$SCRIPTS/completions/fabric/fabric.bash" ]; then
+  source "$SCRIPTS/completions/fabric/fabric.bash"
+fi
+
 # ===============================================
 # History Configuration
 # ===============================================

@@ -45,6 +45,8 @@ That's it! Your development environment is ready. 🎉
 | [**Neovim**](https://neovim.io/) | Text editor | LazyVim base, DevOps plugins, Copilot (v0.11.5) |
 | [**Starship**](https://starship.rs/) | Cross-shell prompt | Git info, Docker context, K8s context |
 | [**Zsh**](https://zsh.sourceforge.io/) | Advanced shell | Auto-suggestions, syntax highlighting |
+| [**Fabric**](https://github.com/danielmiessler/fabric) | AI pattern framework | Pattern aliases, zsh/bash completions |
+| [**Pass**](https://www.passwordstore.org/) | Password manager | System-package install, aliases, `PASSWORD_STORE_DIR` |
 
 ## 🏗️ Architecture Overview
 

@@ -29,6 +29,10 @@ EZA_CONFIG_DIR = "{{env.XDG_CONFIG_HOME}}/eza"
 # Tmux Configuration
 TMUX_AUTO_START = "0" # Enable automatic tmux session management
 
+# Password Manager Configuration
+# pass (passwordstore.org) store location (default is ~/.password-store)
+PASSWORD_STORE_DIR = "{{env.HOME}}/.password-store"
+
 [tools]
 # ===============================================
 # Programming Languages & Runtimes
@@ -60,7 +64,7 @@ zoxide = "0.10.0"
 # File & Text Utilities
 # ===============================================
 
-# Fuzzy finder for files/commands/history (replaces fzf)
+# Fuzzy finder for files/commands/history
 television = "0.15.9"
 
 # Fast grep alternative with smart defaults
@@ -122,6 +126,10 @@ tree-sitter = "0.26.11"
 
 # AI coding assistant with Claude integration
 opencode = "v1.18.7"
+
+# AI framework for augmenting humans (crowdsourced prompt patterns)
+# Installed from GitHub releases via the mise github backend
+"github:danielmiessler/fabric" = "1.4.470"
 
 [settings]
 # ===============================================
