@@ -11,8 +11,7 @@ shell/
 ├── common/                          # Shared configurations
 │   ├── aliases.sh                   # Aliases (tool-agnostic)
 │   ├── functions.sh                 # Shared functions
-│   ├── fzf.sh                       # FZF configuration
-│   └── tools.sh                     # Tool initializations (mise, starship, zoxide, fzf)
+│   └── tools.sh                     # Tool initializations (mise, starship, zoxide)
 ├── bash/
 │   ├── .bashrc                      # Main Bash config (sources common)
 │   └── bash_specific.sh             # Bash-only features
@@ -68,19 +67,11 @@ Shared shell functions:
 - `y()` - Yazi file manager wrapper with directory changing
 - `tmux_auto_start()` - Automated tmux session management
 
-#### `common/fzf.sh`
-FZF (Fuzzy Finder) configuration:
-- Catppuccin Mocha theme
-- CTRL-T file search with `bat` preview
-- CTRL-R history search with copy-to-clipboard
-- ALT-C directory navigation
-
 #### `common/tools.sh`
 Tool availability detection and initialization:
 - Mise (version manager activation with shell-specific eval)
 - Starship prompt
 - Zoxide (smart cd)
-- FZF integration
 
 ### Shell-Specific Modules
 
@@ -155,12 +146,6 @@ The configuration gracefully handles missing tools. If a tool isn't installed, i
 
 ### Vi Mode
 Both Bash and Zsh are configured with Vi key bindings by default.
-
-### FZF Integration
-- **CTRL-T**: Fuzzy file search with preview
-- **CTRL-R**: Command history search
-- **ALT-C**: Directory navigation
-- Catppuccin Mocha theme for consistent styling
 
 ### Smart Directory Navigation
 - `z <partial-path>` - Jump to frequently used directories (zoxide)

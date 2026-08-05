@@ -11,7 +11,6 @@ $ENV:EZA_CONFIG_DIR = "$ENV:USERPROFILE\.config\eza"
 # ===============================================
 Invoke-Expression (&starship init powershell)
 Invoke-Expression (& { (zoxide init powershell | Out-String) })
-Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+t' -PSReadlineChordReverseHistory 'Ctrl+r'
 Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete
 
 # ===============================================
@@ -80,9 +79,6 @@ if (Get-Command z -ErrorAction SilentlyContinue) {
 }
 if (Get-Command fd -ErrorAction SilentlyContinue) {
     Set-Alias -Name find -Value fd -Option AllScope
-}
-if (Get-Command fzf -ErrorAction SilentlyContinue) {
-    Set-Alias -Name f -Value fzf -Option AllScope
 }
 
 # Applications and tools
