@@ -25,12 +25,11 @@ gui:
       - "#f38ba8"
     defaultFgColor:
       - "#cdd6f4"
-
   authorColors:
     "*": "#b4befe"
     "Alexyz205": "#74c7ec"
     "Alexis Pigeon": "#74c7ec"
 git:
-  pagers:
+  diffRenderers:
     - colorArg: always
-      pager: delta --paging=never
+      command: delta --paging=never
