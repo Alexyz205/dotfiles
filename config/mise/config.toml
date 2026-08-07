@@ -4,7 +4,7 @@
 # This file defines the global versions of all development tools.
 # Tools are managed by mise and automatically installed when needed.
 #
-# Last Updated: 2026-07-28
+# Last Updated: 2026-08-07
 #
 # ===============================================
 # Environment Variables
@@ -58,19 +58,19 @@ television = "0.15.9"
 ripgrep = "15.2.0"
 
 # System information tool
-fastfetch = "2.30.0"
+fastfetch = "2.67.0"
 
 # Modern disk usage analyzer (du replacement)
-dust = "1.2.0"
+dust = "1.2.4"
 
 # Better df replacement
-duf = "0.8.1"
+duf = "0.9.1"
 
 # YAML/JSON/XML/TOML/CSV processor (like jq for YAML)
-yq = "4.45.1"
+yq = "4.53.3"
 
 # Universal data format query/transform tool (JSON, YAML, TOML, XML, CSV)
-dasel = "2.8.1"
+dasel = "3.11.2"
 
 # Fast file finder (modern find replacement)
 fd = "10.4.2"
@@ -89,13 +89,16 @@ yazi = "26.5.6"
 # ===============================================
 
 # Git terminal UI for interactive git workflows
-lazygit = "0.63.1"
+lazygit = "0.64.0"
 
 # Diff viewer with syntax highlighting (used by lazygit)
 delta = "0.19.2"
 
 # GitLab CLI for MR, CI/CD, and issue management
-glab = "1.109.0"
+glab = "1.112.0"
+
+# GitHub CLI for PR, Actions, and issue management (used by octo.nvim)
+gh = "2.97.0"
 
 # ===============================================
 # Code Editors & Language Tools
@@ -112,7 +115,7 @@ tree-sitter = "0.26.11"
 # ===============================================
 
 # AI coding assistant with Claude integration
-opencode = "v1.18.7"
+opencode = "v1.18.14"
 
 # AI framework for augmenting humans (crowdsourced prompt patterns)
 # Installed from GitHub releases via the mise github backend
