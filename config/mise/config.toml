@@ -35,19 +35,6 @@ PASSWORD_STORE_DIR = "{{env.HOME}}/.password-store"
 
 [tools]
 # ===============================================
-# Programming Languages & Runtimes
-# ===============================================
-
-# Node.js runtime for JavaScript/TypeScript development
-node = "26.5.0"
-
-# Go runtime (required by gitlab.nvim for building server binary)
-go = "1.26.5"
-
-# .NET SDK (required by csharpier, fantomas, fsautocomplete, omnisharp)
-dotnet = "9.0.316"
-
-# ===============================================
 # Shell & Terminal Tools
 # ===============================================
 
