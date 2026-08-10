@@ -6,6 +6,18 @@
 .DS_Store
 Thumbs.db
 
+# Package lockfiles
+package-lock.json
+npm-shrinkwrap.json
+yarn.lock
+pnpm-lock.yaml
+bun.lock
+bun.lockb
+composer.lock
+Gemfile.lock
+poetry.lock
+Pipfile.lock
+
 # Third-party plugin submodules (hide from finder, keep own code visible)
 # NOTE: config/tmux/tmux/plugins/ is ignored via config/tmux/.gitignore (submodule boundary)
 shell/zsh/plugins/
