@@ -1,294 +1,189 @@
-# 🏠 DevOps Dotfiles
+# DevOps Dotfiles
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Platform Support](https://img.shields.io/badge/Platform-Linux%20%7C%20macOS%20%7C%20WSL-blue.svg)](#platform-support)
-[![Shell Support](https://img.shields.io/badge/Shell-Zsh%20%7C%20Bash-green.svg)](#shell-configurations)
 
-> **A production-ready dotfiles configuration designed for DevOps engineers and infrastructure automation professionals**
+> A production-ready dotfiles configuration managed with Nix and home-manager.
 
-Welcome to my dotfiles repository! This setup provides a complete development environment optimized for DevOps workflows, infrastructure automation.
+## Quick Start
 
-## ✨ Features
-
-- 🚀 **One-command setup** - Get productive in minutes
-- 🎨 **Consistent theming** - Catppuccin Mocha across all tools
-- 🔧 **DevOps-optimized** - Pre-configured for K8s, Docker, Git workflows
-- 📦 **Cross-platform** - Linux, macOS, and WSL support
-- 🔄 **Version management** - Mise for declarative tool version control
-- 💡 **AI-assisted prompts** - Built-in prompt templates for development workflows
-
-## 🚀 Quick Start
-
-**One-liner install** (recommended — clones to `~/repos/personal/dotfiles`, initializes submodules, and runs the full installer):
+**One-liner** — installs Nix, clones the repo, builds and activates:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/Alexyz205/dotfiles/main/install-remote.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/Alexyz205/dotfiles/main/install.sh)
 ```
 
-> Use `bash <(...)` instead of `curl | bash` so sudo password prompts work when the installer needs them.
+> Use `bash <(...)` so sudo prompts from the Nix installer work.
 
-**Or install manually:**
+**Remote host:**
 
 ```bash
-# Clone the repository
+ssh -t user@host 'bash <(curl -fsSL https://raw.githubusercontent.com/Alexyz205/dotfiles/main/install.sh)'
+```
+
+**Or manually:**
+
+```bash
 git clone https://github.com/Alexyz205/dotfiles.git ~/repos/personal/dotfiles
 cd ~/repos/personal/dotfiles
-
-# Run the installer (requires internet connection)
-./install
-
-# Restart your shell or run
+./install.sh
 exec zsh
 ```
 
-**Re-running** the one-liner (or `./install`) is safe — it updates the repo and skips already-configured symlinks and installed tools.
+Re-running is safe — it updates the repo and re-activates home-manager.
 
-## 🛠️ What's Included
+## What's Included
 
-### Core Development Tools
+### Home-manager modules
 
-| Tool | Purpose | Configuration Highlights |
-|------|---------|-------------------------|
-| [**Mise**](https://mise.jdx.dev/) | Tool version manager | Declarative version control for all CLI tools |
-| [**Ghostty**](https://mitchellh.com/ghostty) | Modern terminal emulator | Catppuccin theme, JetBrains Mono font |
-| [**Tmux**](https://github.com/tmux/tmux) | Terminal multiplexer | Catppuccin theme, Neovim integration |
-| [**Neovim**](https://neovim.io/) | Text editor | LazyVim base, DevOps plugins, Copilot (v0.11.5) |
-| [**Starship**](https://starship.rs/) | Cross-shell prompt | Git info, Docker context, K8s context |
-| [**Zsh**](https://zsh.sourceforge.io/) | Advanced shell | Auto-suggestions, syntax highlighting |
-| [**Fabric**](https://github.com/danielmiessler/fabric) | AI pattern framework | Pattern aliases, zsh/bash completions |
-| [**Pass**](https://www.passwordstore.org/) | Password manager | System-package install, aliases, `PASSWORD_STORE_DIR` |
+| Tool | Module | Notes |
+|------|--------|-------|
+| [Ghostty](https://mitchellh.com/ghostty) | `programs.ghostty` | Catppuccin theme, JetBrains Mono |
+| [Tmux](https://github.com/tmux/tmux) | `programs.tmux` | Catppuccin status bar, resurrect/continuum |
+| [Neovim](https://neovim.io/) | `home.file` symlink | LazyVim submodule |
+| [Starship](https://starship.rs/) | `programs.starship` | Git, Docker, K8s context |
+| [Zsh](https://zsh.sourceforge.io/) | `programs.zsh` | Syntax highlighting, autosuggestions, vi mode |
+| [Bash](https://www.gnu.org/software/bash/) | `programs.bash` | Vi mode, history control |
+| [Git](https://git-scm.com/) | `programs.git` | Delta diff, credential helpers, project includes |
+| [Bat](https://github.com/sharkdp/bat) | `programs.bat` | Catppuccin Mocha theme |
+| [Eza](https://eza.rocks/) | `programs.eza` | Icons, git status, Catppuccin theme |
+| [Lazygit](https://github.com/jesseduffield/lazygit) | `programs.lazygit` | Catppuccin UI, delta renderer |
+| [Yazi](https://yazi-rs.github.io/) | `programs.yazi` | Catppuccin theme, shell wrapper |
+| [Zoxide](https://github.com/ajeetdsouza/zoxide) | `programs.zoxide` | Smarter cd |
 
-## 🏗️ Architecture Overview
+### Additional packages (via Nix)
+
+ripgrep, fd, bat, eza, television, fastfetch, dust, duf, yq, dasel, jq, tree-sitter, delta, diff-so-fancy, glab, gh, devpod, docker-compose, neovim, opencode, fabric-ai, pass, lazydocker, lazyssh, just
+
+### Shell integrations
+
+- **Television** fuzzy finder (Ctrl+T / Ctrl+R widgets for zsh and bash)
+- **Starship** prompt with Catppuccin palette
+- **Zoxide** directory jumping
+- **Zsh-autosuggestions** + **zsh-syntax-highlighting**
+- **Fabric** pattern aliases
+
+## Architecture
 
 ```
 dotfiles/
-├── install                    # Main entry point
-├── install-remote.sh          # Remote install over SSH (also powers the one-liner)
-├── setup_dotfiles            # Environment initialization
-├── scripts/                  # Installation and utility scripts
-│   ├── install_packages       # Mise-based package installation
-│   ├── configure_k9s         # K9s theme setup
-│   ├── configure_helm        # Helm plugins setup
-│   ├── setup                 # Configuration symlink management
-│   ├── utils                 # Core utilities (Clean Architecture)
-│   ├── logs                  # Structured logging
-│   └── checker               # System validation
-├── config/                   # XDG Base Directory configurations
-│   ├── ghostty/              # Terminal emulator config
-│   ├── git/                  # Git configuration
-│   ├── lazygit/              # Git TUI config
-│   ├── mise/                 # Mise tool version manager config
-│   ├── opencode/             # AI assistant config
-│   ├── starship/             # Cross-shell prompt config
-│   └── tmux/                 # Tmux configuration (submodule)
-├── shell/                    # Shell configurations
-│   ├── zsh/                  # Zsh config with plugins
-│   ├── bash/                 # Bash configuration
-│   └── powershell/           # PowerShell configuration
-├── nvim/                     # Neovim configuration (LazyVim submodule)
-└── scripts/                  # Installation and utility scripts (submodule)
+├── flake.nix              # Nix flake entry point
+├── home/                  # Home-manager modules
+│   ├── default.nix        # Entry (username, nix settings, stateVersion)
+│   ├── env.nix            # Session variables
+│   ├── packages.nix       # Package list
+│   ├── files.nix          # Symlinks (nvim, opencode, television, themes)
+│   ├── programs/          # HM module configs (one per tool)
+│   │   ├── starship.nix
+│   │   ├── git.nix
+│   │   ├── zsh.nix
+│   │   ├── bash.nix
+│   │   ├── tmux.nix
+│   │   ├── bat.nix
+│   │   ├── eza.nix
+│   │   ├── lazygit.nix
+│   │   ├── yazi.nix
+│   │   ├── ghostty.nix
+│   │   └── zoxide.nix
+│   └── shell/             # Shell scripts (aliases, functions, widget overrides)
+├── config/                # Static config files (symlinked)
+│   ├── ghostty/themes/
+│   ├── bat/themes/
+│   ├── eza/theme.yml
+│   ├── delta/catppuccin.gitconfig
+│   ├── television/        # Cable channels (TV channels)
+│   └── opencode/
+├── devshells/             # Nix dev shell
+├── examples/              # Project templates (devShell + Justfile)
+├── install.sh             # One-command installer
+├── Justfile               # Task runner (build, deploy, clean, switch)
+└── nvim/                  # Neovim config (submodule)
 ```
 
-## 🎨 Theming
+## Theming
 
-All tools use the **Catppuccin Mocha** theme for a consistent, eye-friendly dark experience:
+All tools use **Catppuccin Mocha**:
 
-- 🎨 **Ghostty**: Catppuccin Mocha with JetBrains Mono
-- 🖥️ **Tmux**: Catppuccin status bar and panes
-- ⌨️ **Neovim**: Catppuccin syntax highlighting
-- 🚀 **Starship**: Catppuccin-inspired prompt colors
-- 🔍 **Lazygit**: Catppuccin UI theme
-- 📁 **Yazi**: Catppuccin file manager theme
+- Ghostty — Catppuccin Mocha palette + JetBrains Mono font
+- Tmux — Catppuccin status bar with custom separators
+- Starship — Catppuccin palette across all modules
+- Bat — Catppuccin Mocha syntax theme
+- Eza — Catppuccin file/directory colors
+- Yazi — Catppuccin file manager theme
+- Lazygit — Catppuccin UI
+- Delta — Catppuccin git diff colors
+- K9s — Catppuccin skin (excluded from dotfiles, configured per project)
 
-## 🔧 Configuration Highlights
+## Installation Options
 
-### Shell Environment
-
-- **Vi mode** enabled by default
-- **Auto-suggestions** and syntax highlighting
-- **Environment management** with mise
-
-### Neovim Setup
-
-Built on **LazyVim** with DevOps-focused enhancements:
-
-- 🤖 **GitHub Copilot** integration
-- 🔗 **Tmux navigation** seamless pane switching
-- 📁 **Yazi integration** file management
-- 🌳 **Lazygit integration** Git workflow
-- 🎨 **Catppuccin theme** consistent styling
-
-### Tmux Configuration
-
-- **Catppuccin theme** with custom status bar
-- **Vim-style navigation** between panes
-- **Plugin manager** (TPM) with continuum for session persistence
-- **Seamless Neovim integration** with vim-tmux-navigator
-
-## 🚦 Installation Options
-
-### Remote Installation (Over SSH)
-
-Install the dotfiles on one or more remote hosts directly from your machine. The script SSHes in (using your `~/.ssh/config`), allocates a TTY so you can type the sudo password when prompted, clones the repo over HTTPS, and runs the full installer. No SSH agent forwarding, no GitHub key on the remote.
+### Local
 
 ```bash
-./install-remote.sh [user@]host [host2 ...]
+./install.sh
 ```
 
-This runs the same `install` flow you get from the one-liner. Re-running is safe.
+This installs Nix (if missing), clones/updates the repo, enables flakes, builds the home-manager generation, and activates it.
 
-### Full Installation (Recommended)
+### Remote
 
 ```bash
-./install                    # Complete setup with all tools
+ssh -t user@host 'bash <(curl -fsSL https://raw.githubusercontent.com/Alexyz205/dotfiles/main/install.sh)'
 ```
 
-This will:
+### Project-specific tools
 
-1. Initialize git submodules
-2. Create symlinks for all configurations  
-3. Install mise (tool version manager)
-4. Install all tools defined in `config/mise/config.toml`
-5. Configure k9s theme and Helm plugins
-
-### Selective Installation
+Kubernetes, Helm, K9s, and other project-specific tools are not included in the dotfiles. Each project manages its own dependencies via a `flake.nix` devShell. See `examples/` for a template:
 
 ```bash
-./setup_dotfiles             # Just configure dotfiles (no package installation)
-./scripts/install_packages   # Install mise + all tools + post-install configs
+cp examples/project-flake.nix /path/to/project/flake.nix
+cp examples/Justfile /path/to/project/Justfile
+cd /path/to/project
+nix develop
 ```
 
-### Manual Configuration (Optional)
+## Updating
 
 ```bash
-./scripts/configure_k9s.sh   # Configure k9s Catppuccin theme
-./scripts/configure_helm.sh  # Install Helm plugins (diff, secrets)
+git pull origin main
+git submodule update --init --recursive
+just switch
 ```
 
-### Managing Tools with Mise
-
-All development tools are managed by mise and defined in `config/mise/config.toml`:
+Or to update Nix packages to the latest available versions:
 
 ```bash
-# Install all tools from config
-mise install
-
-# List installed tools and versions
-mise list
-
-# Update a specific tool
-mise upgrade node
-
-# Update all tools to latest versions
-mise upgrade
-
-# Use different version in a project
-cd ~/my-project
-echo "node = '20.0.0'" > .mise.toml
-mise install
-
-# Add new tools
-# Edit config/mise/config.toml, then run:
-mise install
+just update
+just switch
 ```
 
-## 🤖 AI-Powered Development
+## Maintenance Commands
 
-Includes prompt templates for common DevOps tasks:
+```bash
+just build     # Build activation package
+just switch    # Build + activate
+just update    # Update flake inputs
+just clean     # Garbage collect
+just dev       # Enter dev shell
+```
 
-- 📝 **Architecture guidance** - Clean Architecture patterns
-- 🐳 **Dockerfile optimization** - Container best practices
-- 🔧 **Automation scripts** - Infrastructure automation
-- 🔍 **Security reviews** - Code and configuration audits
-- 📚 **Documentation** - README and code documentation
-- 🧪 **Testing strategies** - Unit and integration tests
+## Customization
 
-Access prompts in the `prompts/` directory.
+Adding a new tool:
 
-## 🌍 Platform Support
+1. Add to `home/packages.nix` if it's a standalone package
+2. Add a HM module in `home/programs/` if the tool has a home-manager module
+3. Add aliases in `home/shell/aliases.nix`
+4. Run `just switch`
+
+## Platform Support
 
 | Platform | Status | Notes |
 |----------|--------|-------|
-| **Ubuntu/Debian** | ✅ Full | Primary development platform |
-| **Fedora/RHEL** | ✅ Full | Complete package manager support |
-| **Arch Linux** | ✅ Full | Pacman integration |
-| **macOS** | ✅ Full | Mise-based tool management |
+| **Ubuntu/Debian** | ✅ Full | Primary target |
+| **Fedora/RHEL** | ✅ Full | Nix-based |
+| **macOS** | ✅ Full | Nix-based |
 | **WSL2** | ✅ Full | Windows Subsystem for Linux |
-| **Alpine** | ⚠️ Limited | Basic tools only |
+| **Alpine** | ⚠️ Limited | Basic Nix support |
 
-## 🔄 Updating
+## License
 
-The dotfiles include version-pinned tools managed by mise. To update:
-
-```bash
-# Pull latest configurations
-git pull origin main
-
-# Update git submodules
-git submodule update --init --recursive
-
-# Re-run setup to apply changes
-./setup_dotfiles
-
-# Update all tools to versions in config
-mise install
-
-# Or upgrade all tools to latest versions
-mise upgrade
-```
-
-## 🛠️ Customization
-
-### Adding New Tools
-
-1. **Add to mise config**: Edit `config/mise/config.toml`
-2. **Install the tool**: Run `mise install`
-3. **Create configuration**: Add config files in appropriate directory
-4. **Update setup**: Add symlinks in `scripts/setup` if needed
-5. **Test**: Verify the tool works
-
-### Custom Scripts
-
-Add custom automation scripts following the Clean Architecture pattern:
-
-- **Domain logic**: Pure functions in `scripts/utils`
-- **Use cases**: Main functionality in `scripts/`
-- **Infrastructure**: Platform-specific implementations
-
-## 🤝 Contributing
-
-Contributions are welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch
-3. Follow the existing code structure and Clean Architecture principles
-4. Test on at least one supported platform
-5. Submit a pull request with a clear description
-
-### Development Guidelines
-
-- **Logging**: Use structured logging functions from `scripts/logs`
-- **Error handling**: Implement proper error handling with cleanup
-- **Testing**: Test scripts on clean environments
-- **Documentation**: Update README for new features
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- [Catppuccin](https://github.com/catppuccin/catppuccin) - Beautiful pastel theme
-- [LazyVim](https://www.lazyvim.org/) - Neovim distribution
-- [Starship](https://starship.rs/) - Cross-shell prompt
-- [TPM](https://github.com/tmux-plugins/tpm) - Tmux Plugin Manager
-
----
-
-<div align="center">
-
-**Happy coding! 🚀**
-
-*Built with ❤️ for the DevOps community*
-
-</div>
+MIT — see [LICENSE](LICENSE).

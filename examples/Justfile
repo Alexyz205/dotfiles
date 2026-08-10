@@ -1,0 +1,53 @@
+# ─────────────────────────────────────────────────────
+# Project Justfile — task runner
+# ─────────────────────────────────────────────────────
+# Copy to your project root as `Justfile`.
+# Run:   just <task-name>
+# List:  just --list
+# ─────────────────────────────────────────────────────
+set shell := ["bash", "-uc"]
+
+# Environment (override per project)
+project_name := "my-project"
+python_ver   := "3.11"
+node_ver     := "22"
+
+# ── Tasks ───────────────────────────────────────────
+default:  ## List available tasks
+    just --list
+
+# ── Dev ─────────────────────────────────────────────
+dev:  ## Start dev environment
+    nix develop
+
+setup:  ## Install dependencies
+    echo "Installing dependencies..."
+    pip install -r requirements.txt 2>/dev/null || true
+    npm install 2>/dev/null || true
+    cargo build 2>/dev/null || true
+
+# ── Build / Test ────────────────────────────────────
+build:  ## Build the project
+    echo "Building..."
+
+test:  ## Run tests
+    echo "Running tests..."
+
+lint:  ## Lint the code
+    echo "Linting..."
+
+clean:  ## Clean build artifacts
+    echo "Cleaning..."
+
+# ── Deploy ──────────────────────────────────────────
+deploy:  ## Deploy the project
+    echo "Deploying..."
+
+# ── Utils ───────────────────────────────────────────
+update:  ## Update flake inputs
+    nix flake update
+
+info:  ## Show project info
+    @echo "Project: {{project_name}}"
+    @echo "Python:  {{python_ver}}"
+    @echo "Node:    {{node_ver}}"

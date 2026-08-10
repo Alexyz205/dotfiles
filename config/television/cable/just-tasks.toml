@@ -1,0 +1,42 @@
+[metadata]
+name = "just-tasks"
+description = "A channel to find, inspect and run just tasks"
+requirements = ["just", "grep"]
+
+[source]
+command = [
+  { name = "Project", run = "just --summary | tr ' ' '\\n' | grep -v '^$'" },
+  { name = "All",     run = "just --list --summary | tr ' ' '\\n' | grep -v '^$'" },
+]
+display = "{split:\\t:0}"
+output = "{split:\\t:0}"
+
+[preview]
+command = "just --show '{split:\\t:0}'"
+
+[ui]
+layout = "portrait"
+[ui.preview_panel]
+size = 50
+header = "Task: {split:\\t:0}"
+
+[keybindings]
+shortcut = "f7"
+enter = "actions:run"
+ctrl-e = "actions:edit"
+ctrl-i = "actions:info"
+
+[actions.run]
+description = "Run the selected task"
+command = "just '{}'"
+mode = "execute"
+
+[actions.edit]
+description = "Open the Justfile"
+command = "nvim \"$(git rev-parse --show-toplevel 2>/dev/null || echo .)/Justfile\""
+mode = "fork"
+
+[actions.info]
+description = "Show task details"
+command = "just --show --verbose '{}'"
+mode = "fork"

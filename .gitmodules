@@ -3,16 +3,3 @@
 [submodule "nvim"]
 	url = ../nvim.git
 	path = nvim
-[submodule "config/tmux"]
-	path = config/tmux
-	url = ../tmux.git
-[submodule "scripts"]
-	path = scripts
-	url = ../scripts.git
-# zsh plugins (third-party, not under the dotfiles owner)
-[submodule "shell/zsh/plugins/zsh-syntax-highlighting"]
-	path = shell/zsh/plugins/zsh-syntax-highlighting
-	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
-[submodule "shell/zsh/plugins/zsh-autosuggestions"]
-	path = shell/zsh/plugins/zsh-autosuggestions
-	url = https://github.com/zsh-users/zsh-autosuggestions.git
