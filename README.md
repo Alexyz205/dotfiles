@@ -19,9 +19,19 @@ Welcome to my dotfiles repository! This setup provides a complete development en
 
 ## 🚀 Quick Start
 
+**One-liner install** (recommended — clones to `~/repos/personal/dotfiles`, initializes submodules, and runs the full installer):
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/Alexyz205/dotfiles/main/install-remote.sh)
+```
+
+> Use `bash <(...)` instead of `curl | bash` so sudo password prompts work when the installer needs them.
+
+**Or install manually:**
+
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/dotfiles.git ~/repos/personal/dotfiles
+git clone https://github.com/Alexyz205/dotfiles.git ~/repos/personal/dotfiles
 cd ~/repos/personal/dotfiles
 
 # Run the installer (requires internet connection)
@@ -31,7 +41,7 @@ cd ~/repos/personal/dotfiles
 exec zsh
 ```
 
-That's it! Your development environment is ready. 🎉
+**Re-running** the one-liner (or `./install`) is safe — it updates the repo and skips already-configured symlinks and installed tools.
 
 ## 🛠️ What's Included
 
@@ -53,6 +63,7 @@ That's it! Your development environment is ready. 🎉
 ```
 dotfiles/
 ├── install                    # Main entry point
+├── install-remote.sh          # Remote install over SSH (also powers the one-liner)
 ├── setup_dotfiles            # Environment initialization
 ├── scripts/                  # Installation and utility scripts
 │   ├── install_packages       # Mise-based package installation
@@ -115,6 +126,16 @@ Built on **LazyVim** with DevOps-focused enhancements:
 - **Seamless Neovim integration** with vim-tmux-navigator
 
 ## 🚦 Installation Options
+
+### Remote Installation (Over SSH)
+
+Install the dotfiles on one or more remote hosts directly from your machine. The script SSHes in (using your `~/.ssh/config`), allocates a TTY so you can type the sudo password when prompted, clones the repo over HTTPS, and runs the full installer. No SSH agent forwarding, no GitHub key on the remote.
+
+```bash
+./install-remote.sh [user@]host [host2 ...]
+```
+
+This runs the same `install` flow you get from the one-liner. Re-running is safe.
 
 ### Full Installation (Recommended)
 
