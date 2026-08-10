@@ -57,21 +57,6 @@ television = "0.15.9"
 # Fast grep alternative with smart defaults
 ripgrep = "15.2.0"
 
-# System information tool
-fastfetch = "2.67.0"
-
-# Modern disk usage analyzer (du replacement)
-dust = "1.2.4"
-
-# Better df replacement
-duf = "0.9.1"
-
-# YAML/JSON/XML/TOML/CSV processor (like jq for YAML)
-yq = "4.53.3"
-
-# Universal data format query/transform tool (JSON, YAML, TOML, XML, CSV)
-dasel = "3.11.2"
-
 # Fast file finder (modern find replacement)
 fd = "10.4.2"
 
@@ -84,6 +69,21 @@ eza = "0.23.5"
 # Terminal file manager with preview
 yazi = "26.5.6"
 
+# # System information tool
+# fastfetch = "2.67.0"
+#
+# # Modern disk usage analyzer (du replacement)
+# dust = "1.2.4"
+#
+# # Better df replacement
+# duf = "0.9.1"
+#
+# # YAML/JSON/XML/TOML/CSV processor (like jq for YAML)
+# yq = "4.53.3"
+#
+# # Universal data format query/transform tool (JSON, YAML, TOML, XML, CSV)
+# dasel = "3.11.2"
+
 # ===============================================
 # Version Control & Git Tools
 # ===============================================
@@ -94,11 +94,11 @@ lazygit = "0.64.0"
 # Diff viewer with syntax highlighting (used by lazygit)
 delta = "0.19.2"
 
-# GitLab CLI for MR, CI/CD, and issue management
-glab = "1.112.0"
-
-# GitHub CLI for PR, Actions, and issue management (used by octo.nvim)
-gh = "2.97.0"
+# # GitLab CLI for MR, CI/CD, and issue management
+# glab = "1.112.0"
+#
+# # GitHub CLI for PR, Actions, and issue management (used by octo.nvim)
+# gh = "2.97.0"
 
 # ===============================================
 # Code Editors & Language Tools
@@ -114,12 +114,12 @@ tree-sitter = "0.26.11"
 # AI & Development Assistants
 # ===============================================
 
-# AI coding assistant with Claude integration
-opencode = "v1.18.14"
-
-# AI framework for augmenting humans (crowdsourced prompt patterns)
-# Installed from GitHub releases via the mise github backend
-"github:danielmiessler/fabric" = "1.4.470"
+# # AI coding assistant with Claude integration
+# opencode = "v1.18.14"
+#
+# # AI framework for augmenting humans (crowdsourced prompt patterns)
+# # Installed from GitHub releases via the mise github backend
+# "github:danielmiessler/fabric" = "1.4.470"
 
 [settings]
 # ===============================================
